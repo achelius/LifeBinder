@@ -1,0 +1,36 @@
+Identifier = "LibSimpleWidgets"
+
+Name = {
+  English = "Simple Widgets Library",
+}
+
+NameShort = "LSW"
+
+Description = {
+  English = "Library of simple GUI widgets for use by other addons.",
+}
+
+Author = "Gordon Tyler"
+Website = "http://www.riftui.com/"
+Version = "1.9.3"
+Email = "gordon@doxxx.net"
+Environment = "1.7"
+
+RunOnStartup = {
+  "main.lua",
+  "eventproxy.lua",
+  "border.lua",
+  "scrollview.lua",
+  "window.lua",
+  "select.lua",
+  "list.lua",
+  "textarea.lua",
+  "checkbox.lua",
+  "slider.lua",
+  "tabview.lua",
+  "tooltip.lua",
+  "radiobutton.lua",
+  "radiobuttongroup.lua",
+  "uicreateframe.lua",
+  "layout.lua",
+}

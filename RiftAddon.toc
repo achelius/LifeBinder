@@ -1,0 +1,40 @@
+Identifier = "RiftHbot"
+Name = "RiftHbot"
+NameShort = "RHB"
+Description = "A RiftHealer rewrite"
+Author = "Achepjr"
+Version = "0.26"
+Email = "prjaddon@gmail.com"
+Environment = "1.7"
+Embed = {
+	LibSimpleWidgets = true,
+	LibUnitChange=true
+}
+Dependencies = {
+	LibSimpleWidgets = {"required", "before"},
+	LibUnitChange = {"required", "before"},
+};
+RunOnStartup = {
+	"globals.lua",
+	"view.lua",
+	"main.lua",
+	"slashCmds.lua",
+	"specbuttons.lua",
+	"mousebinds.lua",
+	"buffmonitor.lua",
+    "optionsgui.lua",
+    "castbar.lua",
+    "debuffcache.lua",
+    "eventhandler.lua"
+}
+
+  SavedVariables = {
+	 rhbValues = 'character',
+	 rhbCallingColors = 'character',
+	 rhbMacroText = 'character',
+	 rhbMacroButton = 'character',
+	 rhbBuffList = 'character',
+     rhbDeBuffList = 'character',
+     DebuffCacheList='account'
+}
+

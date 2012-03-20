@@ -1,0 +1,6 @@
+--TODO:
+--mana bar support (with events only in combat and with events + periodic update out of combat), see manabar.lua
+    for details
+--separate main frame elements in separate files (like manabar.lua,healthbar.lua, etc)
+--move buffs/debuffs related functions into the buffmonitor.lua and move the file into frmelements folder
+--move castbar.lua into frmelements folder
