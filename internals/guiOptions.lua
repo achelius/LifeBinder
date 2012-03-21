@@ -228,17 +228,22 @@ function hasBuffOnSlot(slot,name)
 end
 
 function createTableBuffs()
+
     local set= lbValues.set
     if set==nil then return end
     local buffnames=lbBuffList[set]
+ 
     if buffnames==nil then buffnames={} end
+   
     for slot, spells in pairs(buffnames) do
+   
         lb.BuffsList[slot]:SetItems(spells)
         lb.BuffsList[slot]:GetItems()
     end
 end
 
 function createTableBuffsSlot(slot)
+	
     local set= lbValues.set
     if set==nil then return end
     local buffnames=lbBuffList[set][slot]
