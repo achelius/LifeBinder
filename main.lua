@@ -15,7 +15,8 @@ local function getThrottle()
     end
 end
 
-function loadsettings()
+function lbLoadVariables()
+print ("loading")
  lastMode=-1
     if lbValues == nil then
         lbValues = {addonState = true, windowstate = true, lockedState = false, locmainx = 0, locmainy = 0, mainheight = 300, mainwidth = 500, font = 16, pet = false, texture = "health_g.png", set = 1, hotwatch = true, debuffwatch = true, rolewatch = true, showtooltips = true }
@@ -48,6 +49,7 @@ function loadsettings()
         lbMacroButton[5]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
         lbMacroButton[6]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
     end
+   
     if lbBuffList == nil then
         lbBuffList ={}
         lbBuffList[1]={{},{},{},{}}
@@ -80,6 +82,7 @@ function loadsettings()
     lbValues.isincombat=false
     lbValues.set=nil
     lbloadSettings()
+    
 end
 
 function lbloadSettings()
