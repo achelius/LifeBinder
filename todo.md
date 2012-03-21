@@ -9,6 +9,7 @@ Achepjr
 - Separate main frame elements in separate files (like manabar.lua,healthbar.lua, etc). `DONE`
 - Move buffs/debuffs related functions into the buffmonitor.lua and move the file into frmelements folder
 - Move castbar.lua into frmelements folder `DONE`
+- Whitelist/blacklist for debuffs
 
 Protonova
 ---------
