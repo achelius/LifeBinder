@@ -1,9 +1,9 @@
-Identifier = "RiftHbot"
-Name = "RiftHbot"
-NameShort = "RHB"
+Identifier = "LifeBinder"
+Name = "LifeBinder"
+NameShort = "LB"
 Description = "A RiftHealer rewrite"
-Author = "Achepjr"
-Version = "0.26"
+Author = "Achelius,Protonova"
+Version = "0.27"
 Email = "prjaddon@gmail.com"
 Environment = "1.7"
 Embed = {
@@ -18,23 +18,23 @@ RunOnStartup = {
 	"globals.lua",
 	"view.lua",
 	"main.lua",
-	"slashCmds.lua",
-	"specbuttons.lua",
-	"mousebinds.lua",
-	"buffmonitor.lua",
-    "optionsgui.lua",
-    "castbar.lua",
-    "debuffcache.lua",
-    "eventhandler.lua"
+	"internals/slashCmds.lua",
+	"modules/specButtons.lua",
+	"modules/mouseBinds.lua",
+	"modules/buffMonitor.lua",
+    "internals/guiOptions.lua",
+    "modules/castbars.lua",
+    "internals/debuffCache.lua",
+    "internals/eventhandler.lua"
 }
 
   SavedVariables = {
-	 rhbValues = 'character',
-	 rhbCallingColors = 'character',
-	 rhbMacroText = 'character',
-	 rhbMacroButton = 'character',
-	 rhbBuffList = 'character',
-     rhbDeBuffList = 'character',
-     DebuffCacheList='account'
+	 lbValues = 'character',
+	 lbCallingColors = 'character',
+	 lbMacroText = 'character',
+	 lbMacroButton = 'character',
+	 lbBuffList = 'character',
+     lbDeBuffList = 'character',
+     lbDebuffCacheList='account'
 }
 

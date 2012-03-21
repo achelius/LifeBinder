@@ -12,34 +12,34 @@ local function getThrottle2()
     end
 end
 function onCastbarChanged(units)
-    if rhb.PlayerID==nil then
-        rhb.MouseOverUnitLastCast=nil
+    if lb.PlayerID==nil then
+        lb.MouseOverUnitLastCast=nil
         return
     end
     for unitid,ph in pairs(units) do
         --print(unitid)
-        if unitid==rhb.PlayerID then
+        if unitid==lb.PlayerID then
             --print("cbchanged")
-            local unitIndex =GetIndexFromID( rhb.MouseOverUnitLastCast)
-            if unitIndex~=nil then rhb.groupReceivingSpell[unitIndex]:SetVisible(false) end
-            local details= castbardetail(rhb.PlayerID)
+            local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+            if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) end
+            local details= castbardetail(lb.PlayerID)
             --if details==nil then return end
             if details==nil then
 
-                local unitIndex =GetIndexFromID( rhb.MouseOverUnitLastCast)
-                if unitIndex~=nil then rhb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
-                rhb.MouseOverUnitLastCast=nil
+                local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+                if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
+                lb.MouseOverUnitLastCast=nil
 
                 return
             else
-                local unitIndex =GetIndexFromID( rhb.MouseOverUnitLastCast)
-                if unitIndex~=nil then rhb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
+                local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+                if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
                 --print(details.abilityName)
             end
-            if (rhb.MouseOverUnit~=nil) then
-                rhb.MouseOverUnitLastCast=rhb.MouseOverUnit
+            if (lb.MouseOverUnit~=nil) then
+                lb.MouseOverUnitLastCast=lb.MouseOverUnit
             else
-                rhb.MouseOverUnitLastCast=rhb.LastTarget
+                lb.MouseOverUnitLastCast=lb.LastTarget
             end
         end
     end
@@ -51,30 +51,30 @@ end
 function castbarUpdate()
     local timer = getThrottle2()--throttle to limit cpu usage (period set to 0.25 sec)
     if not timer then return end
-    --print("fetching".. tostring(rhb.MouseOverUnitLastCast==nil))
+    --print("fetching".. tostring(lb.MouseOverUnitLastCast==nil))
 
-    if rhb.MouseOverUnitLastCast==nil then return end
-    if rhb.PlayerID==nil then
-        rhb.MouseOverUnitLastCast=nil
+    if lb.MouseOverUnitLastCast==nil then return end
+    if lb.PlayerID==nil then
+        lb.MouseOverUnitLastCast=nil
         return
     end
     --print("fetching2")
-    local details= castbardetail(rhb.PlayerID)
+    local details= castbardetail(lb.PlayerID)
     --if details==nil then return end
     --print (tostring(details))
     if details==nil then
         -- print ("endvis")
-        local unitIndex =GetIndexFromID( rhb.MouseOverUnitLastCast)
-        if unitIndex~=nil then rhb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
-        rhb.MouseOverUnitLastCast=nil
+        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+        if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
+        lb.MouseOverUnitLastCast=nil
 
         return
     else
-        local unitIndex =GetIndexFromID( rhb.MouseOverUnitLastCast)
+        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
         --print ("show" ..tostring(unitIndex ))
 
         if unitIndex~=nil then
-            rhb.groupReceivingSpell[unitIndex]:SetVisible(true)
+            lb.groupReceivingSpell[unitIndex]:SetVisible(true)
             setCastbarVisible(unitIndex,true)
             setCastBarValue(unitIndex,(details.duration-details.remaining)*10,details.duration*10)
 
@@ -86,7 +86,7 @@ function castbarUpdate()
 end
 
 function castbarIndexVisible(index)
-    local vis =rhb.groupReceivingSpell[index]:GetVisible()
+    local vis =lb.groupReceivingSpell[index]:GetVisible()
     if vis==true then
         return true
     else
@@ -95,7 +95,7 @@ function castbarIndexVisible(index)
 end
 
 function resetCastbarIndex(index)
-    rhb.groupReceivingSpell[index]:SetVisible(false)
+    lb.groupReceivingSpell[index]:SetVisible(false)
     setCastbarVisible(index,false)
     setCastBarValue(index,(0)*10,1*10)
 
@@ -103,9 +103,9 @@ end
 function setCastBarValue(index,value,max)
     if value==nil then value=0 end
     local cwidth=(value/max)*tempx
-    rhb.groupCastBar[index]:SetWidth(cwidth)
+    lb.groupCastBar[index]:SetWidth(cwidth)
 end
 
 function setCastbarVisible(index,value)
-    rhb.groupCastBar[index]:SetVisible(value)
+    lb.groupCastBar[index]:SetVisible(value)
 end

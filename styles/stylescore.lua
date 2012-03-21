@@ -20,6 +20,6 @@
 
 function initializeStylesCore()
     -- styles table
-    rhb.styles={}
+    lb.styles={}
 end
 

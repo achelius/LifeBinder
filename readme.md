@@ -13,6 +13,7 @@ Changelog
 - Added slash commands. `Protonova 03/20/12`
 - Changed add-on's name from RiftHBot to LifeBinder. `Achelius & Protonova 03/20/12`
 - Implemented new file structure. `Protonova 03/20/12`
+- working version but, gui need to be fixed becausebuff/debuff lists don't work 'achelius 03/21/12'
 
 Key Features
 ------------
@@ -24,7 +25,7 @@ Key Features
 - Customizable appearance to suit your needs. Almost every visual aspect can be changed.
 - Indication of distance or line of sight.
 - Mousebind, Buff and Debuff profiles for all individual specs.
-- Mouseover targeting. RHB knows when you hover over a target.
+- Mouseover targeting. lb knows when you hover over a target.
 - Role changing buttons that disappear in combat.
 - Target indication, know what you target.
 

@@ -1,7 +1,7 @@
 function setMouseActions()
-    if rhbValues.set==nil then return end
-    if rhbValues.isincombat then return end
-    local associations =rhbMacroButton[rhbValues.set]
+    if lbValues.set==nil then return end
+    if lbValues.isincombat then return end
+    local associations =lbMacroButton[lbValues.set]
     for i = 1,20 do
         local fname=""
         --print (lastMode)
@@ -19,23 +19,23 @@ function setMouseActions()
             if key==1 then
                 --leftclick
                 --if i==1 then print   ("left"..generateMacro(value,fname))end
-                rhb.groupMask[i].Event.LeftDown=generateMacro(value,fname)
+                lb.groupMask[i].Event.LeftDown=generateMacro(value,fname)
             elseif key==2 then
                 -- righeclick
                 --if i==1 then print   ("right"..generateMacro(value,fname))end
-                rhb.groupMask[i].Event.RightDown=generateMacro(value,fname)
+                lb.groupMask[i].Event.RightDown=generateMacro(value,fname)
             elseif key==3 then
                 -- middleclick
                 --print(generateMacro(value,fname))
-                rhb.groupMask[i].Event.MiddleDown=generateMacro(value,fname)
+                lb.groupMask[i].Event.MiddleDown=generateMacro(value,fname)
             elseif key==4 then
                 -- mouse4
                 --print(generateMacro(value,fname))
-                rhb.groupMask[i].Event.Mouse4Down=generateMacro(value,fname)
+                lb.groupMask[i].Event.Mouse4Down=generateMacro(value,fname)
             elseif key==5 then
                 -- mouse5
                 --print(generateMacro(value,fname))
-                rhb.groupMask[i].Event.Mouse5Down=generateMacro(value,fname)
+                lb.groupMask[i].Event.Mouse5Down=generateMacro(value,fname)
             end
 
         end

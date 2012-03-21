@@ -1,184 +1,184 @@
-rhb = {}
+lb = {}
 
-rhb.Context = UI.CreateContext("Context")
-rhb.Context:SetSecureMode("restricted")
-rhb.Window = UI.CreateFrame("Frame", "MainWindow", rhb.Context)
-rhb.Window:SetSecureMode("restricted")
-rhb.WindowFrameTop = UI.CreateFrame("Texture", "Texture", rhb.Window)
-rhb.WindowFrameTop:SetSecureMode("restricted")
-rhb.WindowDrag = UI.CreateFrame("Frame", "drag frame", rhb.Window)
+lb.Context = UI.CreateContext("Context")
+lb.Context:SetSecureMode("restricted")
+lb.Window = UI.CreateFrame("Frame", "MainWindow", lb.Context)
+lb.Window:SetSecureMode("restricted")
+lb.WindowFrameTop = UI.CreateFrame("Texture", "Texture", lb.Window)
+lb.WindowFrameTop:SetSecureMode("restricted")
+lb.WindowDrag = UI.CreateFrame("Frame", "drag frame", lb.Window)
 
-rhb.CombatStatus= UI.CreateFrame("Texture", "Texture", rhb.Window)
-rhb.CenterFrame = UI.CreateFrame("Frame", "Texture", rhb.WindowFrameTop)
-rhb.CenterFrame:SetSecureMode("restricted")
-rhb.PlayerID=nil     -- set by buffmonitor on buff add event or addabilities event
-rhb.LastTarget=nil
-rhb.MouseOverUnit=nil  -- current mouseover unit ID
-rhb.MouseOverUnitLastCast=nil -- unit id of the moment one spell une spell has been casted
-rhb.groupMask = {}
-rhb.groupBF = {}
-rhb.groupTarget={}
-rhb.groupReceivingSpell={} -- frame for receiving spell overlay  (active when the unit is receiving a cast from me)
-rhb.groupHF = {}
+lb.CombatStatus= UI.CreateFrame("Texture", "Texture", lb.Window)
+lb.CenterFrame = UI.CreateFrame("Frame", "Texture", lb.WindowFrameTop)
+lb.CenterFrame:SetSecureMode("restricted")
+lb.PlayerID=nil     -- set by buffmonitor on buff add event or addabilities event
+lb.LastTarget=nil
+lb.MouseOverUnit=nil  -- current mouseover unit ID
+lb.MouseOverUnitLastCast=nil -- unit id of the moment one spell une spell has been casted
+lb.groupMask = {}
+lb.groupBF = {}
+lb.groupTarget={}
+lb.groupReceivingSpell={} -- frame for receiving spell overlay  (active when the unit is receiving a cast from me)
+lb.groupHF = {}
 
-rhb.groupName = {}
-rhb.groupStatus = {}
-rhb.groupRole = {}
-rhb.groupHoTSpots = {}
-rhb.groupHoTSpotsIcons = {}
-rhb.groupCastBar = {}
-rhb.IconsCache={}
-rhb.IconsCacheCount=0
-rhb.groupText = {}
+lb.groupName = {}
+lb.groupStatus = {}
+lb.groupRole = {}
+lb.groupHoTSpots = {}
+lb.groupHoTSpotsIcons = {}
+lb.groupCastBar = {}
+lb.IconsCache={}
+lb.IconsCacheCount=0
+lb.groupText = {}
 
-rhb.SoloTable = {}
-rhb.QueryTable = {}
-rhb.RaidTable = {}
-rhb.GroupTable = {}
+lb.SoloTable = {}
+lb.QueryTable = {}
+lb.RaidTable = {}
+lb.GroupTable = {}
 
-rhb.UnitBuffTable = {}
-rhb.FullBuffsList={}     -- used by buffmonitor
-rhb.FullDeBuffsList={}    -- used by buffmonitor
-rhb.NoIconsBuffList={} --list of buffs that doesn't have an icon because are not abilities, created by the function CompileBuffsList() in buffmonitor.lua
+lb.UnitBuffTable = {}
+lb.FullBuffsList={}     -- used by buffmonitor
+lb.FullDeBuffsList={}    -- used by buffmonitor
+lb.NoIconsBuffList={} --list of buffs that doesn't have an icon because are not abilities, created by the function CompileBuffsList() in buffmonitor.lua
 for i = 1, 20 do
-    rhb.groupHoTSpots[i]= {}
-    rhb.groupHoTSpotsIcons[i]= {}
-	rhb.groupBF[i] = UI.CreateFrame("Texture", "Border", rhb.CenterFrame)
-	rhb.groupHF[i] = UI.CreateFrame("Texture", "Health", rhb.groupBF[i])
-    rhb.groupTarget[i] = UI.CreateFrame("Texture", "Target", rhb.groupBF[i])
-    rhb.groupReceivingSpell[i] = UI.CreateFrame("Texture", "ReceivingSpell", rhb.groupBF[i])
-    rhb.groupCastBar[i] = UI.CreateFrame("Texture", "ReceivingSpell", rhb.groupBF[i])
-	rhb.groupName[i] = UI.CreateFrame("Text", "Name", rhb.groupBF[i])
-	rhb.groupStatus[i] = UI.CreateFrame("Text", "Status", rhb.groupBF[i])
-	rhb.groupRole[i] = UI.CreateFrame("Texture", "Role", rhb.groupBF[i])
-	rhb.groupMask[i] = UI.CreateFrame("Frame", "group"..i, rhb.Window)
-	rhb.groupMask[i]:SetSecureMode("restricted")
-	--rhb.groupTooltip[i] = UI.CreateFrame("SimpleTooltip","groupT"..i, rhb.CenterFrame)
-	rhb.RaidTable[string.format("group%.2d", i)] = true
-	rhb.UnitBuffTable[string.format("group%.2d", i)] = {}
+    lb.groupHoTSpots[i]= {}
+    lb.groupHoTSpotsIcons[i]= {}
+	lb.groupBF[i] = UI.CreateFrame("Texture", "Border", lb.CenterFrame)
+	lb.groupHF[i] = UI.CreateFrame("Texture", "Health", lb.groupBF[i])
+    lb.groupTarget[i] = UI.CreateFrame("Texture", "Target", lb.groupBF[i])
+    lb.groupReceivingSpell[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
+    lb.groupCastBar[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
+	lb.groupName[i] = UI.CreateFrame("Text", "Name", lb.groupBF[i])
+	lb.groupStatus[i] = UI.CreateFrame("Text", "Status", lb.groupBF[i])
+	lb.groupRole[i] = UI.CreateFrame("Texture", "Role", lb.groupBF[i])
+	lb.groupMask[i] = UI.CreateFrame("Frame", "group"..i, lb.Window)
+	lb.groupMask[i]:SetSecureMode("restricted")
+	--lb.groupTooltip[i] = UI.CreateFrame("SimpleTooltip","groupT"..i, lb.CenterFrame)
+	lb.RaidTable[string.format("group%.2d", i)] = true
+	lb.UnitBuffTable[string.format("group%.2d", i)] = {}
 	for g= 1,5 do
-		rhb.groupHoTSpots[i][g] = {}
-        rhb.groupHoTSpots[i][g][0]=true --icon
-        rhb.groupHoTSpots[i][g][1]=UI.CreateFrame("Texture", "HoT" .. tostring(g), rhb.groupBF[i])
-        rhb.groupHoTSpots[i][g][2]=UI.CreateFrame("Text", "HoTText" .. tostring(g), rhb.groupBF[i])
-        rhb.groupHoTSpots[i][g][3]=UI.CreateFrame("Text", "HoTTextShadow" .. tostring(g), rhb.groupBF[i])
+		lb.groupHoTSpots[i][g] = {}
+        lb.groupHoTSpots[i][g][0]=true --icon
+        lb.groupHoTSpots[i][g][1]=UI.CreateFrame("Texture", "HoT" .. tostring(g), lb.groupBF[i])
+        lb.groupHoTSpots[i][g][2]=UI.CreateFrame("Text", "HoTText" .. tostring(g), lb.groupBF[i])
+        lb.groupHoTSpots[i][g][3]=UI.CreateFrame("Text", "HoTTextShadow" .. tostring(g), lb.groupBF[i])
 
-        rhb.groupHoTSpotsIcons[i][g]={}
-        rhb.groupHoTSpotsIcons[i][g][0]=false
-        rhb.groupHoTSpotsIcons[i][g][1]="RiftHbot"
-        rhb.groupHoTSpotsIcons[i][g][2]="Textures/buffhot.png"
-        rhb.groupHoTSpotsIcons[i][g][3]=0 --stacks
-        rhb.groupHoTSpotsIcons[i][g][4]=false    --updated  (true if icon has just updated)
-        rhb.groupHoTSpotsIcons[i][g][5]=nil    --buff spell ID     (used for remove buff )
-        rhb.groupHoTSpotsIcons[i][g][6]=false    --is debuff    true if the debuff applied is a debuff
+        lb.groupHoTSpotsIcons[i][g]={}
+        lb.groupHoTSpotsIcons[i][g][0]=false
+        lb.groupHoTSpotsIcons[i][g][1]="LifeBinder"
+        lb.groupHoTSpotsIcons[i][g][2]="Textures/buffhot.png"
+        lb.groupHoTSpotsIcons[i][g][3]=0 --stacks
+        lb.groupHoTSpotsIcons[i][g][4]=false    --updated  (true if icon has just updated)
+        lb.groupHoTSpotsIcons[i][g][5]=nil    --buff spell ID     (used for remove buff )
+        lb.groupHoTSpotsIcons[i][g][6]=false    --is debuff    true if the debuff applied is a debuff
 	end
 end
 for i = 1, 5 do
-	rhb.GroupTable[string.format("group%.2d", i)] = true
+	lb.GroupTable[string.format("group%.2d", i)] = true
 
-	rhb.UnitBuffTable[string.format("group%.2d.pet", i)] = {}
+	lb.UnitBuffTable[string.format("group%.2d.pet", i)] = {}
 end
-rhb.clickOffset = {x = 0, y = 0}
-rhb.resizeOffset = {x = 0, y = 0 }
-rhb.UnitBuffTable["player"] = {}
-rhb.UnitBuffTable["player.pet"] = {}
-rhb.UnitTable = {"player", "player.pet"}
-rhb.UnitsTable = {}
-rhb.SoloTable["player"] = true
-rhb.UnitsTableStatus={}
+lb.clickOffset = {x = 0, y = 0}
+lb.resizeOffset = {x = 0, y = 0 }
+lb.UnitBuffTable["player"] = {}
+lb.UnitBuffTable["player.pet"] = {}
+lb.UnitTable = {"player", "player.pet"}
+lb.UnitsTable = {}
+lb.SoloTable["player"] = true
+lb.UnitsTableStatus={}
 for i= 1,20 do
     local name=string.format("group%.2d", i)
-    table.insert(rhb.UnitsTable,name);
-    rhb.UnitsTableStatus[name]={}
-    rhb.UnitsTableStatus[name][1]=false --aggro
-    rhb.UnitsTableStatus[name][2]=false --offline
-    rhb.UnitsTableStatus[name][3]=false --not in los
-    rhb.UnitsTableStatus[name][4]="none" --role
-    rhb.UnitsTableStatus[name][5]=0 --Unit ID
-    rhb.UnitsTableStatus[name][6]=false --is target   (not used)
-    rhb.UnitsTableStatus[name][7]=i --Frame index  used for buff monitor
-    rhb.UnitsTableStatus[name][8]=false -- position change check
+    table.insert(lb.UnitsTable,name);
+    lb.UnitsTableStatus[name]={}
+    lb.UnitsTableStatus[name][1]=false --aggro
+    lb.UnitsTableStatus[name][2]=false --offline
+    lb.UnitsTableStatus[name][3]=false --not in los
+    lb.UnitsTableStatus[name][4]="none" --role
+    lb.UnitsTableStatus[name][5]=0 --Unit ID
+    lb.UnitsTableStatus[name][6]=false --is target   (not used)
+    lb.UnitsTableStatus[name][7]=i --Frame index  used for buff monitor
+    lb.UnitsTableStatus[name][8]=false -- position change check
 end
-rhb.UnitsTableStatus["player"]={}
-rhb.UnitsTableStatus["player"][1]=false --aggro
-rhb.UnitsTableStatus["player"][2]=false --offline
-rhb.UnitsTableStatus["player"][3]=false --not in los
-rhb.UnitsTableStatus["player"][4]="none" --role
-rhb.UnitsTableStatus["player"][5]=0 --Unit ID
-rhb.UnitsTableStatus["player"][6]=false  --is target
-rhb.UnitsTableStatus["player"][7]=1  --frame index    used for buff monitor
-rhb.UnitsTableStatus["player"][8]=false -- position change check
-rhb.UnitsGroupTable = {"group01", "group02", "group03", "group04", "group05"}
-rhb.Calling = {"warrior", "cleric", "mage", "rogue", "percentage"}
-rhb.Role = {"tank", "heal", "dps", "support" }
-rhb.ResizeButton = UI.CreateFrame("Texture", "ResizeButton", rhb.Window)
-rhb.clickOffset = {x = 0, y = 0}
-rhb.resizeOffset = {x = 0, y = 0}
+lb.UnitsTableStatus["player"]={}
+lb.UnitsTableStatus["player"][1]=false --aggro
+lb.UnitsTableStatus["player"][2]=false --offline
+lb.UnitsTableStatus["player"][3]=false --not in los
+lb.UnitsTableStatus["player"][4]="none" --role
+lb.UnitsTableStatus["player"][5]=0 --Unit ID
+lb.UnitsTableStatus["player"][6]=false  --is target
+lb.UnitsTableStatus["player"][7]=1  --frame index    used for buff monitor
+lb.UnitsTableStatus["player"][8]=false -- position change check
+lb.UnitsGroupTable = {"group01", "group02", "group03", "group04", "group05"}
+lb.Calling = {"warrior", "cleric", "mage", "rogue", "percentage"}
+lb.Role = {"tank", "heal", "dps", "support" }
+lb.ResizeButton = UI.CreateFrame("Texture", "ResizeButton", lb.Window)
+lb.clickOffset = {x = 0, y = 0}
+lb.resizeOffset = {x = 0, y = 0}
 --options gui
-rhb.WindowOptions = UI.CreateFrame("SimpleWindow", "Options", rhb.Context)
-rhb.WindowOptionsTab = UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", rhb.WindowOptions)
-rhb.WindowOptionsBuffs = UI.CreateFrame("Frame", "OptionsWindowA", rhb.WindowOptionsTab)
-rhb.WindowOptionsDebuffs = UI.CreateFrame("Frame", "OptionsWindowB", rhb.WindowOptionsTab)
-rhb.WindowOptionsMouse = UI.CreateFrame("Frame", "OptionsWindowC", rhb.WindowOptionsTab)
-rhb.WindowOptionsTab:AddTab("Buffs",rhb.WindowOptionsBuffs)
-rhb.WindowOptionsTab:AddTab("Debuffs",rhb.WindowOptionsDebuffs)
-rhb.WindowOptionsTab:AddTab("Mouse",rhb.WindowOptionsMouse)
+lb.WindowOptions = UI.CreateFrame("SimpleWindow", "Options", lb.Context)
+lb.WindowOptionsTab = UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", lb.WindowOptions)
+lb.WindowOptionsBuffs = UI.CreateFrame("Frame", "OptionsWindowA", lb.WindowOptionsTab)
+lb.WindowOptionsDebuffs = UI.CreateFrame("Frame", "OptionsWindowB", lb.WindowOptionsTab)
+lb.WindowOptionsMouse = UI.CreateFrame("Frame", "OptionsWindowC", lb.WindowOptionsTab)
+lb.WindowOptionsTab:AddTab("Buffs",lb.WindowOptionsBuffs)
+lb.WindowOptionsTab:AddTab("Debuffs",lb.WindowOptionsDebuffs)
+lb.WindowOptionsTab:AddTab("Mouse",lb.WindowOptionsMouse)
 --buff  gui
-rhb.BuffsListView={}
-rhb.BuffsList={}
-rhb.BuffsRemoveButtons={}
-rhb.BuffsMoveUpButtons={}
-rhb.BuffsMoveDownButtons={}
-rhb.BuffListAddBuff = {}
-rhb.BuffListAddBuffButtons = {}
+lb.BuffsListView={}
+lb.BuffsList={}
+lb.BuffsRemoveButtons={}
+lb.BuffsMoveUpButtons={}
+lb.BuffsMoveDownButtons={}
+lb.BuffListAddBuff = {}
+lb.BuffListAddBuffButtons = {}
 for i = 1 , 4 do
-    rhb.BuffsListView[i] = UI.CreateFrame("SimpleScrollView", "List", rhb.WindowOptionsBuffs)
-    rhb.BuffsList[i] = UI.CreateFrame("SimpleList", "List", rhb.WindowOptionsBuffs)
-    rhb.BuffsRemoveButtons[i]= UI.CreateFrame("RiftButton", "RemoveBuffSlot"..tostring(i), rhb.WindowOptionsBuffs)
-    rhb.BuffsMoveUpButtons[i]= UI.CreateFrame("RiftButton", "MoveUpBuffSlot"..tostring(i), rhb.WindowOptionsBuffs)
-    rhb.BuffsMoveDownButtons[i]= UI.CreateFrame("RiftButton", "MoveDownBuffSlot"..tostring(i), rhb.WindowOptionsBuffs)
-    rhb.BuffListAddBuff[i] = UI.CreateFrame("RiftTextfield", "BuffListAddBuffTextAres"..tostring(i), rhb.WindowOptionsBuffs)
-    rhb.BuffListAddBuffButtons[i]= UI.CreateFrame("RiftButton", "BuffListAddBuffButtons"..tostring(i), rhb.WindowOptionsBuffs)
+    lb.BuffsListView[i] = UI.CreateFrame("SimpleScrollView", "List", lb.WindowOptionsBuffs)
+    lb.BuffsList[i] = UI.CreateFrame("SimpleList", "List", lb.WindowOptionsBuffs)
+    lb.BuffsRemoveButtons[i]= UI.CreateFrame("RiftButton", "RemoveBuffSlot"..tostring(i), lb.WindowOptionsBuffs)
+    lb.BuffsMoveUpButtons[i]= UI.CreateFrame("RiftButton", "MoveUpBuffSlot"..tostring(i), lb.WindowOptionsBuffs)
+    lb.BuffsMoveDownButtons[i]= UI.CreateFrame("RiftButton", "MoveDownBuffSlot"..tostring(i), lb.WindowOptionsBuffs)
+    lb.BuffListAddBuff[i] = UI.CreateFrame("RiftTextfield", "BuffListAddBuffTextAres"..tostring(i), lb.WindowOptionsBuffs)
+    lb.BuffListAddBuffButtons[i]= UI.CreateFrame("RiftButton", "BuffListAddBuffButtons"..tostring(i), lb.WindowOptionsBuffs)
 end
 --debuff gui
-rhb.ChkDebuffCache= UI.CreateFrame("SimpleCheckbox", "List", rhb.WindowOptionsDebuffs)
-rhb.DebuffsListView = UI.CreateFrame("SimpleScrollView", "List", rhb.WindowOptionsDebuffs)
-rhb.DebuffsList = UI.CreateFrame("SimpleList", "List", rhb.WindowOptionsDebuffs)
-rhb.DebuffsListAddTextbox = UI.CreateFrame("RiftTextfield", "DebuffsListAddTextbox", rhb.WindowOptionsDebuffs)
-rhb.DebuffsListRemove= UI.CreateFrame("RiftButton", "DebuffsListRemove", rhb.WindowOptionsDebuffs)
-rhb.DebuffsListAdd= UI.CreateFrame("RiftButton", "DebuffsListAdd", rhb.WindowOptionsDebuffs)
-rhb.DebuffsListMoveUp= UI.CreateFrame("RiftButton", "DebuffsListMoveUp", rhb.WindowOptionsDebuffs)
-rhb.DebuffsListMoveDown= UI.CreateFrame("RiftButton", "DebuffsListMoveDown", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListView = UI.CreateFrame("SimpleScrollView", "List", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheList = UI.CreateFrame("SimpleList", "List", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListName = UI.CreateFrame("Text", "text", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListDesc = UI.CreateFrame("Text", "text", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListIcon = UI.CreateFrame("Texture", "text", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListUpdate= UI.CreateFrame("RiftButton", "DebuffsCacheListUpdate", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListClear= UI.CreateFrame("RiftButton", "ClearDebuffCache", rhb.WindowOptionsDebuffs)
-rhb.DebuffsCacheListCopyToCurrent= UI.CreateFrame("RiftButton", "DebuffsCacheListCopyToCurrent", rhb.WindowOptionsDebuffs)
+lb.ChkDebuffCache= UI.CreateFrame("SimpleCheckbox", "List", lb.WindowOptionsDebuffs)
+lb.DebuffsListView = UI.CreateFrame("SimpleScrollView", "List", lb.WindowOptionsDebuffs)
+lb.DebuffsList = UI.CreateFrame("SimpleList", "List", lb.WindowOptionsDebuffs)
+lb.DebuffsListAddTextbox = UI.CreateFrame("RiftTextfield", "DebuffsListAddTextbox", lb.WindowOptionsDebuffs)
+lb.DebuffsListRemove= UI.CreateFrame("RiftButton", "DebuffsListRemove", lb.WindowOptionsDebuffs)
+lb.DebuffsListAdd= UI.CreateFrame("RiftButton", "DebuffsListAdd", lb.WindowOptionsDebuffs)
+lb.DebuffsListMoveUp= UI.CreateFrame("RiftButton", "DebuffsListMoveUp", lb.WindowOptionsDebuffs)
+lb.DebuffsListMoveDown= UI.CreateFrame("RiftButton", "DebuffsListMoveDown", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListView = UI.CreateFrame("SimpleScrollView", "List", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheList = UI.CreateFrame("SimpleList", "List", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListName = UI.CreateFrame("Text", "text", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListDesc = UI.CreateFrame("Text", "text", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListIcon = UI.CreateFrame("Texture", "text", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListUpdate= UI.CreateFrame("RiftButton", "DebuffsCacheListUpdate", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListClear= UI.CreateFrame("RiftButton", "ClearDebuffCache", lb.WindowOptionsDebuffs)
+lb.DebuffsCacheListCopyToCurrent= UI.CreateFrame("RiftButton", "DebuffsCacheListCopyToCurrent", lb.WindowOptionsDebuffs)
 --mouse gui
-rhb.WindowOptionsMouseTabControl = UI.CreateFrame("SimpleTabView", "OptionsMouseWindowFrame", rhb.WindowOptionsMouse)
-rhb.WindowOptionsMouseTabs={}
-rhb.WindowOptionsMouseButtonCommands={}
-rhb.WindowOptionsMouseButtonUpdateCommands={}
-rhb.WindowOptionsMouseTabs[1] = UI.CreateFrame("Frame", "OptionsMouseWindowA", rhb.WindowOptionsMouse)
-rhb.WindowOptionsMouseTabs[2] = UI.CreateFrame("Frame", "OptionsMouseWindowA", rhb.WindowOptionsMouse)
-rhb.WindowOptionsMouseTabs[3] = UI.CreateFrame("Frame", "OptionsMouseWindowA", rhb.WindowOptionsMouse)
-rhb.WindowOptionsMouseTabs[4] = UI.CreateFrame("Frame", "OptionsMouseWindowA", rhb.WindowOptionsMouse)
-rhb.WindowOptionsMouseTabs[5] = UI.CreateFrame("Frame", "OptionsMouseWindowA", rhb.WindowOptionsMouse)
-rhb.WindowOptionsMouseTabControl:AddTab("Left Click",rhb.WindowOptionsMouseTabs[1])
-rhb.WindowOptionsMouseTabControl:AddTab("Right Click",rhb.WindowOptionsMouseTabs[2])
-rhb.WindowOptionsMouseTabControl:AddTab("Middle Click",rhb.WindowOptionsMouseTabs[3])
-rhb.WindowOptionsMouseTabControl:AddTab("Button4 Click",rhb.WindowOptionsMouseTabs[4])
-rhb.WindowOptionsMouseTabControl:AddTab("Button5 Click",rhb.WindowOptionsMouseTabs[5])
+lb.WindowOptionsMouseTabControl = UI.CreateFrame("SimpleTabView", "OptionsMouseWindowFrame", lb.WindowOptionsMouse)
+lb.WindowOptionsMouseTabs={}
+lb.WindowOptionsMouseButtonCommands={}
+lb.WindowOptionsMouseButtonUpdateCommands={}
+lb.WindowOptionsMouseTabs[1] = UI.CreateFrame("Frame", "OptionsMouseWindowA", lb.WindowOptionsMouse)
+lb.WindowOptionsMouseTabs[2] = UI.CreateFrame("Frame", "OptionsMouseWindowA", lb.WindowOptionsMouse)
+lb.WindowOptionsMouseTabs[3] = UI.CreateFrame("Frame", "OptionsMouseWindowA", lb.WindowOptionsMouse)
+lb.WindowOptionsMouseTabs[4] = UI.CreateFrame("Frame", "OptionsMouseWindowA", lb.WindowOptionsMouse)
+lb.WindowOptionsMouseTabs[5] = UI.CreateFrame("Frame", "OptionsMouseWindowA", lb.WindowOptionsMouse)
+lb.WindowOptionsMouseTabControl:AddTab("Left Click",lb.WindowOptionsMouseTabs[1])
+lb.WindowOptionsMouseTabControl:AddTab("Right Click",lb.WindowOptionsMouseTabs[2])
+lb.WindowOptionsMouseTabControl:AddTab("Middle Click",lb.WindowOptionsMouseTabs[3])
+lb.WindowOptionsMouseTabControl:AddTab("Button4 Click",lb.WindowOptionsMouseTabs[4])
+lb.WindowOptionsMouseTabControl:AddTab("Button5 Click",lb.WindowOptionsMouseTabs[5])
 
 for i = 1 ,5 do
-    local parent =  rhb.WindowOptionsMouseTabs[i]
-    rhb.WindowOptionsMouseButtonCommands[i]={}
-    rhb.WindowOptionsMouseButtonUpdateCommands[i]=UI.CreateFrame("RiftButton", "WindowOptionsMouseButtonUpdateCommands"..tostring(i), rhb.WindowOptionsMouseTabs[i])
+    local parent =  lb.WindowOptionsMouseTabs[i]
+    lb.WindowOptionsMouseButtonCommands[i]={}
+    lb.WindowOptionsMouseButtonUpdateCommands[i]=UI.CreateFrame("RiftButton", "WindowOptionsMouseButtonUpdateCommands"..tostring(i), lb.WindowOptionsMouseTabs[i])
     for g= 1 , 4 do
-        rhb.WindowOptionsMouseButtonCommands[i][g]= UI.CreateFrame("SimpleTextArea", "DebuffsListAddTextbox",parent)
+        lb.WindowOptionsMouseButtonCommands[i][g]= UI.CreateFrame("SimpleTextArea", "DebuffsListAddTextbox",parent)
     end
 end
 
