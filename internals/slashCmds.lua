@@ -48,7 +48,7 @@ function slashCommands(cmdLine)
 	end
 	
 	--Reset commands
-	if (cmdLine == "reset") then
+	if (cmdLine.find(cmdLine, "reset")) then
 		print("debug: reset list requested")
 		if(cmdLine.find(cmdLine, "position") or cmdLine.find(cmdLine, "pos")) then
 			print("debug: reset location")
@@ -72,7 +72,7 @@ function slashCommands(cmdLine)
 	end
 
 	--Module commands
-	if(cmdLine == "module") then
+	if(cmdLine.find(cmdLine, "module")) then
 		print("debug: module list requested")
 		if(cmdLine.find(cmdLine, "manabar")) then
 			if(cmdLine.find(cmdLine, "enable") or cmdLine.find(cmdLine, "en")) then
