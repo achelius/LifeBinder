@@ -13,7 +13,7 @@ Changelog
 - Added slash commands. `Protonova 03/20/12`
 - Changed add-on's name from RiftHBot to LifeBinder. `Achelius & Protonova 03/20/12`
 - Implemented new file structure. `Protonova 03/20/12`
-- working version but, gui need to be fixed becausebuff/debuff lists don't work `Achelius 03/21/12`
+- Working version of Buff/Debuff white/black listing, but GUI needs to be fixed. `Achelius 03/21/12`
 
 Key Features
 ------------
@@ -57,9 +57,9 @@ RiftHbot for Dummies
 
 Known Issues
 ------------
-- Only in group mode and during combat if a player disconnects, the game sort the players in the group moving the disconnected player last, but i cannot reassign the frames mouseover unit id during combat so it bugs out, i’m trying to fix it but i don't want to complicate things too much or they will easily break.
+- Only in group mode and during combat if a player disconnects, the game sort the players in the group moving the disconnected player last, but I cannot reassign the frames mouseover unit id during combat so it bugs out, I'm trying to fix it but i don't want to complicate things too much or they will easily break.
 - LoS indicator doesn't work like it's intended but is fixed in the upcoming version 0.25.
-- In a 20 man raid. When you apply a great number of buffs at the same time it slow down the game considerably (like when you are spamming healing flood in combat on a 20 man raid), rift has an incredible amount of buffs on every character at the same time.
+- In a 20 man raid. When you apply a great number of buffs at the same time it slow down the game considerably (like when you are spamming healing flood in combat on a 20 man raid), Rift has an incredible amount of buffs on every character at the sametime.
 
 Future Implementations
 ----------------------
