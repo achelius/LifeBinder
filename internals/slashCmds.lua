@@ -1,19 +1,20 @@
+LB_SC_HELP = { -- Temp array while locales being made
+	"---------------------------------------------------------------",
+	"LifeBinder	Help Menu",
+	"---------------------------------------------------------------",
+	"/lb config		-- Configure LifeBinder.",
+	"/lb show		-- Show LifeBinder.",
+	"/lb hide		-- Hide LifeBinder.",
+	"/lb reset		-- Reset to raidui to default location.",
+	"/lb lock		-- Lock the raidui, hiding the dragger.",
+	"/lb unlock		-- Unlock the raid ui, shows dragger.",
+	"/lb ui			-- Reload UI.",
+	"/lb asc		-- Display additional slash commands."
+}
+
 function slashCommands(cmdLine)
 	local cmdLine = string.lower(cmdLine)
-	if (cmdLine == "help" or cmdLine.find(cmdLine,"?")) then
-		LB_SC_HELP = { -- Temp array while locales being made
-			"---------------------------------------------------------------",
-			"LifeBinder	Help Menu",
-			"---------------------------------------------------------------",
-			"/lb config		-- Configure LifeBinder.",
-			"/lb show		-- Show LifeBinder.",
-			"/lb hide		-- Hide LifeBinder.",
-			"/lb reset		-- Reset to raidui to default location.",
-			"/lb lock		-- Lock the raidui, hiding the dragger.",
-			"/lb unlock		-- Unlock the raid ui, shows dragger.",
-			"/lb ui			-- Reload UI.",
-			"/lb asc		-- Display additional slash commands."
-		}
+	if (cmdLine == "help" or cmdLine.find(cmdLine, '?')) then
 		for i = 1, #LB_SC_HELP do print(LB_SC_HELP[i]) end
 	end
 	if(cmdLine.find(cmdLine, "config")) then
@@ -96,7 +97,7 @@ function slashCommands(cmdLine)
 	end
 	
 	--Derp finder
-	if (not (cmdLine.find(cmdLine, "help") cmdLine.find(cmdLine, '?') or cmdLine.find(cmdLine, "config") or cmdLine.find(cmdLine, "show") or cmdLine.find(cmdLine, "hide") or cmdLine.find(cmdLine, "lock") or cmdLine.find(cmdLine, "module") or cmdLine.find(cmdLine, "reset") or cmdLine.find(cmdLine, "ui") or cmdLine.find(cmdLine, "asc"))) then
+	if (not (cmdLine.find(cmdLine, "help") or cmdLine.find(cmdLine, '?') or cmdLine.find(cmdLine, "config") or cmdLine.find(cmdLine, "show") or cmdLine.find(cmdLine, "hide") or cmdLine.find(cmdLine, "lock") or cmdLine.find(cmdLine, "module") or cmdLine.find(cmdLine, "reset") or cmdLine.find(cmdLine, "ui") or cmdLine.find(cmdLine, "asc"))) then
 		print ("Command not recognized, please try again.")
 	end
 end
