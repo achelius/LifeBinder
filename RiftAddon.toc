@@ -22,14 +22,14 @@ RunOnStartup = {
 	"view.lua",
 	"main.lua",
 	"internals/debuffCache.lua",
-	"internals/eventHandler.lua",
 	"internals/guiOptions.lua",
 	"internals/slashCmds.lua",
 	"modules/buffMonitor.lua",
 	"modules/castbars.lua",
 	"modules/manabars.lua",
 	"modules/mouseBinds.lua",
-	"modules/specButtons.lua"
+	"modules/specButtons.lua",
+	"internals/eventHandler.lua"
 }
 
 SavedVariables = {
