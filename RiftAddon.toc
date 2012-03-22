@@ -2,7 +2,7 @@ Identifier = "LifeBinder"
 Name = "LifeBinder"
 NameShort = "LB"
 Description = "Comprehensive click-to-cast raidui replacement that implements a fully customizable appearance."
-Author = "Achelius/Protonova"
+Author = "Achelius / Protonova"
 Version = "0.27"
 Website = "LifeBinder.ceroaim.us"
 Email = "prjaddon@gmail.com"
@@ -22,12 +22,12 @@ RunOnStartup = {
 	"view.lua",
 	"main.lua",
 	"internals/debuffCache.lua",
-	"internals/eventHandler.lua"
+	"internals/eventHandler.lua",
 	"internals/guiOptions.lua",
 	"internals/slashCmds.lua",
 	"modules/buffMonitor.lua",
-	"modules/castbar.lua",
-	"modules/manabars.lua"
+	"modules/castbars.lua",
+	"modules/manabars.lua",
 	"modules/mouseBinds.lua",
 	"modules/specButtons.lua"
 }
@@ -39,5 +39,5 @@ SavedVariables = {
 	lbMacroButton = 'character',
 	lbBuffList = 'character',
 	lbDeBuffList = 'character',
-	lbDebuffCacheList='account'
+	lbDebuffCacheList = 'account'
 }
