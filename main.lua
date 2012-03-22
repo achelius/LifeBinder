@@ -15,8 +15,9 @@ local function getThrottle()
     end
 end
 
-function lbLoadVariables()
-print ("loading")
+function lbLoadVariables(addonidentifier)
+if addonidentifier~="LifeBinder" then return end
+
  lastMode=-1
     if lbValues == nil then
         lbValues = {addonState = true, windowstate = true, lockedState = false, locmainx = 0, locmainy = 0, mainheight = 300, mainwidth = 500, font = 16, pet = false, texture = "health_g.png", set = 1, hotwatch = true, debuffwatch = true, rolewatch = true, showtooltips = true }
@@ -49,15 +50,15 @@ print ("loading")
         lbMacroButton[5]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
         lbMacroButton[6]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
     end
-   
+    
     if lbBuffList == nil then
         lbBuffList ={}
-        lbBuffList[1]={{},{},{},{}}
-        lbBuffList[2]={{},{},{},{}}
-        lbBuffList[3]={{},{},{},{}}
-        lbBuffList[4]={{},{},{},{}}
-        lbBuffList[5]={{},{},{},{}}
-        lbBuffList[6]={{},{},{},{}}
+        lbBuffList[1]={{{}},{{}},{{}},{{}}}
+        lbBuffList[2]={{{}},{{}},{{}},{{}}}
+        lbBuffList[3]={{{}},{{}},{{}},{{}}}
+        lbBuffList[4]={{{}},{{}},{{}},{{}}}
+        lbBuffList[5]={{{}},{{}},{{}},{{}}}
+        lbBuffList[6]={{{}},{{}},{{}},{{}}}
     end
     if lbDeBuffList == nil then
         lbDeBuffList ={}
@@ -68,6 +69,18 @@ print ("loading")
         lbDeBuffList[5]={ }
         lbDeBuffList[6]={ }
     end
+    
+--    if lbSlotPositions==nil then
+--    	lbSlotPositions={}
+--    	for i = 1 to 6 do
+--    		lbSlotPositions[i]={}
+--    		for g = 1 to 8 do
+--    			lbSlotPositions[i][g]={}
+--    		end
+--    	end
+--    	
+--    end
+    
     if lbCallingColors == nil then
         lbCallingColors = {{r = 1, g = 0, b = 0}, {r = 0, g = 1, b = 0}, {r = 0.6, g = 0.2, b = 0.8}, {r = 1, g = 1, b = 0}, {r = 1, g = 1, b = 1}}
     end
@@ -87,7 +100,6 @@ end
 
 function lbloadSettings()
    
-	
 	lbCreateWindow()
     createOptionsWindow()
 	--lbCreateAbilityList()
