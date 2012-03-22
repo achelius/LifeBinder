@@ -18,13 +18,13 @@ function slashCommands(cmdLine)
 		if not lbValues.isincombat then lb.WindowOptions:SetVisible(true) end
 		--register event
 	end
-	if(cmdLine == "show")) then
+	if(cmdLine == "show") then
 		print ("debug: show")
 		lbValues.addonState = true
 		--register event
 		print ("LifeBinder is now Enabled.")
 	end
-	if(cmdLine == "hide")) then
+	if(cmdLine == "hide") then
 		print ("debug: hide")
 		lbValues.addonState = false
 		print ("LifeBinder is now Disabled.")

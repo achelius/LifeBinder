@@ -1,4 +1,4 @@
-LBMMB
+--LBMMB
 
 nkManager = {	addonButton = {},
 				langText = {},
