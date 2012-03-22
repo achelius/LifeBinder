@@ -39,5 +39,6 @@ SavedVariables = {
 	lbMacroButton = 'character',
 	lbBuffList = 'character',
 	lbDeBuffList = 'character',
+	lbSlotPositions='character',
 	lbDebuffCacheList = 'account'
 }

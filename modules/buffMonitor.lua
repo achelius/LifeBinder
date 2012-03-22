@@ -8,7 +8,7 @@ local abilitydetail = _G.Inspect.Ability.Detail
 local buffdetail=   _G.Inspect.Buff.Detail
 local bufflist=   _G.Inspect.Buff.List
 function initializeBuffMonitor()
-    for g= 1, 5 do
+    for g= 1, 10 do
        local lt=0
        local tp=0
         if g==1 then
@@ -54,7 +54,7 @@ end
 
 function updateBuffMonitorTextures()
     for var=1,20 do
-        for g= 1, 5 do
+        for g= 1, 10 do
 
             if lb.groupHoTSpotsIcons[var][g][4] then
                 --just updated
@@ -118,7 +118,7 @@ function updateBuffMonitorTexturesIndex(frameindex,slotindex)
 end
 function resetBuffMonitorTextures()
     for var=1,20 do
-        for g= 1, 5 do
+        for g= 1, 10 do
             lb.groupHoTSpotsIcons[var][g][0]=false
             --print (lb.groupHoTSpotsIcons[var][g][0])
             lb.groupHoTSpots[var][g][4]=false
@@ -146,7 +146,7 @@ function resetBuffMonitorTextures()
 end
 function resetBuffMonitorTexturesForIndex(var)
 
-        for g= 1, 5 do
+        for g= 1, 10 do
 
             if lb.groupHoTSpotsIcons[var][g][0] then
 
@@ -355,7 +355,7 @@ function onBuffRemove(unit, buffs)
     local updatebuffs=false
     for buffID,placeholder in pairs(buffs) do
        -- for slotindex,c in pairs(lbBuffList[lbValues.set]) do
-        for slotindex= 1, 5 do
+        for slotindex= 1, 10 do
             --print (tostring(slotindex)..tostring(buffID))
             if lb.groupHoTSpotsIcons[frameindex][slotindex][5]== buffID then
                 --print (frameindex)
