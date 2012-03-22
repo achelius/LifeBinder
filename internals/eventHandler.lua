@@ -1,6 +1,3 @@
-
-
-
 table.insert(Event.Unit.Detail.Health, {lbHpUpdate, "LifeBinder", "Update_Health"})
 table.insert(Event.Unit.Detail.HealthMax, {lbHpUpdate, "LifeBinder", "Update_Max_Health"})
 table.insert(Event.Unit.Detail.Aggro, {lbAggroUpdate, "LifeBinder", "Update_Aggro_Flags"})
@@ -18,7 +15,3 @@ table.insert(Event.Buff.Remove, {onBuffRemove, "LifeBinder", "onBuffRemove"})
 -- create a change target event
 table.insert(Library.LibUnitChange.Register("player.target"), {onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
 table.insert(Library.LibUnitChange.Register("mouseover"), {onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})
-
-
-
-
