@@ -29,9 +29,9 @@ Key Features
 - Role changing buttons that disappear in combat.
 - Target indication, know what you target.
 
-RiftHbot for Dummies
---------------------
-- Download the Latest ***stable*** version from [RiftUI](http://riftui.com/downloads/info213-RiftHbot.html): http://riftui.com/downloads/info213-LifeBinder.html
+LifeBinder for Dummies
+----------------------
+- Download the Latest ***stable*** version from [RiftUI](http://riftui.com/downloads/info213-LifeBinder.html): http://riftui.com/downloads/info213-LifeBinder.html
 - Download the latest ***preview*** version from [GitHub](https://github.com/achelius/LifeBinder): https://github.com/achelius/LifeBinder
 
 ### Installing and Updating ###
