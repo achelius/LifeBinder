@@ -13,7 +13,7 @@ Changelog
 - Added slash commands. `Protonova 03/20/12`
 - Changed add-on's name from RiftHBot to LifeBinder. `Achelius & Protonova 03/20/12`
 - Implemented new file structure. `Protonova 03/20/12`
-- working version but, gui need to be fixed becausebuff/debuff lists don't work 'Achelius 03/21/12'
+- working version but, gui need to be fixed becausebuff/debuff lists don't work `Achelius 03/21/12`
 
 Key Features
 ------------
