@@ -51,14 +51,31 @@ print ("loading")
         lbMacroButton[6]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
     end
    
-    if lbBuffList == nil then
-        lbBuffList ={}
-        lbBuffList[1]={{},{},{},{}}
-        lbBuffList[2]={{},{},{},{}}
-        lbBuffList[3]={{},{},{},{}}
-        lbBuffList[4]={{},{},{},{}}
-        lbBuffList[5]={{},{},{},{}}
-        lbBuffList[6]={{},{},{},{}}
+   if lbSelectedBuffsList == nil then
+        lbSelectedBuffsList ={}
+        lbSelectedBuffsList[1]=
+        {
+        	{
+        		--it's a subtable, because, who knows how i will change in the future, it can be The one table that controls them all, the one ring table
+        		{ --buff names set for that slot
+        			"buff1",
+        			"buff2"
+        		}
+        	},
+        	{{}},
+        	{{}},
+        	{{}},
+        	{{}},
+        	{{}},
+        	{{}},
+        	{{}},
+        }
+        
+        lbSelectedBuffsList[2]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
+        lbSelectedBuffsList[3]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
+        lbSelectedBuffsList[4]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
+        lbSelectedBuffsList[5]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
+        lbSelectedBuffsList[6]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
     end
     if lbDeBuffList == nil then
         lbDeBuffList ={}
@@ -69,6 +86,39 @@ print ("loading")
         lbDeBuffList[5]={ }
         lbDeBuffList[6]={ }
     end
+    --slot position info, separated from the slot options because i only load this once 
+    --can be more or less slots, but default will be 8 and the style will be X style
+    if lbBuffSlotPositions==nil then
+    	lbBuffSlotPositions={}
+    	for i = 1 , 6 do
+    		lbBuffSlotPositions[i]={}
+    		for g = 1 , 8 do
+    			lbBuffSlotPositions[i][g]=lbPredefinedBuffSlotPos[1][g] --set the slot to the x style definition for that slot
+    		end
+    	end
+    	
+    end
+    --Slot informations for buffs association i can use the lbSelectedBuffsList but i have to create a new buffList that contains all the defined buffs
+    if lbBuffSlotOptions ==nil then
+    	lbBuffSlotOptions={}
+    	for i = 1 , 6 do
+    		lbBuffSlotPositions[i]={}
+    		for g = 1 , 8 do
+    			lbBuffSlotPositions[i]={AllowDebuffs=false,AllowForAutoSortBuffs=false,AllowForAutoSortDebuffs=false}
+    		end
+    	end
+    end
+    --Buffs List
+    if lbBuffList == nil then
+        lbBuffList ={}
+        lbBuffList[1]={ }
+        lbBuffList[2]={ }
+        lbBuffList[3]={ }
+        lbBuffList[4]={ }
+        lbBuffList[5]={ }
+        lbBuffList[6]={ }
+    end
+    
     if lbCallingColors == nil then
         lbCallingColors = {{r = 1, g = 0, b = 0}, {r = 0, g = 1, b = 0}, {r = 0.6, g = 0.2, b = 0.8}, {r = 1, g = 1, b = 0}, {r = 1, g = 1, b = 1}}
     end

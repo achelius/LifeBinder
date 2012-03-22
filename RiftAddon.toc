@@ -19,6 +19,7 @@ Dependencies = {
 
 RunOnStartup = {
 	"globals.lua",
+	"internals/buffPositionStyles.lua",
 	"view.lua",
 	"main.lua",
 	"internals/debuffCache.lua",
@@ -37,8 +38,9 @@ SavedVariables = {
 	lbCallingColors = 'character',
 	lbMacroText = 'character',
 	lbMacroButton = 'character',
-	lbBuffList = 'character',
+	lbSelectedBuffsList = 'character',
 	lbDeBuffList = 'character',
-	lbSlotPositions='character',
+	lbBuffSlotPositions='character',
+	lbBuffSlotOptions='character',
 	lbDebuffCacheList = 'account'
 }

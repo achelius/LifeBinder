@@ -87,7 +87,7 @@ function updateResourceBar(units)
 				end
 				resourcesRatio = resource/resourceMax
 				lb.groupRF[j]:SetWidth((tempx)*(resourcesRatio))
-				print ("Sigh")
+				
 			end
 		end
 	end
