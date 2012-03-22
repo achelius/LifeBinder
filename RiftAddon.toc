@@ -1,40 +1,43 @@
 Identifier = "LifeBinder"
 Name = "LifeBinder"
 NameShort = "LB"
-Description = "A RiftHealer rewrite"
-Author = "Achelius,Protonova"
+Description = "Comprehensive click-to-cast raidui replacement that implements a fully customizable appearance."
+Author = "Achelius/Protonova"
 Version = "0.27"
+Website = "LifeBinder.ceroaim.us"
 Email = "prjaddon@gmail.com"
 Environment = "1.7"
+
 Embed = {
 	LibSimpleWidgets = true,
-	LibUnitChange=true
+	LibUnitChange = true
 }
 Dependencies = {
 	LibSimpleWidgets = {"required", "before"},
 	LibUnitChange = {"required", "before"},
 };
+
 RunOnStartup = {
 	"globals.lua",
 	"view.lua",
 	"main.lua",
+	"internals/debuffCache.lua",
+	"internals/eventHandler.lua"
+	"internals/guiOptions.lua",
 	"internals/slashCmds.lua",
-	"modules/specButtons.lua",
-	"modules/mouseBinds.lua",
 	"modules/buffMonitor.lua",
-    "internals/guiOptions.lua",
-    "modules/castbars.lua",
-    "internals/debuffCache.lua",
-    "internals/eventhandler.lua"
+	"modules/castbar.lua",
+	"modules/manabars.lua"
+	"modules/mouseBinds.lua",
+	"modules/specButtons.lua"
 }
 
-  SavedVariables = {
-	 lbValues = 'character',
-	 lbCallingColors = 'character',
-	 lbMacroText = 'character',
-	 lbMacroButton = 'character',
-	 lbBuffList = 'character',
-     lbDeBuffList = 'character',
-     lbDebuffCacheList='account'
+SavedVariables = {
+	lbValues = 'character',
+	lbCallingColors = 'character',
+	lbMacroText = 'character',
+	lbMacroButton = 'character',
+	lbBuffList = 'character',
+	lbDeBuffList = 'character',
+	lbDebuffCacheList='account'
 }
-
