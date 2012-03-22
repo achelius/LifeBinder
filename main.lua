@@ -72,9 +72,9 @@ if addonidentifier~="LifeBinder" then return end
     
     if lbSlotPositions==nil then
     	lbSlotPositions={}
-    	for i = 1 to 6 do
+    	for i = 1 , 6 do
     		lbSlotPositions[i]={}
-    		for g = 1 to 8 do
+    		for g = 1 , 8 do
     			lbSlotPositions[i][g]={}
     		end
     	end
