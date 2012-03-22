@@ -15,7 +15,8 @@ local function getThrottle()
     end
 end
 
-function lbLoadVariables()
+function lbLoadVariables(addonidentifier)
+if (addonidentifier ~= "LifeBinder") then return end
 print ("loading")
  lastMode=-1
     if lbValues == nil then
@@ -185,7 +186,6 @@ end
 
 
 function lbUnitUpdate()
-
    local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
     if not timer then return end
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
@@ -233,17 +233,11 @@ function lbUnitUpdate()
             if not lbValues.isincombat then
                 lb.groupMask[j]:SetMouseoverUnit(unitTable.id)
             end
-            if unitTable.calling then
-                for i = 1, 4 do
-                    if unitTable.calling == lb.Calling[i] then
-                        lb.groupName[j]:SetFontColor(lbCallingColors[i].r, lbCallingColors[i].g, lbCallingColors[i].b, 1)
-                    end
-                end
-            else
-                lb.groupName[j]:SetFontColor(1, 1, 1, 1)
+            
+			if lb.UnitsTableStatus[unitident][9] ~=  unitTable.calling or viewModeChanged then
+                lb.UnitsTableStatus[unitident][9] =  unitTable.calling
+                setManaBar(j,unitTable)
             end
-
-
             if lb.UnitsTableStatus[unitident][4] ~=  unitTable.role or viewModeChanged then
                 lb.UnitsTableStatus[unitident][4] =  unitTable.role
                 if unitTable.role then
@@ -256,8 +250,9 @@ function lbUnitUpdate()
             if lb.UnitsTableStatus[unitident][2] ~=  unitTable.offline or viewModeChanged then
                 lb.UnitsTableStatus[unitident][2] =  unitTable.offline
                     if unitTable.offline then
-                        lb.groupStatus[j]:SetText("Offline")
+                        lb.groupStatus[j]:SetText("(D/C)")
                         lb.groupHF[j]:SetWidth(1)
+						lb.groupRF[j]:SetWidth(1)
                     end
             end
 

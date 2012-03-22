@@ -54,21 +54,27 @@ function lbCreateGroups()
 			lb.groupBF[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", tempx * (a -1) ,  tempy * (i - 1))
 			lb.groupBF[var]:SetHeight(tempy)
 			lb.groupBF[var]:SetWidth(tempx)
-
 			lb.groupBF[var]:SetVisible(true)
+			
+			--Set Resource Frame
+			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupMask[var], "BOTTOMLEFT", -2, 0)
+			lb.groupRF[var]:SetHeight(5)
+			lb.groupRF[var]:SetWidth(tempx - 6)
+			lb.groupRF[var]:SetLayer(2)
+			lb.groupRF[var]:SetVisible(true)
 
             lb.groupTarget[var]:SetTexture("LifeBinder", "Textures/targetframe.png")
             lb.groupTarget[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
             lb.groupTarget[var]:SetHeight(tempy - 5)
             lb.groupTarget[var]:SetWidth(tempx - 5)
-            lb.groupTarget[var]:SetLayer(2)
+            lb.groupTarget[var]:SetLayer(3)
             lb.groupTarget[var]:SetVisible(false)
 
             lb.groupReceivingSpell[var]:SetTexture("LifeBinder", "Textures/recframe.png")
             lb.groupReceivingSpell[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
             lb.groupReceivingSpell[var]:SetHeight(tempy - 5)
             lb.groupReceivingSpell[var]:SetWidth(tempx - 5)
-            lb.groupReceivingSpell[var]:SetLayer(2)
+            lb.groupReceivingSpell[var]:SetLayer(4)
             lb.groupReceivingSpell[var]:SetVisible(false)
 
             lb.groupCastBar[var]:SetTexture("LifeBinder", "Textures/health_r.png")
@@ -82,8 +88,6 @@ function lbCreateGroups()
 			lb.groupHF[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
 			lb.groupHF[var]:SetHeight(tempy - 5)
 			lb.groupHF[var]:SetWidth(tempx - 5)
-
-
 			lb.groupHF[var]:SetLayer(0)
 
 		

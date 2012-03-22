@@ -20,6 +20,7 @@ lb.groupBF = {}
 lb.groupTarget={}
 lb.groupReceivingSpell={} -- frame for receiving spell overlay  (active when the unit is receiving a cast from me)
 lb.groupHF = {}
+lb.groupRF = {} -- Resource Frame
 
 lb.groupName = {}
 lb.groupStatus = {}
@@ -45,6 +46,7 @@ for i = 1, 20 do
     lb.groupHoTSpotsIcons[i]= {}
 	lb.groupBF[i] = UI.CreateFrame("Texture", "Border", lb.CenterFrame)
 	lb.groupHF[i] = UI.CreateFrame("Texture", "Health", lb.groupBF[i])
+	lb.groupRF[i] = UI.CreateFrame("Texture", "Resource", lb.groupBF[i])
     lb.groupTarget[i] = UI.CreateFrame("Texture", "Target", lb.groupBF[i])
     lb.groupReceivingSpell[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
     lb.groupCastBar[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
@@ -98,6 +100,7 @@ for i= 1,20 do
     lb.UnitsTableStatus[name][6]=false --is target   (not used)
     lb.UnitsTableStatus[name][7]=i --Frame index  used for buff monitor
     lb.UnitsTableStatus[name][8]=false -- position change check
+	lb.UnitsTableStatus[name][9]="none" --Calling
 end
 lb.UnitsTableStatus["player"]={}
 lb.UnitsTableStatus["player"][1]=false --aggro
@@ -108,6 +111,7 @@ lb.UnitsTableStatus["player"][5]=0 --Unit ID
 lb.UnitsTableStatus["player"][6]=false  --is target
 lb.UnitsTableStatus["player"][7]=1  --frame index    used for buff monitor
 lb.UnitsTableStatus["player"][8]=false -- position change check
+lb.UnitsTableStatus["player"][9]="none" --Calling
 lb.UnitsGroupTable = {"group01", "group02", "group03", "group04", "group05"}
 lb.Calling = {"warrior", "cleric", "mage", "rogue", "percentage"}
 lb.Role = {"tank", "heal", "dps", "support" }
@@ -181,8 +185,3 @@ for i = 1 ,5 do
         lb.WindowOptionsMouseButtonCommands[i][g]= UI.CreateFrame("SimpleTextArea", "DebuffsListAddTextbox",parent)
     end
 end
-
-
-
-
-
