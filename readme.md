@@ -9,11 +9,11 @@ Nonetheless, the add-on makes it easier to monitor incoming damage, damage over 
 
 Changelog
 ---------
-- Edited function for onBuffRemove() - buffmonitor.lua, now updates only the changed slots on buff remove event, reducing CPU usage from 45% to 8% max with 20 debuffs changing almost at the same time (found out tonight while playing a purifier cleric). `Achelius 20/03/2012`
+- Edited function for onBuffRemove() - buffmonitor.lua, now updates only the changed slots on buff remove event, reducing CPU usage from 45% to 8% max with 20 debuffs changing almost at the same time (found out tonight while playing a purifier cleric). `Achelius 20/03/12`
 - Added slash commands. `Protonova 03/20/12`
 - Changed add-on's name from RiftHBot to LifeBinder. `Achelius & Protonova 03/20/12`
 - Implemented new file structure. `Protonova 03/20/12`
-- working version but, gui need to be fixed becausebuff/debuff lists don't work 'achelius 03/21/12'
+- working version but, gui need to be fixed becausebuff/debuff lists don't work 'Achelius 03/21/12'
 
 Key Features
 ------------
@@ -25,7 +25,7 @@ Key Features
 - Customizable appearance to suit your needs. Almost every visual aspect can be changed.
 - Indication of distance or line of sight.
 - Mousebind, Buff and Debuff profiles for all individual specs.
-- Mouseover targeting. lb knows when you hover over a target.
+- Mouseover targeting. LB knows when you hover over a target.
 - Role changing buttons that disappear in combat.
 - Target indication, know what you target.
 
@@ -57,9 +57,9 @@ RiftHbot for Dummies
 
 Known Issues
 ------------
-- Only in group mode and during combat if a player disconnects, the game sort the players in the group moving the disconnected player last, but I cannot reassign the frames mouseover unit id during combat so it bugs out, I’m trying to fix it but i don't want to complicate things too much or they will easily break.
-- Los indicator doesn't work like it's intended but is fixed in the upcoming version 0.25.
-- In a 20 man raid. When you apply a great number of buffs at the same time it slow down the game considerably (like when you are spamming Healing Flood in combat on a 20 man raid), rift has an incredible amount of buffs on every character at the same time.
+- Only in group mode and during combat if a player disconnects, the game sort the players in the group moving the disconnected player last, but i cannot reassign the frames mouseover unit id during combat so it bugs out, i’m trying to fix it but i don't want to complicate things too much or they will easily break.
+- LoS indicator doesn't work like it's intended but is fixed in the upcoming version 0.25.
+- In a 20 man raid. When you apply a great number of buffs at the same time it slow down the game considerably (like when you are spamming healing flood in combat on a 20 man raid), rift has an incredible amount of buffs on every character at the same time.
 
 Future Implementations
 ----------------------
