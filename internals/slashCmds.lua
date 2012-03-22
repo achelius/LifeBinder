@@ -2,7 +2,7 @@ function slashCommands(cmdLine)
 	local cmdLine = string.lower(cmdLine)
 	if (cmdLine.find(cmdLine,"help")) then
 		print ("------------------------") --Longer on purpose because of rift's odd char spacing
-		print ("RiftHbot Help Menu")
+		print ("LifeBinder Help Menu")
 		print ("------------------------")
 		print ("/lb config  -- Configure RiftHbot.")
 		print ("/lb show    -- Show RiftHbot.")
@@ -85,4 +85,4 @@ end
 
 -- register slash commands
 table.insert(Command.Slash.Register("lb"), {slashCommands, "LifeBinder", "lbSlashCmds"})
-table.insert(Command.Slash.Register("LifeBinder"), {slashCommands, "LifeBinder", "lbSlashCmds"})
+table.insert(Command.Slash.Register("lifebinder"), {slashCommands, "LifeBinder", "lbSlashCmds"})
