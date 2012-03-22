@@ -92,7 +92,7 @@ function lbloadSettings()
     createOptionsWindow()
 	--lbCreateAbilityList()
 	--lbCreateOptions()
-    print ("Welcome to LifeBinder v0.27! Type /lb for commands.")
+    print ("Welcome to LifeBinder v0.27! Type /lb help for commands.")
 
 end
 
