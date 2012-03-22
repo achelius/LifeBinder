@@ -6,7 +6,7 @@ local unitLookup= _G.Inspect.Unit.Lookup
 lastMode=-1 -- last view mode (solo =0 group=1 raid=0) needed to update hp after view mode change
 local viewModeChanged=false -- true if view mode changes
 local lastUnitUpdate =0
-local function getThrottle()
+local function getThrottle() 
     local now =  timeFrame()
     local elapsed = now - lastUnitUpdate
     if (elapsed >= (.5)) then --half a second
@@ -70,16 +70,16 @@ if addonidentifier~="LifeBinder" then return end
         lbDeBuffList[6]={ }
     end
     
---    if lbSlotPositions==nil then
---    	lbSlotPositions={}
---    	for i = 1 to 6 do
---    		lbSlotPositions[i]={}
---    		for g = 1 to 8 do
---    			lbSlotPositions[i][g]={}
---    		end
---    	end
---    	
---    end
+    if lbSlotPositions==nil then
+    	lbSlotPositions={}
+    	for i = 1 to 6 do
+    		lbSlotPositions[i]={}
+    		for g = 1 to 8 do
+    			lbSlotPositions[i][g]={}
+    		end
+    	end
+    	
+    end
     
     if lbCallingColors == nil then
         lbCallingColors = {{r = 1, g = 0, b = 0}, {r = 0, g = 1, b = 0}, {r = 0.6, g = 0.2, b = 0.8}, {r = 1, g = 1, b = 0}, {r = 1, g = 1, b = 1}}
