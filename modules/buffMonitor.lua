@@ -8,47 +8,86 @@ local abilitydetail = _G.Inspect.Ability.Detail
 local buffdetail=   _G.Inspect.Buff.Detail
 local bufflist=   _G.Inspect.Buff.List
 function initializeBuffMonitor()
-    for g= 1, 10 do
-       local lt=0
-       local tp=0
-        if g==1 then
-            lt=(-6)*tempx*0.009009009
-            tp=6*tempy*0.023255814
-        elseif g==2 then
-            lt=-24 *tempx*0.009009009
-            tp=6 *tempy*0.023255814
+--print (#(lbBuffSlotPositions[lbValues.set]) )
+ 	for var=1,20 do
+	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
+	       
+	       local lt=lbBuffSlotPositions[lbValues.set][g][3]
+	       local tp=lbBuffSlotPositions[lbValues.set][g][4]
+	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
+	       local Point2=lbBuffSlotPositions[lbValues.set][g][2]
+	       local scalex=tempx*0.009009009
+	       local scaley=tempy*0.023255814
+	        
+	        local iconwidth=16*scalex
+	        local iconheight=16*scaley
+	        lb.groupHoTSpots[var][g][1]:SetTexture(lb.groupHoTSpotsIcons[var][g][1],lb.groupHoTSpotsIcons[var][g][2] )
+	        lb.groupHoTSpots[var][g][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
+	        lb.groupHoTSpots[var][g][1]:SetHeight(iconwidth)
+	        lb.groupHoTSpots[var][g][1]:SetWidth(iconheight)
+	        lb.groupHoTSpots[var][g][1]:SetLayer(5)
+	        lb.groupHoTSpots[var][g][1]:SetVisible(lb.groupHoTSpotsIcons[var][g][0])
+	
+	        lb.groupHoTSpots[var][g][2]:SetPoint("CENTER", lb.groupHoTSpots[var][g][1], "CENTER", 5, 5 )
+	        lb.groupHoTSpots[var][g][2]:SetFontColor(1,1,1,1)
+	        lb.groupHoTSpots[var][g][2]:SetText(tostring(lb.groupHoTSpotsIcons[var][g][3]))
+	        lb.groupHoTSpots[var][g][2]:SetLayer(7)
+	        if lb.groupHoTSpotsIcons[var][g][3]==0 then  lb.groupHoTSpots[var][g][2]:SetVisible(false) end
+	
+	        lb.groupHoTSpots[var][g][3]:SetPoint("CENTER", lb.groupHoTSpots[var][g][1], "CENTER",7, 7 )
+	        lb.groupHoTSpots[var][g][3]:SetFontColor(0,0,0,1)
+	        lb.groupHoTSpots[var][g][3]:SetText(tostring(lb.groupHoTSpotsIcons[var][g][3]))
+	        lb.groupHoTSpots[var][g][3]:SetLayer(6)
+	        if lb.groupHoTSpotsIcons[var][g][3]==0 then  lb.groupHoTSpots[var][g][3]:SetVisible(false) end
+    	end
+    end
+end
 
-        elseif g==3 then
-            lt=-tempx+(25)*tempx*0.009009009
-            tp=tempy-(20)*tempy*0.023255814
+function relocateBuffMonitorSlots()
+--print (#(lbBuffSlotPositions[lbValues.set]) )
+ 	for var=1,20 do
+	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
+	       
+	       local lt=lbBuffSlotPositions[lbValues.set][g][3]
+	       local tp=lbBuffSlotPositions[lbValues.set][g][4]
+	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
+	       local Point2=lbBuffSlotPositions[lbValues.set][g][2]
+	       local scalex=tempx*0.009009009
+	       local scaley=tempy*0.023255814
+	        
+	        local iconwidth=16*scalex
+	        local iconheight=16*scaley
+	        
+	        lb.groupHoTSpots[var][g][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
+	        lb.groupHoTSpots[var][g][1]:SetHeight(iconwidth)
+	        lb.groupHoTSpots[var][g][1]:SetWidth(iconheight)
+	        lb.groupHoTSpots[var][g][1]:SetLayer(5)
 
-        elseif g==4 then
-            lt=-tempx+(43)*tempx*0.009009009
-            tp=tempy-(20)*tempy*0.023255814
-        elseif g==5 then
-            lt=-tempx+61*tempx*0.009009009
-            tp=tempy-20*tempy*0.023255814
-        end
-        local iconheight=(16*tempy)*0.023255814
-        local iconwidth=(16*tempx)*0.009009009
-        lb.groupHoTSpots[var][g][1]:SetTexture(lb.groupHoTSpotsIcons[var][g][1],lb.groupHoTSpotsIcons[var][g][2] )
-        lb.groupHoTSpots[var][g][1]:SetPoint("TOPRIGHT", lb.groupBF[var], "TOPRIGHT", lt,  tp )
-        lb.groupHoTSpots[var][g][1]:SetHeight(iconwidth)
-        lb.groupHoTSpots[var][g][1]:SetWidth(iconheight)
-        lb.groupHoTSpots[var][g][1]:SetLayer(5)
-        lb.groupHoTSpots[var][g][1]:SetVisible(lb.groupHoTSpotsIcons[var][g][0])
+	   
+    	end
+    end
+end
+function relocateSingleBuffMonitorSlot(index)
+--print (#(lbBuffSlotPositions[lbValues.set]) )
+ 	for var=1,20 do
+	   
+	       
+	       local lt=lbBuffSlotPositions[lbValues.set][index][3]
+	       local tp=lbBuffSlotPositions[lbValues.set][index][4]
+	       local Point1=lbBuffSlotPositions[lbValues.set][index][1]
+	       local Point2=lbBuffSlotPositions[lbValues.set][index][2]
+	       local scalex=tempx*0.009009009
+	       local scaley=tempy*0.023255814
+	        
+	        local iconwidth=16*scalex
+	        local iconheight=16*scaley
+	        
+	        lb.groupHoTSpots[var][index][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
+	        lb.groupHoTSpots[var][index][1]:SetHeight(iconwidth)
+	        lb.groupHoTSpots[var][index][1]:SetWidth(iconheight)
+	        lb.groupHoTSpots[var][index][1]:SetLayer(5)
 
-        lb.groupHoTSpots[var][g][2]:SetPoint("CENTER", lb.groupHoTSpots[var][g][1], "CENTER", 5, 5 )
-        lb.groupHoTSpots[var][g][2]:SetFontColor(1,1,1,1)
-        lb.groupHoTSpots[var][g][2]:SetText(tostring(lb.groupHoTSpotsIcons[var][g][3]))
-        lb.groupHoTSpots[var][g][2]:SetLayer(7)
-        if lb.groupHoTSpotsIcons[var][g][3]==0 then  lb.groupHoTSpots[var][g][2]:SetVisible(false) end
-
-        lb.groupHoTSpots[var][g][3]:SetPoint("CENTER", lb.groupHoTSpots[var][g][1], "CENTER",7, 7 )
-        lb.groupHoTSpots[var][g][3]:SetFontColor(0,0,0,1)
-        lb.groupHoTSpots[var][g][3]:SetText(tostring(lb.groupHoTSpotsIcons[var][g][3]))
-        lb.groupHoTSpots[var][g][3]:SetLayer(6)
-        if lb.groupHoTSpotsIcons[var][g][3]==0 then  lb.groupHoTSpots[var][g][3]:SetVisible(false) end
+	   
     end
 end
 
@@ -180,33 +219,38 @@ end
 function lbUpdateSpellTextures()
     local abilities
     abtextures={}
-    for v, k in pairs(lbBuffList) do
+    for v, k in pairs(lbSelectedBuffsList) do
         table.insert(abtextures,"Textures/buffhot.png")
     end
     abilities =abilitylist()
     abilitydets=abilitydetail(abilities)
-    for d,c in pairs(lbBuffList[lbValues.set]) do
+    for d,c in pairs(lbSelectedBuffsList[lbValues.set]) do
         --c={"Soothing Stream", "Healing Current","Healing Flood" }
-        for s,a in pairs(c) do
-            --a="Soothing Stream" ....
-            found=false
-            lb.FullBuffsList[a]=true
-            for v, k in pairs(abilitydets) do
-                if a==k.name and a~=nil then
-                    if k.icon ~=nil then
-                        found=true
-                        if lb.IconsCache[a] == nil then
-                            lb.IconsCacheCount=lb.IconsCacheCount+1
-                            lb.IconsCache[a]={"Rift",k.icon }
-                        end
-                    end
-                end
-            end
-            if not found then
-                lb.NoIconsBuffList[a]=true
-                --print (a)
-            end
-
+        
+        for j,m in pairs(c) do
+        
+	        for s,a in pairs(m) do
+	            --a="Soothing Stream" ....
+	            found=false
+	           
+	            lb.FullBuffsList[a]=true
+	            for v, k in pairs(abilitydets) do
+	                if a==k.name and a~=nil then
+	                    if k.icon ~=nil then
+	                        found=true
+	                        if lb.IconsCache[a] == nil then
+	                            lb.IconsCacheCount=lb.IconsCacheCount+1
+	                            lb.IconsCache[a]={"Rift",k.icon }
+	                        end
+	                    end
+	                end
+	            end
+	            if not found then
+	                lb.NoIconsBuffList[a]=true
+	                --print (a)
+	            end
+	
+	        end
         end
     end
     createDebuffFullList()
@@ -274,25 +318,27 @@ function onBuffAdd(unit, buffs)
                         --print("added"..getTextureFromCache(name)[2])
                     end
 
-                    for slotindex,c in pairs(lbBuffList[lbValues.set]) do
+                    for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
                         --c={"Soothing Stream", "Healing Current","Healing Flood" }
-                        for s,a in pairs(c) do
-                            --a="Soothing Stream" ....
-                            if a==name and a~=nil then
-                                --print (frameindex)
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][0]=true
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][1]=texture[1]
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][2]=texture[2]
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][3]=buffTable.stack
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][4]=true
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][5]=buffTable.id
-                                lb.groupHoTSpotsIcons[frameindex][slotindex][6]=false
-                                --print (lb.groupHoTSpotsIcons[frameindex][slotindex][4])
-                                updateBuffMonitorTexturesIndex(frameindex,slotindex)
-                                updatebuffs=true
-                            end
-
-
+                         for j,m in pairs(c) do
+	                        for s,a in pairs(m) do
+	                            --a="Soothing Stream" ....
+	                            if a==name and a~=nil then
+	                                --print (frameindex)
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][0]=true
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][1]=texture[1]
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][2]=texture[2]
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][3]=buffTable.stack
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][4]=true
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][5]=buffTable.id
+	                                lb.groupHoTSpotsIcons[frameindex][slotindex][6]=false
+	                                --print (lb.groupHoTSpotsIcons[frameindex][slotindex][4])
+	                                updateBuffMonitorTexturesIndex(frameindex,slotindex)
+	                                updatebuffs=true
+	                            end
+	
+	
+	                        end
                         end
                     end
                 end
@@ -354,7 +400,7 @@ function onBuffRemove(unit, buffs)
     if frameindex==nil then return end
     local updatebuffs=false
     for buffID,placeholder in pairs(buffs) do
-       -- for slotindex,c in pairs(lbBuffList[lbValues.set]) do
+       -- for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
         for slotindex= 1, 10 do
             --print (tostring(slotindex)..tostring(buffID))
             if lb.groupHoTSpotsIcons[frameindex][slotindex][5]== buffID then
@@ -388,7 +434,7 @@ function onBuffRemove(unit, buffs)
                     --was a buff
                     for idb,BuffDet in pairs(newbuffsdetails) do
                         if BuffDet.debuff==nil then
-                            local slotbuffs=  lbBuffList[lbValues.set][slotindex]
+                            local slotbuffs=  lbSelectedBuffsList[lbValues.set][slotindex]
 
                             if slotbuffs~=nil then
                                 local lastdebuffID

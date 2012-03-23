@@ -93,7 +93,10 @@ print ("loading")
     	for i = 1 , 6 do
     		lbBuffSlotPositions[i]={}
     		for g = 1 , 8 do
-    			lbBuffSlotPositions[i][g]=lbPredefinedBuffSlotPos[1][g] --set the slot to the x style definition for that slot
+    			lbBuffSlotPositions[i][g]={}
+    			for h=1,6 do --6 because the options are 6 (anchor1,anchor2,left,top,width,height)
+    				lbBuffSlotPositions[i][g][h]=lbPredefinedBuffSlotPos[1][g][h] --set the slot to the x style definition for that slot
+    			end
     		end
     	end
     	
@@ -102,9 +105,9 @@ print ("loading")
     if lbBuffSlotOptions ==nil then
     	lbBuffSlotOptions={}
     	for i = 1 , 6 do
-    		lbBuffSlotPositions[i]={}
+    		lbBuffSlotOptions[i]={}
     		for g = 1 , 8 do
-    			lbBuffSlotPositions[i]={AllowDebuffs=false,AllowForAutoSortBuffs=false,AllowForAutoSortDebuffs=false}
+    			lbBuffSlotOptions[i]={AllowDebuffs=false,AllowForAutoSortBuffs=false,AllowForAutoSortDebuffs=false}
     		end
     	end
     end
@@ -481,6 +484,7 @@ end
 function onRoleChanged(role)
     lbValues.set=role;
     --call abilities
+    initializeBuffMonitor()--initializes buff monitor
     initializeSpecButtons()
     lbUpdateSpellTextures() --update textures cache and populate the lb.NoIconsBuffList table
     resetBuffMonitorTextures() --hide every buff slot
@@ -490,6 +494,7 @@ function onRoleChanged(role)
     createTableBuffs()--gui
     createTableDebuffs() --gui
     UpdateMouseAssociationsTextFieldsValues() --gui
+    lb.SlotsGui.initialize()
 end
 
 function onAbilityAdded(abilities)

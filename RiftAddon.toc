@@ -20,8 +20,9 @@ Dependencies = {
 RunOnStartup = {
 	"globals.lua",
 	"internals/buffPositionStyles.lua",
-	"view.lua",
+	"internals/slotsEditor.lua",
 	"main.lua",
+	"view.lua",
 	"internals/debuffCache.lua",
 	"internals/guiOptions.lua",
 	"internals/slashCmds.lua",

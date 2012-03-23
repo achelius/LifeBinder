@@ -122,7 +122,7 @@ function lbCreateGroups()
 			lb.groupRole[var]:SetWidth(16*tempy*0.023255814)
 			lb.groupRole[var]:SetLayer(2)
 
-            initializeBuffMonitor()
+            
 
 			lb.groupMask[var]:SetLayer(3)
 			lb.groupMask[var]:SetBackgroundColor(0,0,0,0)
