@@ -57,7 +57,7 @@ function lbCreateGroups()
 			lb.groupBF[var]:SetVisible(true)
 			
 			--Set Resource Frame
-			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupMask[var], "BOTTOMLEFT", -2, 0)
+			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupBF[var], "BOTTOMLEFT", 5, 0)
 			lb.groupRF[var]:SetHeight(5)
 			lb.groupRF[var]:SetWidth(tempx - 6)
 			lb.groupRF[var]:SetLayer(2)
@@ -84,7 +84,7 @@ function lbCreateGroups()
             lb.groupCastBar[var]:SetLayer(6)
             lb.groupCastBar[var]:SetVisible(false)
 
-			lb.groupHF[var]:SetTexture("LifeBinder", "Textures/health_g.png")
+			lb.groupHF[var]:SetTexture("LifeBinder","Textures/"..lbValues.texture)
 			lb.groupHF[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
 			lb.groupHF[var]:SetHeight(tempy - 5)
 			lb.groupHF[var]:SetWidth(tempx - 5)

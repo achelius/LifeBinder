@@ -31,7 +31,7 @@ function lb.SlotsGui.initialize()
 	 lb.SlotsGui.Tabs[1].UnitFrame:SetWidth(tempx*lb.SlotsGui.PreviewScale[1])
 	 lb.SlotsGui.Tabs[1].UnitFrame:SetHeight(tempy*lb.SlotsGui.PreviewScale[2])
 	 
-	 lb.SlotsGui.Tabs[1].UnitFrame:SetTexture("LifeBinder", "Textures/health_g.png")
+	 lb.SlotsGui.Tabs[1].UnitFrame:SetTexture("LifeBinder", "Textures/"..lbValues.texture)
 	 ------initialize Slots
 	 lb.SlotsGui.Tabs[1].Slots={}
 	 
@@ -40,8 +40,14 @@ function lb.SlotsGui.initialize()
 	 	lb.SlotsGui.Tabs[1].Slots[i]={}
 	 	lb.SlotsGui.Tabs[1].Slots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  lb.SlotsGui.Tabs[1].UnitFrame )
 	 	lb.SlotsGui.Tabs[1].Slots[i].Frame:SetPoint(slotinfo[1],lb.SlotsGui.Tabs[1].UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.SlotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.SlotsGui.PreviewScale[2])
-	 	lb.SlotsGui.Tabs[1].Slots[i].Frame:SetWidth(slotinfo[5]*scalex*lb.SlotsGui.PreviewScale[1])
-	 	lb.SlotsGui.Tabs[1].Slots[i].Frame:SetHeight(slotinfo[6]*scaley*lb.SlotsGui.PreviewScale[2])
+	 	local iconwidth=slotinfo[5]*scalex
+	        local iconheight=slotinfo[6]*scaley
+	        local iconl=iconwidth
+	        if iconheight<iconwidth then
+	        	iconl=iconheight
+	        end
+	 	lb.SlotsGui.Tabs[1].Slots[i].Frame:SetWidth(iconl*lb.SlotsGui.PreviewScale[1])
+	 	lb.SlotsGui.Tabs[1].Slots[i].Frame:SetHeight(iconl*lb.SlotsGui.PreviewScale[2])
 	 	lb.SlotsGui.Tabs[1].Slots[i].Frame:SetBackgroundColor(0,0,0,1)
 	 	lb.SlotsGui.Tabs[1].Slots[i].Frame.Event.LeftDown=function () onSlotLeftDown(i) end
 	 	lb.SlotsGui.Tabs[1].Slots[i].Frame.Event.LeftUp=function () onSlotLeftUp(i) end
@@ -59,7 +65,29 @@ function lb.SlotsGui.initialize()
 	 lb.SlotsGui.Tabs[1].ApplyButton:SetPoint("BOTTOMRIGHT", lb.SlotsGui.Tabs[1].MainFrame,"BOTTOMRIGHT",-5,-5)
 	 lb.SlotsGui.Tabs[1].ApplyButton:SetText("Apply")
 	 lb.SlotsGui.Tabs[1].ApplyButton.Event.LeftClick=function() relocateBuffMonitorSlots() end
+	 --initialize abilities list
+	 lb.SlotsGui.Tabs[1].AbilitesList=UI.CreateFrame("AbilitiesList", "List", lb.SlotsGui.Tabs[1].MainFrame)
 	 
+	 lb.SlotsGui.Tabs[1].AbilitesListView=UI.CreateFrame("SimpleScrollView", "List", lb.SlotsGui.Tabs[1].MainFrame)
+	 lb.SlotsGui.Tabs[1].AbilitesListView:SetPoint("TOPLEFT", lb.SlotsGui.Tabs[1].MainFrame, "TOPLEFT",600, 100)
+     lb.SlotsGui.Tabs[1].AbilitesListView:SetWidth(140)
+     lb.SlotsGui.Tabs[1].AbilitesListView:SetHeight(240)
+     lb.SlotsGui.Tabs[1].AbilitesListView:SetLayer(1)
+     lb.SlotsGui.Tabs[1].AbilitesListView:SetBorder(1, 1, 1, 1, 1)
+     lb.SlotsGui.Tabs[1].AbilitesListView:SetContent( lb.SlotsGui.Tabs[1].AbilitesList)
+        
+	 
+	 local list={}
+	 
+	 local abs=Inspect.Ability.Detail(Inspect.Ability.List())
+	 local counter=1
+	 for k,ab in pairs(abs) do
+		local name=ab.name
+		local texture=getTextureFromCache(name)
+	     list[counter]={name,"Rift",ab.icon}
+	     counter=counter+1
+	 end
+	 lb.SlotsGui.Tabs[1].AbilitesList:SetItems(list)
 end
 
 function onSlotLeftDown(index)
@@ -67,7 +95,7 @@ function onSlotLeftDown(index)
         slotdrag = true
         
         local mouseStatus = Inspect.Mouse()
-        
+        lb.SlotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(1,0,0,1)
         local slot=lb.SlotsGui.Tabs[1].Slots[index]
         lb.SlotsGui.selectedIndex=index
         --print (slot:GetPosition()[1])
@@ -79,11 +107,12 @@ end
 function onSlotLeftUp(index)
 if  lb.SlotsGui.selectedIndex~=index then return end
     slotdrag = false
+    lb.SlotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(0,0,0,1)
 end
 function onSlotUpoutside(index)
 if  lb.SlotsGui.selectedIndex~=index then return end
     slotdrag = false
-    
+    lb.SlotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(0,0,0,1) 
 end
 function OnSlotMouseMove(index,x,y)
 if  lb.SlotsGui.selectedIndex~=index then return end
@@ -99,6 +128,7 @@ if  lb.SlotsGui.selectedIndex~=index then return end
     	local newy=y-(lb.SlotsGui.clickOffset["y"])
    		lb.SlotsGui.Tabs[1].Slots[index].X=newx
 	 	lb.SlotsGui.Tabs[1].Slots[index].Y=newy
+	 	
 	 	---Experimental
 	 	lbBuffSlotPositions[lbValues.set][index][3]=newx/scalex/lb.SlotsGui.PreviewScale[1]
 	 	lbBuffSlotPositions[lbValues.set][index][4]=newy/scaley/lb.SlotsGui.PreviewScale[2]

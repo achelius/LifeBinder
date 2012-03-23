@@ -11,20 +11,24 @@ function initializeBuffMonitor()
 --print (#(lbBuffSlotPositions[lbValues.set]) )
  	for var=1,20 do
 	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
-	       
-	       local lt=lbBuffSlotPositions[lbValues.set][g][3]
-	       local tp=lbBuffSlotPositions[lbValues.set][g][4]
-	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
-	       local Point2=lbBuffSlotPositions[lbValues.set][g][2]
 	       local scalex=tempx*0.009009009
 	       local scaley=tempy*0.023255814
+	       local lt=lbBuffSlotPositions[lbValues.set][g][3]*scalex
+	       local tp=lbBuffSlotPositions[lbValues.set][g][4]*scaley
+	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
+	       local Point2=lbBuffSlotPositions[lbValues.set][g][2]
+	       
 	        
 	        local iconwidth=16*scalex
 	        local iconheight=16*scaley
+	        local iconl=iconwidth
+	        if iconheight<iconwidth then
+	        	iconl=iconheight
+	        end
 	        lb.groupHoTSpots[var][g][1]:SetTexture(lb.groupHoTSpotsIcons[var][g][1],lb.groupHoTSpotsIcons[var][g][2] )
 	        lb.groupHoTSpots[var][g][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
-	        lb.groupHoTSpots[var][g][1]:SetHeight(iconwidth)
-	        lb.groupHoTSpots[var][g][1]:SetWidth(iconheight)
+	        lb.groupHoTSpots[var][g][1]:SetHeight(iconl)
+	        lb.groupHoTSpots[var][g][1]:SetWidth(iconl)
 	        lb.groupHoTSpots[var][g][1]:SetLayer(5)
 	        lb.groupHoTSpots[var][g][1]:SetVisible(lb.groupHoTSpotsIcons[var][g][0])
 	
@@ -45,22 +49,26 @@ end
 
 function relocateBuffMonitorSlots()
 --print (#(lbBuffSlotPositions[lbValues.set]) )
+   local scalex=tempx*0.009009009
+	local scaley=tempy*0.023255814
  	for var=1,20 do
 	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
-	       
-	       local lt=lbBuffSlotPositions[lbValues.set][g][3]
-	       local tp=lbBuffSlotPositions[lbValues.set][g][4]
+	    
+	       local lt=lbBuffSlotPositions[lbValues.set][g][3]*scalex
+	       local tp=lbBuffSlotPositions[lbValues.set][g][4]*scaley
 	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
 	       local Point2=lbBuffSlotPositions[lbValues.set][g][2]
-	       local scalex=tempx*0.009009009
-	       local scaley=tempy*0.023255814
+	       
 	        
 	        local iconwidth=16*scalex
 	        local iconheight=16*scaley
-	        
+	        local iconl=iconwidth
+	        if iconheight<iconwidth then
+	        	iconl=iconheight
+	        end
 	        lb.groupHoTSpots[var][g][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
-	        lb.groupHoTSpots[var][g][1]:SetHeight(iconwidth)
-	        lb.groupHoTSpots[var][g][1]:SetWidth(iconheight)
+	        lb.groupHoTSpots[var][g][1]:SetHeight(iconl)
+	        lb.groupHoTSpots[var][g][1]:SetWidth(iconl)
 	        lb.groupHoTSpots[var][g][1]:SetLayer(5)
 
 	   
@@ -69,22 +77,26 @@ function relocateBuffMonitorSlots()
 end
 function relocateSingleBuffMonitorSlot(index)
 --print (#(lbBuffSlotPositions[lbValues.set]) )
+ local scalex=tempx*0.009009009
+ local scaley=tempy*0.023255814
  	for var=1,20 do
 	   
-	       
-	       local lt=lbBuffSlotPositions[lbValues.set][index][3]
-	       local tp=lbBuffSlotPositions[lbValues.set][index][4]
+	      
+	       local lt=lbBuffSlotPositions[lbValues.set][index][3]*scalex
+	       local tp=lbBuffSlotPositions[lbValues.set][index][4]*scaley
 	       local Point1=lbBuffSlotPositions[lbValues.set][index][1]
 	       local Point2=lbBuffSlotPositions[lbValues.set][index][2]
-	       local scalex=tempx*0.009009009
-	       local scaley=tempy*0.023255814
+	       
 	        
 	        local iconwidth=16*scalex
 	        local iconheight=16*scaley
-	        
+	        local iconl=iconwidth
+	        if iconheight<iconwidth then
+	        	iconl=iconheight
+	        end
 	        lb.groupHoTSpots[var][index][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
-	        lb.groupHoTSpots[var][index][1]:SetHeight(iconwidth)
-	        lb.groupHoTSpots[var][index][1]:SetWidth(iconheight)
+	        lb.groupHoTSpots[var][index][1]:SetHeight(iconl)
+	        lb.groupHoTSpots[var][index][1]:SetWidth(iconl)
 	        lb.groupHoTSpots[var][index][1]:SetLayer(5)
 
 	   
@@ -226,11 +238,12 @@ function lbUpdateSpellTextures()
     abilitydets=abilitydetail(abilities)
     for d,c in pairs(lbSelectedBuffsList[lbValues.set]) do
         --c={"Soothing Stream", "Healing Current","Healing Flood" }
-        
+         
         for j,m in pairs(c) do
         
 	        for s,a in pairs(m) do
 	            --a="Soothing Stream" ....
+	            print("txt"..tostring(a))
 	            found=false
 	           
 	            lb.FullBuffsList[a]=true

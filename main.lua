@@ -20,7 +20,7 @@ if (addonidentifier ~= "LifeBinder") then return end
 print ("loading")
  lastMode=-1
     if lbValues == nil then
-        lbValues = {addonState = true, windowstate = true, lockedState = false, locmainx = 0, locmainy = 0, mainheight = 300, mainwidth = 500, font = 16, pet = false, texture = "health_g.png", set = 1, hotwatch = true, debuffwatch = true, rolewatch = true, showtooltips = true }
+        lbValues = {addonState = true, windowstate = true, lockedState = false, locmainx = 0, locmainy = 0, mainheight = 300, mainwidth = 500, font = 16, pet = false, texture = "statusbars/health_g.png", set = 1, hotwatch = true, debuffwatch = true, rolewatch = true, showtooltips = true }
 
 
         lbValues.locmainx = ((UIParent:GetRight() / 2) - 150)
