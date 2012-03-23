@@ -20,7 +20,24 @@ if (addonidentifier ~= "LifeBinder") then return end
 print ("loading")
  lastMode=-1
     if lbValues == nil then
-        lbValues = {addonState = true, windowstate = true, lockedState = false, locmainx = 0, locmainy = 0, mainheight = 300, mainwidth = 500, font = 16, pet = false, texture = "statusbars/health_g.png", set = 1, hotwatch = true, debuffwatch = true, rolewatch = true, showtooltips = true }
+        lbValues = {
+	        addonState = true, 
+	        windowstate = true, 
+	        lockedState = false, 
+	        locmainx = 0, 
+	        locmainy = 0, 
+	        mainheight = 300, 
+	        mainwidth = 500, 
+	        font = 16, 
+	        pet = false, 
+	        texture = "statusbars/health_g.png", 
+	        set = 1, 
+	        hotwatch = true,
+	        debuffwatch = true, 
+	        rolewatch = true, 
+	        showtooltips = true,
+	        CacheDebuffs=false 
+        }
 
 
         lbValues.locmainx = ((UIParent:GetRight() / 2) - 150)
@@ -85,6 +102,15 @@ print ("loading")
         lbDeBuffList[4]={ }
         lbDeBuffList[5]={ }
         lbDeBuffList[6]={ }
+    end
+    if lbDeBuffListBlackList == nil then
+        lbDeBuffListBlackList ={}
+        lbDeBuffListBlackList[1]={ }
+        lbDeBuffListBlackList[2]={ }
+        lbDeBuffListBlackList[3]={ }
+        lbDeBuffListBlackList[4]={ }
+        lbDeBuffListBlackList[5]={ }
+        lbDeBuffListBlackList[6]={ }
     end
     --slot position info, separated from the slot options because i only load this once 
     --can be more or less slots, but default will be 8 and the style will be X style
@@ -494,7 +520,7 @@ function onRoleChanged(role)
     createTableBuffs()--gui
     createTableDebuffs() --gui
     UpdateMouseAssociationsTextFieldsValues() --gui
-    lb.SlotsGui.initialize()
+    lb.slotsGui.initialize()
 end
 
 function onAbilityAdded(abilities)

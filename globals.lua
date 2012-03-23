@@ -73,6 +73,9 @@ for i = 1, 20 do
         lb.groupHoTSpotsIcons[i][g][4]=false    --updated  (true if icon has just updated)
         lb.groupHoTSpotsIcons[i][g][5]=nil    --buff spell ID     (used for remove buff )
         lb.groupHoTSpotsIcons[i][g][6]=false    --is debuff    true if the debuff applied is a debuff
+        lb.groupHoTSpotsIcons[i][g][7]=false    --is from whitelist
+        lb.groupHoTSpotsIcons[i][g][8]=false    --accepts Debuffs (true is this slot accepts debuffs
+        
 	end
 end
 for i = 1, 5 do
