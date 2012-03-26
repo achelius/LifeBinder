@@ -13,7 +13,7 @@ function loadVariables(addonidentifier)
 	        mainwidth = 500, 
 	        font = 16, 
 	        pet = false, 
-	        texture = "statusbars/health_g.png", 
+	        texture = "bars/health.png", 
 	        set = 1, 
 	        hotwatch = true,
 	        debuffwatch = true, 
