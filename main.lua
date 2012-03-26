@@ -251,13 +251,38 @@ function UpdateFramesVisibility()
         end
     end
 end
-function WaitPlayerAvailable()
+function waitPlayerAvailable()
+	print ("wp")
+	lb.PlayerID =Inspect.Unit.Lookup("player")
+	local unitdet=Inspect.Unit.Detail(lb.PlayerID)
+	print("hh"..Inspect.Unit.Lookup("player")) 
+	if lb.PlayerID~=nil then
+		if unitdet~=nil then
+			print (unitdet.name)
+		else
+			print("nounit")
+		end
+	else
+	print("noid")
+	end 
+	if lb.PlayerID ~=nil and unitdet~=nil then
+		print ("unit found")
+		print(lb.PlayerID)
+		print(unitdet.name)
+		remev()
+		--RemoveEventHandler(Event.System.Update.Begin,WaitPlayerEventID)
+		PlayerFound=true
+		lbUnitUpdate()
+		
+	end
 
 end
 
 function lbUnitUpdate()
+	--waitPlayerAvailable()
 --   local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
 --    if not timer then return end
+	if not PlayerFound then return end
 	print("loadingjhjkjh")
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
     if lbValues.isincombat==nil or not lbValues.isincombat then  UpdateFramesVisibility()end -- reads the group status and hide or show players frames
@@ -266,29 +291,29 @@ function lbUnitUpdate()
 --        if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) end
 --  
 --  end
-	 if lb.PlayerID==nil then print(Inspect.Unit.Lookup("player")) end
-    local details = unitdetail({"player"})--lb.QueryTable)
-    for k,h in pairs(lb.QueryTable)do
-    	print(h)
-    end
-    for k,h in pairs(details)do
-    	print("kk"..h.name)
-    end
-    print (#details)
+	
+    local details = unitdetail(lb.QueryTable)--lb.QueryTable)
+  
     local targetunit=unitdetail("player.target")
     for key,val in pairs(lb.UnitsTableStatus) do
         if key~= "player" then
         	lb.UnitsTableStatus[key][8]=false
         end
     end
-    local units =Inspect.Unit.Detail({"player"}) 
-    for k,g in pairs(units) do 
-    print(g.name) 
-    end
+  
     for unitident, unitTable in pairs(details) do
     	
+    	print("----------"..unitident)
+    	print("----------"..unitTable.name)
     	
-        local j = stripnum(unitident)   --calculate key from unit identifier
+       local j=1
+       if lastMode==0 then unitident="player"end
+       if unitident~=1 then 
+       		j= stripnum(unitident)   --calculate key from unit identifier
+       else
+       		
+       		
+       end
        local name = unitTable.name
 
         if string.len(name) > 5 then name = string.sub(name, 1, 5).."" end --restrict names to 8 letters
@@ -460,6 +485,28 @@ function  lbBlockedUpdate(units)
         end
     end
 end
+function onUnitRoleChanged(units)
+	local details = unitdetail(units)
+
+    for unitident, unitTable in pairs(details) do
+        identif = GetIdentifierFromID(unitTable.id)   --calculate key from unit identifier
+        if identif~=nil then
+            local j=stripnum(identif)
+            if j~=nil then
+
+                if lb.UnitsTableStatus[identif][4] ~=  unitTable.role or viewModeChanged then
+                lb.UnitsTableStatus[identif][4] =  unitTable.role
+                if unitTable.role then
+                    lb.groupRole[j]:SetTexture("LifeBinder", "Textures/"..unitTable.role..".png")
+                else
+                    lb.groupRole[j]:SetTexture("LifeBinder", "Textures/".."blank.png")
+                end
+            end
+            end
+        end
+    end
+end
+
 --Called by the event   Event.Unit.Detail.Health e Event.Unit.Detail.HealthMax
 function  lbHpUpdate(units)
 
@@ -528,7 +575,7 @@ function onRoleChanged(role)
     createTableDebuffs() --gui
     UpdateMouseAssociationsTextFieldsValues() --gui
     --lb.slotsGui.initialize()
-    hideSpecButtons()
+   -- hideSpecButtons()
 end
 
 function onAbilityAdded(abilities)

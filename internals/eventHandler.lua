@@ -12,8 +12,10 @@ table.insert(Event.System.Secure.Enter, {onSecureEnter, "LifeBinder", "onSecureE
 table.insert(Event.System.Secure.Leave, {onSecureExit, "LifeBinder", "onSecureExit"})
 table.insert(Event.Addon.SavedVariables.Load.End, {lbLoadVariables, "LifeBinder", "lbLoadVariables"})
 table.insert(Event.TEMPORARY.Role, {onRoleChanged, "LifeBinder", "onRoleChanged"})
+table.insert(Event.Unit.Detail.Role, {onUnitRoleChanged, "LifeBinder", "onUnitRoleChanged"})
+
 table.insert(Event.Addon.Load.End, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
---table.insert(Event.System.Update.Begin, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
+
 table.insert(Event.System.Update.Begin, {castbarUpdate, "LifeBinder", "CastbarUpdate"})
 table.insert(Event.Unit.Castbar, {onCastbarChanged, "LifeBinder", "OnCastBarChanged"})
 table.insert(Event.Buff.Add, {onBuffAdd, "LifeBinder", "onBuffChange"})
@@ -29,3 +31,26 @@ table.insert(Event.SafesRaidManager.Group.Leave, {lbUnitUpdate , "LifeBinder", "
 
 table.insert(Event.SafesRaidManager.Player.Join, {lbUnitUpdate , "LifeBinder", "PlayerJoin"})
 table.insert(Event.SafesRaidManager.Player.Leave,{lbUnitUpdate , "LifeBinder", "PlayerLeave"})
+
+--player available wait
+WaitPlayerEventID={waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
+table.insert(Event.System.Update.Begin,WaitPlayerEventID)
+function remev()
+	for id, eventData in ipairs(Event.System.Update.Begin) do
+		if eventData == WaitPlayerEventID then
+			
+			table.remove(Event.System.Update.Begin, id)
+			break
+		end
+	end
+end
+function RemoveEventHandler(table,event_id)
+	--removing
+	for id, eventData in ipairs(table) do
+		if eventData == event_id then
+			
+			table.remove(table, id)
+			break
+		end
+	end
+end
