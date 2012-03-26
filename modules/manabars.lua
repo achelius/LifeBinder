@@ -24,7 +24,7 @@ end
                 healthmax = unitTable.healthMax
                 if healthtick and healthmax ~= nil then
                     healthpercent = string.format("%s%%", (math.ceil(healthtick/healthmax * 100)))
-                    lb.groupHF[j]:SetWidth((tempx - 5)*(healthtick/healthmax))
+                    lb.groupHF[j]:SetWidth((lbValues.mainwidth - 5)*(healthtick/healthmax))
                     lb.groupStatus[j]:SetText(healthpercent)
                 end
                 if lb.UnitsTableStatus[identif][1] ~=  unitTable.aggro or viewModeChanged then
@@ -87,7 +87,7 @@ function updateResourceBar(units)
 				end
 				
 				resourcesRatio = resource/resourceMax
-				lb.groupRF[j]:SetWidth((tempx)*(resourcesRatio))
+				lb.groupRF[j]:SetWidth((lbValues.mainwidth)*(resourcesRatio))
 				
 			end
 		end
@@ -103,13 +103,13 @@ function setManaBar(index,unitTable)
 		for i = 1, 4 do
 			--initializeResourceBar(unitTable.calling) -- Set Resource Bar Color
 			if (unitTable.calling == "mage" or unitTable.calling == "cleric") then
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/statusbars/resource_mana.png")
+				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/mana.png")
 			elseif(unitTable.calling == "warrior") then
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/statusbars/resource_rage.png")
+				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/energy.png")
 			elseif(unitTable.calling == "rogue") then
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/statusbars/resource_energy.png")
+				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/energy.png")
 			else
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/statusbars/resource_plain.png")
+				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/resource_plain.png")
 			end
 			
 			
@@ -128,5 +128,5 @@ end
 
 function showManaBar(index)
 
-	lb.groupRF[j]:SetWidth((tempx)*(resourcesRatio))
+	lb.groupRF[j]:SetWidth((lbValues.mainwidth)*(resourcesRatio))
 end

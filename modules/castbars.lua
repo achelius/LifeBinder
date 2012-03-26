@@ -102,7 +102,7 @@ function resetCastbarIndex(index)
 end
 function setCastBarValue(index,value,max)
     if value==nil then value=0 end
-    local cwidth=(value/max)*tempx
+    local cwidth=(value/max)*lbValues.mainwidth
     lb.groupCastBar[index]:SetWidth(cwidth)
 end
 

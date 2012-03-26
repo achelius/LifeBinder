@@ -95,7 +95,22 @@ function slashCommands(cmdLine)
 		print ("debug: reloadui")
 		--register event
 	end
-	
+	if(cmdLine == "disable") then
+		
+		--register event
+		lbValues.AddonDisabled = true
+		print ("Addon disabled, write /reloadui to reload the interface")
+	end
+	if(cmdLine == "enable") then
+		
+		--register event
+		lbValues.AddonDisabled = false
+		print ("Addon enabled, write /reloadui to reload the interface")
+	end
+	if(cmdLine == "slotseditor") then
+		lb.slotsGui.initialize()
+	end
+
 	--Derp finder
 	if (not (cmdLine.find(cmdLine, "help") or cmdLine.find(cmdLine, '?') or cmdLine.find(cmdLine, "config") or cmdLine.find(cmdLine, "show") or cmdLine.find(cmdLine, "hide") or cmdLine.find(cmdLine, "lock") or cmdLine.find(cmdLine, "module") or cmdLine.find(cmdLine, "reset") or cmdLine.find(cmdLine, "ui") or cmdLine.find(cmdLine, "asc"))) then
 		print ("Command not recognized, please try again.")

@@ -7,12 +7,17 @@ local abilitylist = _G.Inspect.Ability.List
 local abilitydetail = _G.Inspect.Ability.Detail
 local buffdetail=   _G.Inspect.Buff.Detail
 local bufflist=   _G.Inspect.Buff.List
-function initializeBuffMonitor()
+lb.buffMonitor={}
+lb.FullBuffsList={}     -- used by buffmonitor
+lb.FullDeBuffsList={}    -- used by buffmonitor
+
+function lb.buffMonitor.initializeBuffMonitor()
 --print (#(lbBuffSlotPositions[lbValues.set]) )
+	
  	for var=1,20 do
 	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
-	       local scalex=tempx*0.009009009
-	       local scaley=tempy*0.023255814
+	       local scalex=lbValues.mainwidth*0.009009009
+	       local scaley=lbValues.mainheight*0.023255814
 	       local lt=lbBuffSlotPositions[lbValues.set][g][3]*scalex
 	       local tp=lbBuffSlotPositions[lbValues.set][g][4]*scaley
 	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
@@ -47,10 +52,10 @@ function initializeBuffMonitor()
     end
 end
 
-function relocateBuffMonitorSlots()
+function lb.buffMonitor.relocateBuffMonitorSlots()
 --print (#(lbBuffSlotPositions[lbValues.set]) )
-   local scalex=tempx*0.009009009
-	local scaley=tempy*0.023255814
+   local scalex=lbValues.mainwidth*0.009009009
+	local scaley=lbValues.mainheight*0.023255814
  	for var=1,20 do
 	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
 	    
@@ -75,10 +80,10 @@ function relocateBuffMonitorSlots()
     	end
     end
 end
-function relocateSingleBuffMonitorSlot(index)
+function lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
 --print (#(lbBuffSlotPositions[lbValues.set]) )
- local scalex=tempx*0.009009009
- local scaley=tempy*0.023255814
+ local scalex=lbValues.mainwidth*0.009009009
+ local scaley=lbValues.mainheight*0.023255814
  	for var=1,20 do
 	   
 	      
@@ -103,7 +108,7 @@ function relocateSingleBuffMonitorSlot(index)
     end
 end
 
-function updateBuffMonitorTextures()
+function lb.buffMonitor.updateBuffMonitorTextures()
     for var=1,20 do
         for g= 1, 10 do
 
@@ -136,7 +141,7 @@ function updateBuffMonitorTextures()
         end
     end
 end
-function updateBuffMonitorTexturesIndex(frameindex,slotindex)
+function lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 
 
             if lb.groupHoTSpotsIcons[frameindex][slotindex][4] then
@@ -167,7 +172,7 @@ function updateBuffMonitorTexturesIndex(frameindex,slotindex)
             end
 
 end
-function resetBuffMonitorTextures()
+function lb.buffMonitor.resetBuffMonitorTextures()
     for var=1,20 do
         for g= 1, 10 do
             lb.groupHoTSpotsIcons[var][g][0]=false
@@ -195,7 +200,7 @@ function resetBuffMonitorTextures()
         end
     end
 end
-function resetBuffMonitorTexturesForIndex(var)
+function lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
 
         for g= 1, 10 do
 
@@ -228,7 +233,7 @@ function resetBuffMonitorTexturesForIndex(var)
         end
 
 end
-function lbUpdateSpellTextures()
+function lb.buffMonitor.updateSpellTextures()
     local abilities
     abtextures={}
     for v, k in pairs(lbSelectedBuffsList) do
@@ -251,10 +256,7 @@ function lbUpdateSpellTextures()
 	                if a==k.name and a~=nil then
 	                    if k.icon ~=nil then
 	                        found=true
-	                        if lb.IconsCache[a] == nil then
-	                            lb.IconsCacheCount=lb.IconsCacheCount+1
-	                            lb.IconsCache[a]={"Rift",k.icon }
-	                        end
+	                        lb.iconsCache.addTextureToCache(a,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
 	                    end
 	                end
 	            end
@@ -266,10 +268,10 @@ function lbUpdateSpellTextures()
 	        end
         end
     end
-    createDebuffFullList()
+    lb.buffMonitor.createDebuffFullList()
 end
 
-function createDebuffFullList()
+function lb.buffMonitor.createDebuffFullList()
     lb.FullDeBuffsList={}
     for slotindex,c in pairs(lbDeBuffList[lbValues.set]) do
         --c="Soothing Stream" ....
@@ -277,39 +279,7 @@ function createDebuffFullList()
     end
 end
 
-
-
-function removeFromNoIconList(abilityname)
-    if lb.NoIconsBuffList[a]~=nil then
-        lb.NoIconsBuffList[a]=nil
-        --print (a)
-    end
-end
-function getTextureFromCache(abilityName)
-    local texture= lb.IconsCache[abilityName]
-    if texture==nil then
-        texture={"LifeBinder","Textures/buffhot.png"}
-    end
-    return texture
-end
-function hasTextureInCache(abilityName)
-    if lb.IconsCache[abilityName]==nil then
-        return false
-    else
-        return true
-    end
-
-end
-function addTextureToCache(abilityName,textureLocation,texturePath)
-    if not hasTextureInCache(abilityName) then
-        lb.IconsCache[abilityName]={textureLocation,texturePath }
-        lb.IconsCacheCount=lb.IconsCacheCount+1
-        removeFromNoIconList(abilityName)
-    end
-end
-
-
-function onBuffAdd(unit, buffs)
+function lb.buffMonitor.onBuffAdd(unit, buffs)
      buffs=buffdetail(unit,buffs)
      local frameindex=GetIndexFromID(unit)
      if frameindex==nil then return end
@@ -322,13 +292,13 @@ function onBuffAdd(unit, buffs)
             if lb.FullBuffsList[name]~=nil then
                 if buffTable.caster== lb.PlayerID then
                     local texture=nil
-                    if hasTextureInCache(name) then
-                        texture= getTextureFromCache(name)
-                        --print("cache"..getTextureFromCache(name)[2])
+                    if lb.iconsCache.hasTextureInCache(name) then
+                        texture= lb.iconsCache.getTextureFromCache(name)
+                        --print("cache"..lb.iconsCache.getTextureFromCache(name)[2])
                     else
-                        addTextureToCache(name,"Rift",buffTable.icon)
+                        lb.iconsCache.addTextureToCache(name,"Rift",buffTable.icon)
                         texture={"Rift", buffTable.icon}
-                        --print("added"..getTextureFromCache(name)[2])
+                        --print("added"..lb.iconsCache.getTextureFromCache(name)[2])
                     end
 
                     for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
@@ -346,7 +316,7 @@ function onBuffAdd(unit, buffs)
 	                                lb.groupHoTSpotsIcons[frameindex][slotindex][5]=buffTable.id
 	                                lb.groupHoTSpotsIcons[frameindex][slotindex][6]=false
 	                                --print (lb.groupHoTSpotsIcons[frameindex][slotindex][4])
-	                                updateBuffMonitorTexturesIndex(frameindex,slotindex)
+	                                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 	                                updatebuffs=true
 	                            end
 	
@@ -358,7 +328,7 @@ function onBuffAdd(unit, buffs)
             end
             if updatebuffs then
                 --print(true)
-                --updateBuffMonitorTextures()
+                --lb.buffMonitor.updateBuffMonitorTextures()
             end
         else
 
@@ -368,13 +338,13 @@ function onBuffAdd(unit, buffs)
             if lb.FullDeBuffsList[name]~=nil then
 
                     local texture=nil
-                    if hasTextureInCache(name) then
-                        texture= getTextureFromCache(name)
-                        --print("cache"..getTextureFromCache(name)[2])
+                    if lb.iconsCache.hasTextureInCache(name) then
+                        texture= lb.iconsCache.getTextureFromCache(name)
+                        --print("cache"..lb.iconsCache.getTextureFromCache(name)[2])
                     else
-                        addTextureToCache(name,"Rift",buffTable.icon)
+                        lb.iconsCache.addTextureToCache(name,"Rift",buffTable.icon)
                         texture={"Rift", buffTable.icon}
-                        --print("added"..getTextureFromCache(name)[2])
+                        --print("added"..lb.iconsCache.getTextureFromCache(name)[2])
                     end
 
                     for slotindex,c in pairs(lbDeBuffList[lbValues.set]) do
@@ -389,7 +359,7 @@ function onBuffAdd(unit, buffs)
                             lb.groupHoTSpotsIcons[frameindex][5][5]=buffTable.id
                             lb.groupHoTSpotsIcons[frameindex][5][6]=true
                             --print (lb.groupHoTSpotsIcons[frameindex][slotindex][4])
-                            updateBuffMonitorTexturesIndex(frameindex,5)
+                            lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,5)
                             updatebuffs=true
 
 
@@ -400,13 +370,13 @@ function onBuffAdd(unit, buffs)
             end
             if updatebuffs then
                 --print(true)
-                --updateBuffMonitorTextures()
+                --lb.buffMonitor.updateBuffMonitorTextures()
             end
         end
     end
 
 end
-function onBuffRemove(unit, buffs)
+function lb.buffMonitor.onBuffRemove(unit, buffs)
     --buffs=buffdetail(unit,buffs)
     --print ("remove")
     local frameindex=GetIndexFromID(unit)
@@ -438,7 +408,7 @@ function onBuffRemove(unit, buffs)
                                 end
                             end
                             if lastdebuffID~=nil then
-                                onBuffAdd(unit,{lastdebuffID})
+                                lb.buffMonitor.onBuffAdd(unit,{lastdebuffID})
                             end
                         end
                     end
@@ -462,7 +432,7 @@ function onBuffRemove(unit, buffs)
                                 end
                                 if lastdebuffID~=nil then
 
-                                    onBuffAdd(unit,{lastdebuffID})
+                                    lb.buffMonitor.onBuffAdd(unit,{lastdebuffID})
                                 end
 
                             end
@@ -471,7 +441,7 @@ function onBuffRemove(unit, buffs)
                     end
                 end
 
-                updateBuffMonitorTexturesIndex(frameindex,slotindex)
+                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
                 --print ("rem"..lb.groupHoTSpotsIcons[frameindex][slotindex][4])
                 updatebuffs=true
             end
@@ -488,7 +458,7 @@ function onBuffRemove(unit, buffs)
                 lb.groupHoTSpotsIcons[frameindex][5][4]=true
                 lb.groupHoTSpotsIcons[frameindex][5][5]=nil
                 --print ("rem"..lb.groupHoTSpotsIcons[frameindex][slotindex][4])
-                updateBuffMonitorTexturesIndex(frameindex,5)
+                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,5)
 
                 updatebuffs=true
             end
@@ -496,7 +466,7 @@ function onBuffRemove(unit, buffs)
         end
         if updatebuffs then
             --print(true)
-            --updateBuffMonitorTextures()
+            --lb.buffMonitor.updateBuffMonitorTextures()
         end
 
     end

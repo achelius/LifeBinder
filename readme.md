@@ -9,7 +9,7 @@ Nonetheless, the add-on makes it easier to monitor incoming damage, damage over 
 
 Changelog
 ---------
-- Edited function for onBuffRemove() - buffmonitor.lua, now updates only the changed slots on buff remove event, reducing CPU usage from 45% to 8% max with 20 debuffs changing almost at the same time (found out tonight while playing a purifier cleric). `Achelius 20/03/12`
+- Edited function for lb.buffMonitor.onBuffRemove() - buffmonitor.lua, now updates only the changed slots on buff remove event, reducing CPU usage from 45% to 8% max with 20 debuffs changing almost at the same time (found out tonight while playing a purifier cleric). `Achelius 20/03/12`
 - Added slash commands. `Protonova 03/20/12`
 - Changed add-on's name from RiftHBot to LifeBinder. `Achelius & Protonova 03/20/12`
 - Implemented new file structure. `Protonova 03/20/12`

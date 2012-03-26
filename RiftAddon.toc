@@ -20,19 +20,26 @@ Dependencies = {
 };
 
 RunOnStartup = {
-	"globals.lua",
+"internals/loadSettings.lua",
+	"LifeBinderMain.lua",
+	"styles/customstyle.lua",
+	"styles/standard.lua",
+	"styles/stylescore.lua",
+	
+	
+	"internals/iconsCache.lua",
 	"internals/buffPositionStyles.lua",
 	"internals/slotsEditor.lua",
-	"main.lua",
+	
 	"view.lua",
 	"internals/debuffCache.lua",
-	"internals/guiOptions.lua",
+	
 	"internals/slashCmds.lua",
 	"modules/buffMonitor.lua",
 	"modules/castbars.lua",
 	"modules/manabars.lua",
 	"modules/mouseBinds.lua",
-	"modules/specButtons.lua",
+	
 	"internals/eventHandler.lua"
 }
 

@@ -6,8 +6,8 @@ lb.slotsGui.selectedIndex=-1
 lb.slotsGui.PreviewScale={3,3} --scale of the preview unit frame
 
 function lb.slotsGui.initialize()
-	 local scalex=tempx*0.009009009
-	 local scaley=tempy*0.023255814
+	 local scalex=lbValues.mainwidth*0.009009009
+	 local scaley=lbValues.mainheight*0.023255814
 	 lb.slotsGui.Window=UI.CreateFrame("SimpleWindow", "Options", lb.Context)
 	 lb.slotsGui.Window:SetPoint("CENTER", UIParent, "CENTER")
 	 lb.slotsGui.Window:SetWidth(850)
@@ -28,8 +28,8 @@ function lb.slotsGui.initialize()
 	 
 	 lb.slotsGui.Tabs[1].UnitFrame = UI.CreateFrame("Texture", "UnitFrame", lb.slotsGui.Tabs[1].MainFrame )
 	 lb.slotsGui.Tabs[1].UnitFrame:SetPoint("TOPLEFT",lb.slotsGui.Tabs[1].MainFrame , "TOPLEFT", 150, 150)
-	 lb.slotsGui.Tabs[1].UnitFrame:SetWidth(tempx*lb.slotsGui.PreviewScale[1])
-	 lb.slotsGui.Tabs[1].UnitFrame:SetHeight(tempy*lb.slotsGui.PreviewScale[2])
+	 lb.slotsGui.Tabs[1].UnitFrame:SetWidth(lbValues.mainwidth*lb.slotsGui.PreviewScale[1])
+	 lb.slotsGui.Tabs[1].UnitFrame:SetHeight(lbValues.mainheight*lb.slotsGui.PreviewScale[2])
 	 
 	 lb.slotsGui.Tabs[1].UnitFrame:SetTexture("LifeBinder", "Textures/"..lbValues.texture)
 	 ------initialize Slots
@@ -64,7 +64,7 @@ function lb.slotsGui.initialize()
 	 lb.slotsGui.Tabs[1].ApplyButton=UI.CreateFrame("RiftButton", "UnitFrame", lb.slotsGui.Tabs[1].MainFrame )
 	 lb.slotsGui.Tabs[1].ApplyButton:SetPoint("BOTTOMRIGHT", lb.slotsGui.Tabs[1].MainFrame,"BOTTOMRIGHT",-5,-5)
 	 lb.slotsGui.Tabs[1].ApplyButton:SetText("Apply")
-	 lb.slotsGui.Tabs[1].ApplyButton.Event.LeftClick=function() relocateBuffMonitorSlots() end
+	 lb.slotsGui.Tabs[1].ApplyButton.Event.LeftClick=function() lb.buffMonitor.relocateBuffMonitorSlots() end
 	 --initialize abilities list
 	 lb.slotsGui.Tabs[1].AbilitesList=UI.CreateFrame("AbilitiesList", "List", lb.slotsGui.Tabs[1].MainFrame)
 	 
@@ -83,7 +83,7 @@ function lb.slotsGui.initialize()
 	 local counter=1
 	 for k,ab in pairs(abs) do
 		local name=ab.name
-		local texture=getTextureFromCache(name)
+		local texture=lb.iconsCache.getTextureFromCache(name)
 	     list[counter]={name,"Rift",ab.icon}
 	     counter=counter+1
 	 end
@@ -122,8 +122,8 @@ if  lb.slotsGui.selectedIndex~=index then return end
         return
     end
     if slotdrag == true then
-    	local scalex=tempx*0.009009009
-	 local scaley=tempy*0.023255814
+    	local scalex=lbValues.mainwidth*0.009009009
+	 local scaley=lbValues.mainheight*0.023255814
     	local newx=x-(lb.slotsGui.clickOffset["x"])
     	local newy=y-(lb.slotsGui.clickOffset["y"])
    		lb.slotsGui.Tabs[1].Slots[index].X=newx
@@ -133,7 +133,7 @@ if  lb.slotsGui.selectedIndex~=index then return end
 	 	lbBuffSlotPositions[lbValues.set][index][3]=newx/scalex/lb.slotsGui.PreviewScale[1]
 	 	lbBuffSlotPositions[lbValues.set][index][4]=newy/scaley/lb.slotsGui.PreviewScale[2]
 	 	----
-	 	relocateSingleBuffMonitorSlot(index)
+	 	lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
 		lb.slotsGui.Tabs[1].Slots[index].Frame:SetPoint("TOPLEFT", lb.slotsGui.Tabs[1].UnitFrame, "TOPLEFT", newx, newy)
 		
     end
@@ -148,4 +148,14 @@ end
 --called when changing spec
 function lb.slotsGui.updateOptions()
 
+end
+
+
+
+context = UI.CreateContext("Fluff Context")
+focushack = UI.CreateFrame("RiftTextfield", "focus hack", context)
+focushack:SetVisible(false)
+function ClearKeyFocus()
+    focushack:SetKeyFocus(true)
+    focushack:SetKeyFocus(false)
 end

@@ -199,7 +199,7 @@ function addBuffToSlot(slot)
             createTableBuffsSlot(slot)
         end
     end
-    lbUpdateSpellTextures()
+    lb.buffMonitor.updateSpellTextures()
     ClearKeyFocus()
 end
 
@@ -262,7 +262,7 @@ function addDebuffFromTextbox()
     local name=  lb.DebuffsListAddTextbox:GetText()
     if name==nil then return end
     addDebuffToWatch(name)
-    lbUpdateSpellTextures()
+    lb.buffMonitor.updateSpellTextures()
     createTableDebuffs()
     ClearKeyFocus()
 end
@@ -273,7 +273,7 @@ function addDebuffToWatch(debuffName)
     if debuffName==nil then return end
     local debuffnames=lbDeBuffList[set]
     table.insert(debuffnames,debuffName)
-    lbUpdateSpellTextures()
+    lb.buffMonitor.updateSpellTextures()
     createTableDebuffs()
 end
 
@@ -289,7 +289,7 @@ function removeDebuffFromWatch(debuffName)
             return
         end
     end
-    lbUpdateSpellTextures()
+    lb.buffMonitor.updateSpellTextures()
     createTableDebuffs()
 end
 
@@ -323,7 +323,7 @@ function addSelectedFromlbDebuffCacheListToLive()
     local selected=lb.DebuffsCacheList:GetSelectedItem()
     if selected~=nil then
         addDebuffToWatch(selected)
-        lbUpdateSpellTextures()
+        lb.buffMonitor.updateSpellTextures()
         createTableDebuffs()
     end
 
@@ -336,7 +336,7 @@ function removeSelectedDebuffFromWatch()
     local selectedIndex=lb.DebuffsList:GetSelectedIndex()
     if selectedIndex==nil then return end
     table.remove(debuffnames,selectedIndex)
-    lbUpdateSpellTextures()
+    lb.buffMonitor.updateSpellTextures()
     createTableDebuffs()
 end
 
@@ -351,7 +351,7 @@ function lb.DebuffsListMoveUp.Event.LeftClick()
             local dbname=lb.DebuffsList:GetSelectedItem()
             table.remove(debuffnames,selectedIndex)
             table.insert(debuffnames,selectedIndex-1,dbname )
-            lbUpdateSpellTextures()
+            lb.buffMonitor.updateSpellTextures()
             createTableDebuffs()
             lb.DebuffsList:SetSelectedIndex(selectedIndex-1)
         end
@@ -368,7 +368,7 @@ function lb.DebuffsListMoveDown.Event.LeftClick()
             local dbname=lb.DebuffsList:GetSelectedItem()
             table.remove(debuffnames,selectedIndex)
             table.insert(debuffnames,selectedIndex+1,dbname )
-            lbUpdateSpellTextures()
+            lb.buffMonitor.updateSpellTextures()
             createTableDebuffs()
             lb.DebuffsList:SetSelectedIndex(selectedIndex+1)
         end
@@ -406,10 +406,3 @@ function writeText(text,name,parent,left,top)
 
 end
 
-context = UI.CreateContext("Fluff Context")
-focushack = UI.CreateFrame("RiftTextfield", "focus hack", context)
-focushack:SetVisible(false)
-function ClearKeyFocus()
-    focushack:SetKeyFocus(true)
-    focushack:SetKeyFocus(false)
-end
