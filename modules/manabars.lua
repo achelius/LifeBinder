@@ -67,7 +67,7 @@ function updateResourceBar(units)
 			local j=stripnum(identif)
 			if j~=nil then
 				resource = 0
-				resourceMax = 0
+				resourceMax = 1
 				
 				if(unitTable.calling == "mage" or unitTable.calling == "cleric") then
 					if ( unitTable.mana and unitTable.manaMax ) then
@@ -85,6 +85,7 @@ function updateResourceBar(units)
 						resourceMax = unitTable.energyMax
 					end
 				end
+				
 				resourcesRatio = resource/resourceMax
 				lb.groupRF[j]:SetWidth((tempx)*(resourcesRatio))
 				

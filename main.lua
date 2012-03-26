@@ -2,7 +2,7 @@ local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
 local timeFrame=_G.Inspect.Time.Frame
 local unitLookup= _G.Inspect.Unit.Lookup
-
+local PlayerFound=false
 lastMode=-1 -- last view mode (solo =0 group=1 raid=0) needed to update hp after view mode change
 local viewModeChanged=false -- true if view mode changes
 local lastUnitUpdate =0
@@ -172,6 +172,7 @@ function lbloadSettings()
     createOptionsWindow()
 	--lbCreateAbilityList()
 	--lbCreateOptions()
+	lbUnitUpdate()
     print ("Welcome to LifeBinder v0.27! Type /lb help for commands.")
 
 end
@@ -206,11 +207,7 @@ function UpdateFramesVisibility()
             setMouseActions()
         end
 
-        for i= 1,20 do
-            --name=string.format("group%.2d", i)
-            --lb.UnitsTableStatus[name][5]=0 --Unit ID
-
-        end
+     
         lb.QueryTable = lb.SoloTable
         if processsolo == false then
             processMacroText(lb.UnitTable)
@@ -231,13 +228,8 @@ function UpdateFramesVisibility()
         if processgroup == false then
             processMacroText(lb.UnitsGroupTable)
         end
---        if not lbValues.isincombat then
---            lb.groupMask[1].Event.LeftClick="/target @group01"
---        end
-        for i = 1, 5 do
-            --name=string.format("group%.2d", i)
-            --lb.UnitsTableStatus[name][5]=0 --Unit ID
-        end
+
+     
     end
     if lbraidfound then
         if lastMode~=2 then
@@ -253,34 +245,49 @@ function UpdateFramesVisibility()
             --resetBuffMonitorTextures()
         end
         lb.QueryTable = lb.RaidTable
-        for i= 1,20 do
-            --name=string.format("group%.2d", i)
-            --lb.UnitsTableStatus[name][5]=0 --Unit ID
-        end
+
         if processraid == false then
             processMacroText(lb.UnitsTable)
         end
     end
 end
+function WaitPlayerAvailable()
 
+end
 
 function lbUnitUpdate()
-   local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
-    if not timer then return end
+--   local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
+--    if not timer then return end
+	print("loadingjhjkjh")
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
-    if lbValues.isincombat==nil or not lbValues.isincombat then UpdateFramesVisibility()end -- reads the group status and hide or show players frames
+    if lbValues.isincombat==nil or not lbValues.isincombat then  UpdateFramesVisibility()end -- reads the group status and hide or show players frames
 --    if (lb.MouseOverUnitLastCast~=nil) then
 --        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
 --        if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) end
---    end
-    local details = unitdetail(lb.QueryTable)
+--  
+--  end
+	 if lb.PlayerID==nil then print(Inspect.Unit.Lookup("player")) end
+    local details = unitdetail({"player"})--lb.QueryTable)
+    for k,h in pairs(lb.QueryTable)do
+    	print(h)
+    end
+    for k,h in pairs(details)do
+    	print("kk"..h.name)
+    end
+    print (#details)
     local targetunit=unitdetail("player.target")
     for key,val in pairs(lb.UnitsTableStatus) do
         if key~= "player" then
-        lb.UnitsTableStatus[key][8]=false
+        	lb.UnitsTableStatus[key][8]=false
         end
     end
+    local units =Inspect.Unit.Detail({"player"}) 
+    for k,g in pairs(units) do 
+    print(g.name) 
+    end
     for unitident, unitTable in pairs(details) do
+    	
+    	
         local j = stripnum(unitident)   --calculate key from unit identifier
        local name = unitTable.name
 
@@ -440,7 +447,7 @@ function  lbBlockedUpdate(units)
 
                 --if lb.UnitsTableStatus[identif][3] ~=  unitTable.blocked or viewModeChanged then
                     lb.UnitsTableStatus[identif][3] =  unitTable.blocked
-                    print (identif .. tostring(unitTable.blocked))
+                    --print (identif .. tostring(unitTable.blocked))
                     if unitTable.blocked  then
                         lb.groupHF[j]:SetTexture("LifeBinder", "Textures/healthlos.png")
                      elseif unitTable.blocked==nil  then
@@ -520,7 +527,8 @@ function onRoleChanged(role)
     createTableBuffs()--gui
     createTableDebuffs() --gui
     UpdateMouseAssociationsTextFieldsValues() --gui
-    lb.slotsGui.initialize()
+    --lb.slotsGui.initialize()
+    hideSpecButtons()
 end
 
 function onAbilityAdded(abilities)

@@ -32,7 +32,7 @@ lb.IconsCache={}
 lb.IconsCacheCount=0
 lb.groupText = {}
 
-lb.SoloTable = {}
+
 lb.QueryTable = {}
 lb.RaidTable = {}
 lb.GroupTable = {}
@@ -87,9 +87,9 @@ lb.clickOffset = {x = 0, y = 0}
 lb.resizeOffset = {x = 0, y = 0 }
 lb.UnitBuffTable["player"] = {}
 lb.UnitBuffTable["player.pet"] = {}
-lb.UnitTable = {"player", "player.pet"}
+lb.UnitTable = {"player"}
 lb.UnitsTable = {}
-lb.SoloTable["player"] = true
+lb.SoloTable={"player"}
 lb.UnitsTableStatus={}
 for i= 1,20 do
     local name=string.format("group%.2d", i)

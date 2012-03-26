@@ -124,8 +124,7 @@ local function LayoutItems(self)
 	self.iconsFrames[i]:SetWidth(32)
 	self.iconsFrames[i]:SetHeight(32)
 	self.iconsFrames[i]:SetVisible(true)
-	print (#(self.iconsFrames))
-	print (#(self.itemFrames))
+	
 	
     height = height + itemFrame:GetHeight()
     prevItemFrame = itemFrame

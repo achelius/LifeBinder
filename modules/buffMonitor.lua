@@ -243,7 +243,7 @@ function lbUpdateSpellTextures()
         
 	        for s,a in pairs(m) do
 	            --a="Soothing Stream" ....
-	            print("txt"..tostring(a))
+	            --print("txt"..tostring(a))
 	            found=false
 	           
 	            lb.FullBuffsList[a]=true

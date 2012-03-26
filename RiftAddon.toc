@@ -10,11 +10,13 @@ Environment = "1.7"
 
 Embed = {
 	LibSimpleWidgets = true,
-	LibUnitChange = true
+	LibUnitChange = true,
+	SafesRaidManager = true
 }
 Dependencies = {
 	LibSimpleWidgets = {"required", "before"},
 	LibUnitChange = {"required", "before"},
+	SafesRaidManager = {"required", "before"},
 };
 
 RunOnStartup = {

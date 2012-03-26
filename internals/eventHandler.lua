@@ -12,7 +12,8 @@ table.insert(Event.System.Secure.Enter, {onSecureEnter, "LifeBinder", "onSecureE
 table.insert(Event.System.Secure.Leave, {onSecureExit, "LifeBinder", "onSecureExit"})
 table.insert(Event.Addon.SavedVariables.Load.End, {lbLoadVariables, "LifeBinder", "lbLoadVariables"})
 table.insert(Event.TEMPORARY.Role, {onRoleChanged, "LifeBinder", "onRoleChanged"})
-table.insert(Event.System.Update.Begin, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
+table.insert(Event.Addon.Load.End, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
+--table.insert(Event.System.Update.Begin, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
 table.insert(Event.System.Update.Begin, {castbarUpdate, "LifeBinder", "CastbarUpdate"})
 table.insert(Event.Unit.Castbar, {onCastbarChanged, "LifeBinder", "OnCastBarChanged"})
 table.insert(Event.Buff.Add, {onBuffAdd, "LifeBinder", "onBuffChange"})
@@ -20,3 +21,11 @@ table.insert(Event.Buff.Remove, {onBuffRemove, "LifeBinder", "onBuffRemove"})
 -- create a change target event
 table.insert(Library.LibUnitChange.Register("player.target"), {onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
 table.insert(Library.LibUnitChange.Register("mouseover"), {onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})
+
+
+-- safesraidmanager events
+table.insert(Event.SafesRaidManager.Group.Join, {lbUnitUpdate , "LifeBinder", "GroupJoin"})
+table.insert(Event.SafesRaidManager.Group.Leave, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
+
+table.insert(Event.SafesRaidManager.Player.Join, {lbUnitUpdate , "LifeBinder", "PlayerJoin"})
+table.insert(Event.SafesRaidManager.Player.Leave,{lbUnitUpdate , "LifeBinder", "PlayerLeave"})
