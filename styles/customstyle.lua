@@ -53,7 +53,7 @@ function stTable.initialize()
             lb.groupCastBar[var]:SetLayer(6)
             lb.groupCastBar[var]:SetVisible(false)
 
-			lb.groupHF[var]:SetTexture("LifeBinder","Textures/"..lbValues.texture)
+			lb.groupHF[var]:SetTexture("LifeBinder","Textures/bars/health.png")
 			lb.groupHF[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
 			lb.groupHF[var]:SetHeight(lbValues.mainheight - 5)
 			lb.groupHF[var]:SetWidth(lbValues.mainwidth - 5)
