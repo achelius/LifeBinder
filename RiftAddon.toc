@@ -25,7 +25,7 @@ RunOnStartup = {
 	"styles/customstyle.lua",
 	"styles/standard.lua",
 	"styles/stylescore.lua",
-	
+	"internals/posData.lua",
 	
 	"internals/iconsCache.lua",
 	"internals/buffPositionStyles.lua",
@@ -53,5 +53,6 @@ SavedVariables = {
 	lbDeBuffListBlackList='character',
 	lbBuffSlotPositions='character',
 	lbBuffSlotOptions='character',
+	lbStylesOptions='character',
 	lbDebuffCacheList = 'account'
 }

@@ -28,6 +28,13 @@ function EnableHandlers()
 			table.insert(Library.LibUnitChange.Register("player.target"), {onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
 			table.insert(Library.LibUnitChange.Register("mouseover"), {onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})
 			
+			---coordinates changer
+			if (Event.Unit.Detail.Coord~=nil) then
+				table.insert(Event.Unit.Detail.Coord, {lb.posData.onPlayerMovement, "LifeBinder", "OnUnitCoodsChange"})
+				table.insert(Library.LibUnitChange.Register("player.target"), {lb.posData.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
+				table.insert(Event.Unit.Detail.OutOfRange, {onOutOfRange , "LifeBinder", "outofrange"})
+			end
+			
 			
 			-- safesraidmanager events
 			table.insert(Event.SafesRaidManager.Group.Join, {lbUnitUpdate , "LifeBinder", "GroupJoin"})

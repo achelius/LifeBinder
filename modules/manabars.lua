@@ -66,8 +66,8 @@ function updateResourceBar(units)
 		if identif~=nil then
 			local j=stripnum(identif)
 			if j~=nil then
-				resource = 0
-				resourceMax = 1
+				local resource = 0
+				local resourceMax = 1
 				
 				if(unitTable.calling == "mage" or unitTable.calling == "cleric") then
 					if ( unitTable.mana and unitTable.manaMax ) then
@@ -86,8 +86,7 @@ function updateResourceBar(units)
 					end
 				end
 				
-				resourcesRatio = resource/resourceMax
-				lb.groupRF[j]:SetWidth((lbValues.mainwidth)*(resourcesRatio))
+				lb.styles[lb.currentStyle].setManaBarValue(j,resource,resourceMax)
 				
 			end
 		end

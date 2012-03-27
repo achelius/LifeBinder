@@ -7,7 +7,8 @@ lb = {}
 lb.initialized=false
 --initializes the raid window
 lb.PlayerID=nil     -- set by buffmonitor on buff add event or addabilities event
-lb.LastTarget=nil
+lb.LastTarget=nil --current group target (if it's in the group)
+lb.currentTarget=nil --current target (the actual target)
 lb.MouseOverUnit=nil  -- current mouseover unit ID
 lb.MouseOverUnitLastCast=nil -- unit id of the moment one spell une spell has been casted
  --had to set these here because of dependencies problems
@@ -106,6 +107,7 @@ function lb.initialize()
 	    lb.UnitsTableStatus[name][7]=i --Frame index  used for buff monitor
 	    lb.UnitsTableStatus[name][8]=false -- position change check
 		lb.UnitsTableStatus[name][9]="none" --Calling
+		lb.UnitsTableStatus[name][10]=false --out of range
 		lb.RaidTable[string.format("group%.2d", i)] = true --populate raid query table
 		
 	end
@@ -120,6 +122,7 @@ function lb.initialize()
 	lb.UnitsTableStatus["player"][7]=1  --frame index    used for buff monitor
 	lb.UnitsTableStatus["player"][8]=false -- position change check
 	lb.UnitsTableStatus["player"][9]="none" --Calling
+	lb.UnitsTableStatus["player"][10]=false --out of range
 	
 	--constants
 	lb.Calling = {"warrior", "cleric", "mage", "rogue", "percentage"}
@@ -127,6 +130,8 @@ function lb.initialize()
 	lb.ResizeButton = UI.CreateFrame("Texture", "ResizeButton", lb.Window)
 	lb.clickOffset = {x = 0, y = 0}
 	lb.resizeOffset = {x = 0, y = 0}	
+	
+	
 end
 
 
@@ -303,6 +308,7 @@ function waitPlayerAvailable()
 		remev()
 		--RemoveEventHandler(Event.System.Update.Begin,WaitPlayerEventID)
 		PlayerFound=true
+		lb.posData.initialize()--positional module initialized here to be sure to have player info
 		lbUnitUpdate()
 		
 	end
@@ -333,9 +339,7 @@ function lbUnitUpdate()
   
     for unitident, unitTable in pairs(details) do
     	
-    	print("----------"..unitident)
-    	print("----------"..unitTable.name)
-    	
+
        local j=1
        if lastMode==0 then unitident="player"end
        if unitident~=1 then 
@@ -350,26 +354,14 @@ function lbUnitUpdate()
         lb.groupName[j]:SetText(name)
 
         if unitTable == nil  then
---            print(tostring(unitTable))
---            if lb.UnitsTableStatus[unitident][5]~=0 then
---                lb.UnitsTableStatus[unitident][5]=0
---                lb.buffMonitor.resetBuffMonitorTexturesForIndex(j)
---            end
+
         else
-            --print("1s:"..tostring(j)..tostring(lb.UnitsTableStatus[unitident][5]))
 
             lb.UnitsTableStatus[unitident][8]=true
             if lb.UnitsTableStatus[unitident][5]~=unitTable.id then
---                print("1:"..tostring(lb.UnitsTableStatus[unitident][5]))
---                print("2:"..unitTable.id)
---                print("3:"..unitident)
---                print("3.5:"..tostring(j))
---                print ("4:"..tostring(tostring(lb.UnitsTableStatus[unitident][5])==tostring(unitTable.id)))
+				  if Event.Unit.Detail.Coord~=nil then lb.posData.resetUnitPositionofIndex(j,unitTable.coordX,unitTable.coordY,unitTable.coordZ) end
+				  
                   lb.UnitsTableStatus[unitident][5]=unitTable.id
---                print("5:"..lb.UnitsTableStatus[unitident][5])
---                lb.buffMonitor.resetBuffMonitorTexturesForIndex(j)
---                print("6:"..lb.UnitsTableStatus[unitident][5])
---                print ("7:"..tostring(tostring(lb.UnitsTableStatus[unitident][5])==tostring(unitTable.id)))
             end
             if not lbValues.isincombat then
                 lb.groupMask[j]:SetMouseoverUnit(unitTable.id)
@@ -419,7 +411,6 @@ function lbUnitUpdate()
                 end
             end
             if lb.UnitsTableStatus[unitident][3] ~=  unitTable.blocked or viewModeChanged then
-
                 lb.UnitsTableStatus[unitident][3] =  unitTable.blocked
                 if unitTable.blocked  then
                     lb.groupHF[j]:SetTexture("LifeBinder", "Textures/healthlos.png")
@@ -430,10 +421,9 @@ function lbUnitUpdate()
             if viewModeChanged then
               local  healthtick = unitTable.health
               local  healthmax = unitTable.healthMax
-                if healthtick and healthmax ~= nil then
-                local  healthpercent = string.format("%s%%", (math.ceil(healthtick/healthmax * 100)))
-                    lb.groupHF[j]:SetWidth((lbValues.mainwidth - 5)*(healthtick/healthmax))
-                    lb.groupStatus[j]:SetText(healthpercent)
+                if healthtick~=nil and healthmax ~= nil then
+                	lb.styles[lb.currentStyle].setHealthBarValue(j,healthtick,healthmax)
+                    lb.styles[lb.currentStyle].setHealthBarText(j,healthtick,healthmax)
                 end
             end
 
@@ -548,12 +538,13 @@ function  lbHpUpdate(units)
         if identif~=nil then
             local j=stripnum(identif)
             if j~=nil then
-                healthtick = unitTable.health
-                healthmax = unitTable.healthMax
-                if healthtick and healthmax ~= nil then
-                    healthpercent = string.format("%s%%", (math.ceil(healthtick/healthmax * 100)))
-                    lb.groupHF[j]:SetWidth((lbValues.mainwidth - 5)*(healthtick/healthmax))
-                    lb.groupStatus[j]:SetText(healthpercent)
+                local healthtick = unitTable.health
+                local healthmax = unitTable.healthMax
+                if healthtick~=nil and healthmax ~= nil then
+                    
+                    lb.styles[lb.currentStyle].setHealthBarValue(j,healthtick,healthmax)
+                    lb.styles[lb.currentStyle].setHealthBarText(j,healthtick,healthmax)
+                    
                 end
                 if lb.UnitsTableStatus[identif][1] ~=  unitTable.aggro or viewModeChanged then
                     lb.UnitsTableStatus[identif][1] =  unitTable.aggro
@@ -584,11 +575,16 @@ function GetIndexFromID(ID)
     end
     return nil
 end
+
 function stripnum(name)
     local j
     if name == "player" or name == "player.pet" then j = 1
     else j = tonumber(string.sub(name, string.find(name, "%d%d"))) end
     return j
+end
+
+function getIdentifierFromIndex(index)
+	return lb.QueryTable[index]
 end
 
 function onRoleChanged(role)
@@ -630,7 +626,14 @@ end
 
 function onPlayerTargetChanged(unit)
     -- print (unit)
-    if unit==false then  lb.LastTarget =nil end
+    if unit==false then 
+     	lb.LastTarget =nil
+     	lb.currentTarget=nil
+     	
+    else
+    	lb.currentTarget=unit
+    end
+    
     local found = false
 
     for i = 1 , 20 do
