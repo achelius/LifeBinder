@@ -22,7 +22,7 @@ function stTable.initialize()
 			lb.groupBF[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", lbValues.mainwidth * (a -1) ,  lbValues.mainheight * (i - 1))
 			lb.groupBF[var]:SetHeight(lbValues.mainheight)
 			lb.groupBF[var]:SetWidth(lbValues.mainwidth)
-			lb.groupBF[var]:SetVisible(true)
+			lb.groupBF[var]:SetVisible(false)
 			
 			--Set Resource Frame
 			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupBF[var], "BOTTOMLEFT", 5, 0)
@@ -118,3 +118,32 @@ function stTable.initialize()
 		lbValues.font = 16
 	end
 end
+
+function stTable.setManaBarValue(index,value,maxvalue)
+	if index==nil then return end
+	local resourcesRatio = value/maxvalue
+	lb.groupRF[index]:SetWidth((lbValues.mainwidth-6)*(resourcesRatio))
+end
+function stTable.setHealthBarValue(index,value,maxvalue)
+	if index==nil then return end
+	local resourcesRatio = value/maxvalue
+	lb.groupHF[index]:SetWidth((lbValues.mainwidth-5)*(resourcesRatio))
+end
+function stTable.setHealthBarText(index,value,maxvalue)
+	if index==nil then return end
+	local resourcesRatio = value/maxvalue
+	local healthpercent = string.format("%s%%", (math.ceil(value/maxvalue * 100)))
+	lb.groupStatus[index]:SetText(healthpercent)
+end
+
+function stTable.setBlockedValue(index,value)
+	if index==nil then return end
+	if value then
+          lb.groupHF[index]:SetTexture("LifeBinder", "Textures/healthlos.png")
+    elseif value==nil  then
+          lb.groupHF[index]:SetTexture("LifeBinder", "Textures/bars/health.png")
+    else
+          lb.groupHF[index]:SetTexture("LifeBinder", "Textures/bars/health.png")
+    end
+end
+

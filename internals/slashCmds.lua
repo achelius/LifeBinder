@@ -110,6 +110,15 @@ function slashCommands(cmdLine)
 	if(cmdLine == "slotseditor") then
 		lb.slotsGui.initialize()
 	end
+	if(cmdLine == "stylereinit") then
+		lb.styles[lb.currentStyle].initialize()
+		lbUnitUpdate()
+	end
+	if(cmdLine == "styleviewall") then
+		lb.styles[lb.currentStyle].showAllFrames()
+		
+	end
+
 
 	--Derp finder
 	if (not (cmdLine.find(cmdLine, "help") or cmdLine.find(cmdLine, '?') or cmdLine.find(cmdLine, "config") or cmdLine.find(cmdLine, "show") or cmdLine.find(cmdLine, "hide") or cmdLine.find(cmdLine, "lock") or cmdLine.find(cmdLine, "module") or cmdLine.find(cmdLine, "reset") or cmdLine.find(cmdLine, "ui") or cmdLine.find(cmdLine, "asc"))) then

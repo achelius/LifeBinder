@@ -56,7 +56,7 @@ function UpdateFramesVisibility()
             --if not lbValues.isincombat then lb.groupMask[1].Event.LeftClick="/target @self" end
             --lb.buffMonitor.resetBuffMonitorTextures()
             --print("soloreset")
-            setMouseActions()
+            lb.mouseBinds.setMouseActions()
         end
 
      
@@ -74,7 +74,7 @@ function UpdateFramesVisibility()
             lastMode=1
             --print("groupreset")
             --lb.buffMonitor.resetBuffMonitorTextures()
-            setMouseActions()
+            lb.mouseBinds.setMouseActions()
         end
         lb.QueryTable = lb.GroupTable
         if processgroup == false then
@@ -92,7 +92,7 @@ function UpdateFramesVisibility()
 --                    lb.groupMask[1].Event.LeftClick="/target @group01"
 --                end
             end
-            setMouseActions()
+            lb.mouseBinds.setMouseActions()
             --print("raidreset")
             --lb.buffMonitor.resetBuffMonitorTextures()
         end
@@ -290,7 +290,7 @@ function lbUnitUpdate()
     viewModeChanged=false
 end
 --Called by the event   Event.Unit.Detail.Aggro
-function  lbAggroUpdate(units)
+function  lb.onAggroUpdate(units)
     local details = unitdetail(units)
 
     for unitident, unitTable in pairs(details) do
@@ -312,7 +312,7 @@ function  lbAggroUpdate(units)
     end
 end
 --Called by the event   Event.Unit.Detail.Blocked
-function  lbBlockedUpdate(units)
+function  lb.onBlockedUpdate(units)
     local details = unitdetail(units)
 
     for unitident, unitTable in pairs(details) do
@@ -359,7 +359,7 @@ function onUnitRoleChanged(units)
 end
 
 --Called by the event   Event.Unit.Detail.Health e Event.Unit.Detail.HealthMax
-function  lbHpUpdate(units)
+function  lb.onHpUpdate(units)
 
   --  timer = getThrottle2()--throttle to limit cpu usage (period set to 0.25 sec)
    -- if not timer then return end
@@ -412,14 +412,14 @@ function stripnum(name)
     return j
 end
 
-function onRoleChanged(role)
+function lb.onRoleChanged(role)
     lbValues.set=role;
     --call abilities
     lb.buffMonitor.initializeBuffMonitor()--initializes buff monitor
     initializeSpecButtons()
     lb.buffMonitor.updateSpellTextures() --update textures cache and populate the lb.NoIconsBuffList table
     lb.buffMonitor.resetBuffMonitorTextures() --hide every buff slot
-    setMouseActions()
+    lb.mouseBinds.setMouseActions()
     --lbUpdateRequiredSpellsList()
 
     --createTableBuffs()--gui
@@ -429,27 +429,27 @@ function onRoleChanged(role)
    -- hideAll()
 end
 
-function onAbilityAdded(abilities)
+function lb.onAbilityAdded(abilities)
     if lbValues.set==nil then
         if lb.PlayerID==nil then lb.PlayerID=Inspect.Unit.Lookup("player") end
-        onRoleChanged( Inspect.TEMPORARY.Role())
+        lb.onRoleChanged( Inspect.TEMPORARY.Role())
     end
 end
 
-function onSecureEnter()
+function lb.onSecureEnter()
     lbValues.isincombat=true
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot2.png")
     lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
     lb.specButtons.hideAll()
 end
-function onSecureExit()
+function lb.onSecureExit()
     lbValues.isincombat=false
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
     lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
     lb.specButtons.showAll()
 end
 
-function onPlayerTargetChanged(unit)
+function lb.onPlayerTargetChanged(unit)
     -- print (unit)
     if unit==false then  lb.LastTarget =nil end
     local found = false
@@ -486,7 +486,7 @@ function onPlayerTargetChanged(unit)
         lb.LastTarget=nil
     end
 end
-function onMouseOverTargetChanged(unit)
+function lb.onMouseOverTargetChanged(unit)
 
      local newindex =GetIndexFromID(unit)
      local lastindex= GetIndexFromID(lb.MouseOverUnit)

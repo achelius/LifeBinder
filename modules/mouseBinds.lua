@@ -1,4 +1,5 @@
-function setMouseActions()
+lb.mouseBinds={}
+function lb.mouseBinds.setMouseActions()
     if lbValues.set==nil then return end
     if lbValues.isincombat then return end
     local associations =lbMacroButton[lbValues.set]
@@ -18,24 +19,24 @@ function setMouseActions()
             --print(tostring(i).."->"..key)
             if key==1 then
                 --leftclick
-                --if i==1 then print   ("left"..generateMacro(value,fname))end
-                lb.groupMask[i].Event.LeftDown=generateMacro(value,fname)
+                --if i==1 then print   ("left"..lb.mouseBinds.generateMacro(value,fname))end
+                lb.groupMask[i].Event.LeftDown=lb.mouseBinds.generateMacro(value,fname)
             elseif key==2 then
                 -- righeclick
-                --if i==1 then print   ("right"..generateMacro(value,fname))end
-                lb.groupMask[i].Event.RightDown=generateMacro(value,fname)
+                --if i==1 then print   ("right"..lb.mouseBinds.generateMacro(value,fname))end
+                lb.groupMask[i].Event.RightDown=lb.mouseBinds.generateMacro(value,fname)
             elseif key==3 then
                 -- middleclick
-                --print(generateMacro(value,fname))
-                lb.groupMask[i].Event.MiddleDown=generateMacro(value,fname)
+                --print(lb.mouseBinds.generateMacro(value,fname))
+                lb.groupMask[i].Event.MiddleDown=lb.mouseBinds.generateMacro(value,fname)
             elseif key==4 then
                 -- mouse4
-                --print(generateMacro(value,fname))
-                lb.groupMask[i].Event.Mouse4Down=generateMacro(value,fname)
+                --print(lb.mouseBinds.generateMacro(value,fname))
+                lb.groupMask[i].Event.Mouse4Down=lb.mouseBinds.generateMacro(value,fname)
             elseif key==5 then
                 -- mouse5
-                --print(generateMacro(value,fname))
-                lb.groupMask[i].Event.Mouse5Down=generateMacro(value,fname)
+                --print(lb.mouseBinds.generateMacro(value,fname))
+                lb.groupMask[i].Event.Mouse5Down=lb.mouseBinds.generateMacro(value,fname)
             end
 
         end
@@ -43,7 +44,7 @@ function setMouseActions()
 
 end
 
-function generateMacro(associations,name)
+function lb.mouseBinds.generateMacro(associations,name)
     local none=associations[1]
     local alt=associations[2]
     local ctrl=associations[3]

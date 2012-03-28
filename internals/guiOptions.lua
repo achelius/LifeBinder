@@ -391,7 +391,7 @@ function setMouseAssociationField(buttonIndex)
     for FieldIndex=1,4 do
         lbMacroButton[set][buttonIndex][FieldIndex]=lb.WindowOptionsMouseButtonCommands[buttonIndex][FieldIndex]:GetText()
     end
-    setMouseActions()
+    lb.mouseBinds.setMouseActions()
 end
 
 

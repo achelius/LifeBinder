@@ -37,6 +37,9 @@ function loadVariables(addonidentifier)
 	if lbValues.AddonDisabled==nil then
         lbValues.AddonDisabled=false
     end
+    if lbValues.MaxRange==nil then
+        lbValues.MaxRange=35*35
+    end
 
 
     if lbMacroText == nil then

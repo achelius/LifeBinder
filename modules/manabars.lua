@@ -12,49 +12,10 @@ local function getThrottle()
     end
 end
 
---Called by the event   Event.Unit.Detail.Health e Event.Unit.Detail.HealthMax
---[[function  lbHpUpdate(units)
-    local details = unitdetail(units)
-    for unitident, unitTable in pairs(details) do
-        identif = GetIdentifierFromID(unitTable.id)   --calculate key from unit identifier
-        if identif~=nil then
-            local j=stripnum(identif)
-            if j~=nil then
-                healthtick = unitTable.health
-                healthmax = unitTable.healthMax
-                if healthtick and healthmax ~= nil then
-                    healthpercent = string.format("%s%%", (math.ceil(healthtick/healthmax * 100)))
-                    lb.groupHF[j]:SetWidth((lbValues.mainwidth - 5)*(healthtick/healthmax))
-                    lb.groupStatus[j]:SetText(healthpercent)
-                end
-                if lb.UnitsTableStatus[identif][1] ~=  unitTable.aggro or viewModeChanged then
-                    lb.UnitsTableStatus[identif][1] =  unitTable.aggro
-                    if unitTable.aggro then
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
-                    else
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/backframe.png")
-                    end
-                end
-            end
-        end
-    end
-end
-]]
+
 
 -- mana bar manager
---planned options:
---  showOnlyManaUsers   (true or false   default=true)
---[[function initializeResourceBar(unitTable.calling)
-	if (unitTable.calling == "mage" or unitTable.calling == "cleric") then
-		lb.groupRF[j]:SetTexture("LifeBinder", "textures/statusbars/resource_mana.png")
-	elseif(unitID.calling == "warrior") then
-		lb.groupRF[j]:SetTexture("LifeBinder", "textures/statusbars/resource_rage.png")
-	elseif(unitID.calling == "rogue") then
-		lb.groupRF[j]:SetTexture("LifeBinder", "textures/statusbars/resource_energy.png")
-	else
-		lb.groupRF[j]:SetTexture("LifeBinder", "textures/statusbars/resource_plain.png")
-	end
-end]]
+
 
 function updateResourceBar(units)
 	-- local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
@@ -62,12 +23,12 @@ function updateResourceBar(units)
 	
 	local details = unitdetail(units)
 	for unitident, unitTable in pairs(details) do
-		identif = GetIdentifierFromID(unitTable.id)   --calculate key from unit identifier
+		local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
 		if identif~=nil then
-			local j=stripnum(identif)
+			local j=identif
 			if j~=nil then
-				resource = 0
-				resourceMax = 1
+				local resource = 0
+				local resourceMax = 1
 				
 				if(unitTable.calling == "mage" or unitTable.calling == "cleric") then
 					if ( unitTable.mana and unitTable.manaMax ) then
@@ -86,8 +47,7 @@ function updateResourceBar(units)
 					end
 				end
 				
-				resourcesRatio = resource/resourceMax
-				lb.groupRF[j]:SetWidth((lbValues.mainwidth)*(resourcesRatio))
+				lb.styles[lb.currentStyle].setManaBarValue(j,resource,resourceMax)
 				
 			end
 		end

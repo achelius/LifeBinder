@@ -2,20 +2,20 @@ table.insert(Event.Addon.SavedVariables.Load.End, {loadVariables, "LifeBinder", 
 function EnableHandlers()
 	if not lbValues.AddonDisabled then
 	 
-			table.insert(Event.Unit.Detail.Health, {lbHpUpdate, "LifeBinder", "Update_Health"})
-			table.insert(Event.Unit.Detail.HealthMax, {lbHpUpdate, "LifeBinder", "Update_Max_Health"})
+			table.insert(Event.Unit.Detail.Health, {lb.onHpUpdate, "LifeBinder", "Update_Health"})
+			table.insert(Event.Unit.Detail.HealthMax, {lb.onHpUpdate, "LifeBinder", "Update_Max_Health"})
 			table.insert(Event.Unit.Detail.Mana, {updateResourceBar, "LifeBinder", "Update_Mana"})
 			table.insert(Event.Unit.Detail.ManaMax, {updateResourceBar, "LifeBinder", "Update_Max_Mana"})
 			table.insert(Event.Unit.Detail.Power, {updateResourceBar, "LifeBinder", "Update_Power"})
 			table.insert(Event.Unit.Detail.Energy, {updateResourceBar, "LifeBinder", "Update_Energy"})
 			table.insert(Event.Unit.Detail.EnergyMax, {updateResourceBar, "LifeBinder", "Update_Max_Energy"})
-			table.insert(Event.Unit.Detail.Aggro, {lbAggroUpdate, "LifeBinder", "Update_Aggro_Flags"})
-			table.insert(Event.Unit.Detail.Blocked, {lbBlockedUpdate, "LifeBinder", "Update_Blocked_Flags"})
-			table.insert(Event.Ability.Add, {onAbilityAdded, "LifeBinder", "onAbilityAdded"})
-			table.insert(Event.System.Secure.Enter, {onSecureEnter, "LifeBinder", "onSecureEnter"})
-			table.insert(Event.System.Secure.Leave, {onSecureExit, "LifeBinder", "onSecureExit"})
+			table.insert(Event.Unit.Detail.Aggro, {lb.onAggroUpdate, "LifeBinder", "Update_Aggro_Flags"})
+			table.insert(Event.Unit.Detail.Blocked, {lb.onBlockedUpdate, "LifeBinder", "Update_Blocked_Flags"})
+			table.insert(Event.Ability.Add, {lb.onAbilityAdded, "LifeBinder", "lb.onAbilityAdded"})
+			table.insert(Event.System.Secure.Enter, {lb.onSecureEnter, "LifeBinder", "lb.onSecureEnter"})
+			table.insert(Event.System.Secure.Leave, {lb.onSecureExit, "LifeBinder", "lb.onSecureExit"})
 			
-			table.insert(Event.TEMPORARY.Role, {onRoleChanged, "LifeBinder", "onRoleChanged"})
+			table.insert(Event.TEMPORARY.Role, {lb.onRoleChanged, "LifeBinder", "lb.onRoleChanged"})
 			table.insert(Event.Unit.Detail.Role, {onUnitRoleChanged, "LifeBinder", "onUnitRoleChanged"})
 			
 			table.insert(Event.Addon.Load.End, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
@@ -25,14 +25,21 @@ function EnableHandlers()
 			table.insert(Event.Buff.Add, {lb.buffMonitor.onBuffAdd, "LifeBinder", "onBuffChange"})
 			table.insert(Event.Buff.Remove, {lb.buffMonitor.onBuffRemove, "LifeBinder", "lb.buffMonitor.onBuffRemove"})
 			-- create a change target event
-			table.insert(Library.LibUnitChange.Register("player.target"), {onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
-			table.insert(Library.LibUnitChange.Register("mouseover"), {onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})
+			table.insert(Library.LibUnitChange.Register("player.target"), {lb.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
+			table.insert(Library.LibUnitChange.Register("mouseover"), {lb.onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})
+			
+			---coordinates changer
+			if (Event.Unit.Detail.Coord~=nil) then
+				table.insert(Event.Unit.Detail.Coord, {lb.posData.onPlayerMovement, "LifeBinder", "OnUnitCoodsChange"})
+				table.insert(Library.LibUnitChange.Register("player.target"), {lb.posData.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
+				table.insert(Event.Unit.Detail.OutOfRange, {onOutOfRange , "LifeBinder", "outofrange"})
+			end
 			
 			
 			-- safesraidmanager events
 			table.insert(Event.SafesRaidManager.Group.Join, {lbUnitUpdate , "LifeBinder", "GroupJoin"})
 			table.insert(Event.SafesRaidManager.Group.Leave, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
-			
+			table.insert(Event.SafesRaidManager.Group.Change, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
 			table.insert(Event.SafesRaidManager.Player.Join, {lbUnitUpdate , "LifeBinder", "PlayerJoin"})
 			table.insert(Event.SafesRaidManager.Player.Leave,{lbUnitUpdate , "LifeBinder", "PlayerLeave"})
 			--player available wait

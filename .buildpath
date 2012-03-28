@@ -6,4 +6,5 @@
 	<buildpathentry kind="src" path="modules"/>
 	<buildpathentry kind="src" path="styles"/>
 	<buildpathentry kind="src" path="textures"/>
+	<buildpathentry kind="src" path="SafesRaidManager"/>
 </buildpath>
