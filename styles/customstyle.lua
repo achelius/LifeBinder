@@ -22,7 +22,7 @@ function stTable.initialize()
     for a = 1, 4 do
 		for i = 1, 5 do
 			var = i + ((a-1) * 5)
-			lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
+			--lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
 			lb.groupBF[var]:SetLayer(1)
 			lb.groupBF[var]:SetBackgroundColor(0, 0, 0, 1)
 			lb.groupBF[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a - 1))
@@ -30,6 +30,13 @@ function stTable.initialize()
 			lb.groupBF[var]:SetWidth(optionsTable.frameWidth)
 			lb.groupBF[var]:SetVisible(false)
 			
+			lb.groupAggro[var]:SetTexture("LifeBinder", "Textures/backframe.png")
+            lb.groupAggro[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 0,  0 )
+            lb.groupAggro[var]:SetHeight(optionsTable.frameHeight)
+            lb.groupAggro[var]:SetWidth(optionsTable.frameWidth)
+            lb.groupAggro[var]:SetLayer(1)
+            lb.groupAggro[var]:SetVisible(true)
+            
 			--Set Resource Frame
 			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupBF[var], "BOTTOMLEFT", 1, -3)
 			lb.groupRF[var]:SetHeight(5)
@@ -44,12 +51,8 @@ function stTable.initialize()
             lb.groupTarget[var]:SetLayer(3)
             lb.groupTarget[var]:SetVisible(false)
 
-            lb.groupReceivingSpell[var]:SetTexture("LifeBinder", "Textures/recfraNme.png")
-            lb.groupReceivingSpell[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
-            lb.groupReceivingSpell[var]:SetHeight(optionsTable.frameHeight - 5)
-            lb.groupReceivingSpell[var]:SetWidth(optionsTable.frameWidth - 5)
-            lb.groupReceivingSpell[var]:SetLayer(4)
-            lb.groupReceivingSpell[var]:SetVisible(false)
+          
+            
 
             lb.groupCastBar[var]:SetTexture("LifeBinder", "Textures/bars/cast.png")
             lb.groupCastBar[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 0, 0 )
@@ -92,13 +95,13 @@ function stTable.initialize()
 
 			lb.groupRole[var]:SetTexture("LifeBinder", "Textures/blank.png")
 			lb.groupRole[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 4*optionsTable.frameWidth*0.009009009,  6*optionsTable.frameHeight*0.023255814 )
-			lb.groupRole[var]:SetHeight(24*optionsTable.frameWidth*0.009009009)
-			lb.groupRole[var]:SetWidth(24*optionsTable.frameHeight*0.023255814)
+			lb.groupRole[var]:SetHeight(20)
+			lb.groupRole[var]:SetWidth(20)
 			lb.groupRole[var]:SetLayer(2)
 
             
 
-			lb.groupMask[var]:SetLayer(3)
+			lb.groupMask[var]:SetLayer(99)
 			lb.groupMask[var]:SetBackgroundColor(0,0,0,0)
 			lb.groupMask[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a - 1))
 			lb.groupMask[var]:SetHeight(optionsTable.frameHeight)

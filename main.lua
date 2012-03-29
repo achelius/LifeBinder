@@ -140,7 +140,7 @@ function lbUnitUpdate()
     if lbValues.isincombat==nil or not lbValues.isincombat then  UpdateFramesVisibility()end -- reads the group status and hide or show players frames
 --    if (lb.MouseOverUnitLastCast~=nil) then
 --        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
---        if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) end
+--        if unitIndex~=nil then lb.groupAggro[unitIndex]:SetVisible(false) end
 --  end
 	
     local details = unitdetail(lb.QueryTable)--lb.QueryTable)
@@ -490,12 +490,12 @@ function lb.onMouseOverTargetChanged(unit)
 
      local newindex =GetIndexFromID(unit)
      local lastindex= GetIndexFromID(lb.MouseOverUnit)
-     --if lastindex~=nil then lb.groupReceivingSpell[lastindex]:SetVisible(false) end
+     --if lastindex~=nil then lb.groupAggro[lastindex]:SetVisible(false) end
      if newindex~=nil then
 
         --print (GetIdentifierFromID(unit))
 
-         --lb.groupReceivingSpell[newindex]:SetVisible(true)
+         --lb.groupAggro[newindex]:SetVisible(true)
         lb.MouseOverUnit=unit
      else
         --print (unit)

@@ -21,8 +21,10 @@ function EnableHandlers()
 			table.insert(Event.Addon.Load.End, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
 			
 			table.insert(Event.System.Update.Begin, {castbarUpdate, "LifeBinder", "CastbarUpdate"})
+			table.insert(Event.System.Update.Begin, {UpdatePlayerFrame, "LifeBinder", "UpdatePlayerFrame"})
+			--table.insert(Event.System.Update.Begin, {lb.buffMonitor.updateDurations, "LifeBinder", "updatedurationscycle"})
 			table.insert(Event.Unit.Castbar, {onCastbarChanged, "LifeBinder", "OnCastBarChanged"})
-			table.insert(Event.Buff.Add, {lb.buffMonitor.onBuffAdd, "LifeBinder", "onBuffChange"})
+			table.insert(Event.Buff.Add, {lb.buffMonitor.onBuffAdd, "LifeBinder", "lb.buffMonitor.onBuffAdd"})
 			table.insert(Event.Buff.Remove, {lb.buffMonitor.onBuffRemove, "LifeBinder", "lb.buffMonitor.onBuffRemove"})
 			-- create a change target event
 			table.insert(Library.LibUnitChange.Register("player.target"), {lb.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
@@ -34,24 +36,19 @@ function EnableHandlers()
 				table.insert(Library.LibUnitChange.Register("player.target"), {lb.posData.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
 				table.insert(Event.Unit.Detail.OutOfRange, {onOutOfRange , "LifeBinder", "outofrange"})
 			end
-			
-			---coordinates changer
-			if (Event.Unit.Detail.Coord~=nil) then
-				table.insert(Event.Unit.Detail.Coord, {lb.posData.onPlayerMovement, "LifeBinder", "OnUnitCoodsChange"})
-				table.insert(Library.LibUnitChange.Register("player.target"), {lb.posData.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
-				table.insert(Event.Unit.Detail.OutOfRange, {onOutOfRange , "LifeBinder", "outofrange"})
-			end
-			
+			--table.insert(Event.Unit.Detail.OutOfRange, {test , "LifeBinder", "outofrange"})
+				
 			
 			-- safesraidmanager events
+			table.insert(Event.SafesRaidManager.Player.Ready, {waitPlayerAvailable , "LifeBinder", "PlayerReady"})
 			table.insert(Event.SafesRaidManager.Group.Join, {lbUnitUpdate , "LifeBinder", "GroupJoin"})
 			table.insert(Event.SafesRaidManager.Group.Leave, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
 			table.insert(Event.SafesRaidManager.Group.Change, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
 			table.insert(Event.SafesRaidManager.Player.Join, {lbUnitUpdate , "LifeBinder", "PlayerJoin"})
 			table.insert(Event.SafesRaidManager.Player.Leave,{lbUnitUpdate , "LifeBinder", "PlayerLeave"})
 			--player available wait
-			WaitPlayerEventID={waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
-			table.insert(Event.System.Update.Begin,WaitPlayerEventID)
+--			WaitPlayerEventID={waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
+--			table.insert(Event.System.Update.Begin,WaitPlayerEventID)
 	end
 end
 

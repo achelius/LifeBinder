@@ -21,19 +21,19 @@ function onCastbarChanged(units)
         if unitid==lb.PlayerID then
             --print("cbchanged")
             local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-            if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) end
+            if unitIndex~=nil then  end
             local details= castbardetail(lb.PlayerID)
             --if details==nil then return end
             if details==nil then
 
                 local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-                if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
+                if unitIndex~=nil then  setCastbarVisible(unitIndex,false) end
                 lb.MouseOverUnitLastCast=nil
 
                 return
             else
                 local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-                if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
+                if unitIndex~=nil then  setCastbarVisible(unitIndex,false) end
                 --print(details.abilityName)
             end
             if (lb.MouseOverUnit~=nil) then
@@ -65,7 +65,7 @@ function castbarUpdate()
     if details==nil then
         -- print ("endvis")
         local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-        if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) setCastbarVisible(unitIndex,false) end
+        if unitIndex~=nil then  setCastbarVisible(unitIndex,false) end
         lb.MouseOverUnitLastCast=nil
 
         return
@@ -74,7 +74,7 @@ function castbarUpdate()
         --print ("show" ..tostring(unitIndex ))
 
         if unitIndex~=nil then
-            lb.groupReceivingSpell[unitIndex]:SetVisible(true)
+            
             setCastbarVisible(unitIndex,true)
             setCastBarValue(unitIndex,(details.duration-details.remaining)*10,details.duration*10)
 
@@ -86,7 +86,7 @@ function castbarUpdate()
 end
 
 function castbarIndexVisible(index)
-    local vis =lb.groupReceivingSpell[index]:GetVisible()
+    local vis =lb.groupCastBar[index]:GetVisible()
     if vis==true then
         return true
     else
@@ -95,7 +95,7 @@ function castbarIndexVisible(index)
 end
 
 function resetCastbarIndex(index)
-    lb.groupReceivingSpell[index]:SetVisible(false)
+    
     setCastbarVisible(index,false)
     setCastBarValue(index,(0)*10,1*10)
 

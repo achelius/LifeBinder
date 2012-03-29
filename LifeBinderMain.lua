@@ -16,6 +16,17 @@ lb.ReloadWhileInCombat=false --true if lbUnitUpdate is called during combat
 lb.styles={}
 lb.WindowDrag = {}
 --
+local lastUpdatePlayerFrameCheck=0
+
+function lb.getUpdatePlayerFrameThrottle()
+    local now =  timeFrame()
+    local elapsed = now - lastUpdatePlayerFrameCheck
+    if (elapsed >= (.5)) then --half a second
+        lastdurationcheck = now
+        return true
+    end
+end
+
 function lb.initialize()
 	if lbValues.AddonDisabled then return end
 	lb.initialized=true
@@ -32,7 +43,7 @@ function lb.initialize()
 	lb.groupMask = {} --mouse click masks
 	lb.groupBF = {} --frames backgrounds
 	lb.groupTarget={} --targer outline (enabled only if frame is target)
-	lb.groupReceivingSpell={} -- frame for receiving spell overlay  (active when the unit is receiving a cast from me)
+	lb.groupAggro={} -- frame for aggro overlay  (active when the unit is receiving a cast from me)
 	lb.groupHF = {} --HP frame
 	lb.groupRF = {} -- Resource Frame
 	lb.groupName = {} -- name of the player
@@ -51,7 +62,7 @@ function lb.initialize()
 		lb.groupHF[i] = UI.CreateFrame("Texture", "Health", lb.groupBF[i])
 		lb.groupRF[i] = UI.CreateFrame("Texture", "Resource", lb.groupBF[i])
 	    lb.groupTarget[i] = UI.CreateFrame("Texture", "Target", lb.groupBF[i])
-	    lb.groupReceivingSpell[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
+	    lb.groupAggro[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
 	    lb.groupCastBar[i] = UI.CreateFrame("Texture", "ReceivingSpell", lb.groupBF[i])
 		lb.groupName[i] = UI.CreateFrame("Text", "Name", lb.groupBF[i])
 		lb.groupStatus[i] = UI.CreateFrame("Text", "Status", lb.groupBF[i])
@@ -66,6 +77,8 @@ function lb.initialize()
 	        lb.groupHoTSpots[i][g][1]=UI.CreateFrame("Texture", "HoT" .. tostring(g), lb.groupBF[i])
 	        lb.groupHoTSpots[i][g][2]=UI.CreateFrame("Text", "HoTText" .. tostring(g), lb.groupBF[i])
 	        lb.groupHoTSpots[i][g][3]=UI.CreateFrame("Text", "HoTTextShadow" .. tostring(g), lb.groupBF[i])
+	        lb.groupHoTSpots[i][g][4]=UI.CreateFrame("Text", "Duration" .. tostring(g), lb.groupBF[i])
+	        lb.groupHoTSpots[i][g][5]=UI.CreateFrame("Text", "DurationShadow" .. tostring(g), lb.groupBF[i])
 	
 	        lb.groupHoTSpotsIcons[i][g]={}
 	        lb.groupHoTSpotsIcons[i][g][0]=false
@@ -77,6 +90,10 @@ function lb.initialize()
 	        lb.groupHoTSpotsIcons[i][g][6]=false    --is debuff    true if the debuff applied is a debuff
 	        lb.groupHoTSpotsIcons[i][g][7]=false    --is from whitelist
 	        lb.groupHoTSpotsIcons[i][g][8]=false    --accepts Debuffs (true is this slot accepts debuffs
+	        lb.groupHoTSpotsIcons[i][g][9]=false    --has duration
+	        lb.groupHoTSpotsIcons[i][g][10]=1    --buff duration
+	        lb.groupHoTSpotsIcons[i][g][11]=0   --timeframe of the moment this buff was set
+	        lb.groupHoTSpotsIcons[i][g][12]=0   --current duration displayed
 	        
 		end
 	end
@@ -109,6 +126,7 @@ function lb.initialize()
 	    lb.UnitsTableStatus[i][8]=false -- position change check
 		lb.UnitsTableStatus[i][9]="none" --Calling
 		lb.UnitsTableStatus[i][10]=false --out of range
+		lb.UnitsTableStatus[i][11]=false --needs an update
 		lb.RaidTable[string.format("group%.2d", i)] = true --populate raid query table
 		
 	end
@@ -203,7 +221,46 @@ end -- function round
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+function waitPlayerAvailable()
+	local unitdet=Inspect.Unit.Detail(lb.PlayerID)
+	if lb.PlayerID~=nil then
+		if unitdet~=nil then
+			print (unitdet.name)
+		else
+			
+		end
+	else
+	end 
+	if lb.PlayerID ~=nil and unitdet~=nil then
+		remev()
+		PlayerFound=true
+		lb.posData.initialize()--positional module initialized here to be sure to have player info
+		lbUnitUpdate()
+		
+	end
 
+end
+function UpdatePlayerFrame()
+	local timer=lb.getUpdatePlayerFrameThrottle()
+	if not timer then return end
+	local unitupd=false
+	for i = 1,20 do
+		lb.buffMonitor.updateDurationsOfIndex(i)
+		if lb.UnitsTableStatus[i][11] then
+			local detail =unitdetail(lb.UnitsTableStatus[i][5])
+			if detail ~=nil then
+				if detail.calling~=nil then
+					unitupd=true
+					lb.UnitsTableStatus[i][11]=false
+					lbUnitUpdateIndex(i)
+				end
+			end
+		end
+	end
+	if unitupd then
+		--lbUnitUpdate()
+	end
+end
 
 function UpdateFramesVisibility()
    local lbgroupfound = false
@@ -223,7 +280,6 @@ function UpdateFramesVisibility()
     end
 
     if lbsolofound then
-
         if lastMode~=0 then
             viewModeChanged=true
             lastMode=0
@@ -238,7 +294,6 @@ function UpdateFramesVisibility()
         if lastMode~=1 then
             viewModeChanged=true
             lastMode=1
-        
             lb.mouseBinds.setMouseActions()
         end
         lb.QueryTable = lb.GroupTable
@@ -258,34 +313,114 @@ function UpdateFramesVisibility()
       
     end
 end
-function waitPlayerAvailable()
-	print ("wp")
-	lb.PlayerID =Inspect.Unit.Lookup("player")
-	local unitdet=Inspect.Unit.Detail(lb.PlayerID)
-	print("hh"..Inspect.Unit.Lookup("player")) 
-	if lb.PlayerID~=nil then
-		if unitdet~=nil then
-			print (unitdet.name)
-		else
-			print("nounit")
-		end
-	else
-	print("noid")
-	end 
-	if lb.PlayerID ~=nil and unitdet~=nil then
-		print ("unit found")
-		print(lb.PlayerID)
-		print(unitdet.name)
-		remev()
-		--RemoveEventHandler(Event.System.Update.Begin,WaitPlayerEventID)
-		PlayerFound=true
-		lb.posData.initialize()--positional module initialized here to be sure to have player info
-		lbUnitUpdate()
-		
-	end
+function lbUnitUpdateIndex(index)
+	if index==nil then return end
+	if not PlayerFound then return end
+	if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
+	
+	UpdateFramesVisibility()
+	
+	if lbValues.isincombat then  
+    	lb.ReloadWhileInCombat=true 
+    else
+    	lb.ReloadWhileInCombat=false 
+    end
+    
+	local unitTable = unitdetail(lb.UnitsTableStatus[index][5])--lb.QueryTable)
+    if unitTable ~=nil then
+    	local j =index
+    	local name = unitTable.name
 
+        if string.len(name) > 5 then name = string.sub(name, 1, 5).."" end --restrict names to 8 letters
+        lb.groupName[j]:SetText(name)
+
+        if unitTable == nil  then
+
+        else
+
+            lb.UnitsTableStatus[j][8]=true
+            if lb.UnitsTableStatus[j][5]~=unitTable.id then
+				  if Event.Unit.Detail.Coord~=nil then lb.posData.resetUnitPositionofIndex(j,unitTable.coordX,unitTable.coordY,unitTable.coordZ) end
+                  lb.UnitsTableStatus[j][5]=unitTable.id
+            end
+            if not lbValues.isincombat then
+                lb.groupMask[j]:SetMouseoverUnit(unitTable.id)
+            else
+            	--reorganizeMasks()
+            end
+            if unitTable.calling==nil then
+            	print (tostring(j).."nocalling")
+            	lb.UnitsTableStatus[j][11]=true
+            else
+            	print (tostring(j).."calling")
+            end
+			if lb.UnitsTableStatus[j][9] ~=  unitTable.calling or viewModeChanged then
+                lb.UnitsTableStatus[j][9] =  unitTable.calling
+                setManaBar(j,unitTable)
+            end
+            
+           -- if lb.UnitsTableStatus[j][4] ~=  unitTable.role or viewModeChanged then
+                lb.UnitsTableStatus[j][4] =  unitTable.role
+                if unitTable.role then
+                    lb.groupRole[j]:SetTexture("LifeBinder",  "Textures/icons/"..tostring(unitTable.calling).."-"..tostring(unitTable.role)..".png")--"Textures/"..unitTable.role..".png")
+                else
+                    lb.groupRole[j]:SetTexture("LifeBinder", "Textures/".."blank.png")
+                end
+            --end
+
+            --if lb.UnitsTableStatus[j][2] ~=  unitTable.offline or viewModeChanged then
+                lb.UnitsTableStatus[j][2] =  unitTable.offline
+                    if unitTable.offline then
+                        lb.groupStatus[j]:SetText("(D/C)")
+                        lb.groupHF[j]:SetWidth(1)
+						lb.groupRF[j]:SetWidth(1)
+                    end
+            --end
+
+            if targetunit~=nil then
+                if unitident == targetunit.id  or viewModeChanged then
+                    lb.UnitsTableStatus[j][6] =  true
+                    if lb.UnitsTableStatus[j][6] then
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
+                    else
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/backframe.png")
+                    end
+                else
+                    lb.UnitsTableStatus[j][6] =  false
+                end
+            end
+
+           -- if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
+                lb.UnitsTableStatus[j][1] =  unitTable.aggro
+                if unitTable.aggro then
+                    lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
+                else
+                    lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/backframe.png")
+                end
+            --end
+           
+                lb.UnitsTableStatus[j][3] =  unitTable.blocked
+                lb.styles[lb.currentStyle].setBlockedValue(j,lb.UnitsTableStatus[j][3],lb.UnitsTableStatus[j][10])
+            
+            if viewModeChanged then
+              local  healthtick = unitTable.health
+              local  healthmax = unitTable.healthMax
+                if healthtick~=nil and healthmax ~= nil then
+                	lb.styles[lb.currentStyle].setHealthBarValue(j,healthtick,healthmax)
+                    lb.styles[lb.currentStyle].setHealthBarText(j,healthtick,healthmax)
+                end
+            end
+
+        end
+    end
+    
+     
+    
+    
+    
+    
+    
 end
-
 function lbUnitUpdate()
 	--waitPlayerAvailable()
 --   local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
@@ -302,11 +437,11 @@ function lbUnitUpdate()
     end
 --    if (lb.MouseOverUnitLastCast~=nil) then
 --        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
---        if unitIndex~=nil then lb.groupReceivingSpell[unitIndex]:SetVisible(false) end
+--        if unitIndex~=nil then lb.groupAggro[unitIndex]:SetVisible(false) end
 --  end
 	
     local details = unitdetail(lb.QueryTable)--lb.QueryTable)
-  
+  	
     local targetunit=unitdetail("player.target")
 --    for key,val in pairs(lb.UnitsTableStatus) do
 --        if key~= "player" then
@@ -341,58 +476,60 @@ function lbUnitUpdate()
             else
             	--reorganizeMasks()
             end
-            
+            if unitTable.calling==nil then
+            	print (tostring(j).."nocalling")
+            	lb.UnitsTableStatus[j][11]=true
+            else
+            	print (tostring(j).."calling")
+            end
 			if lb.UnitsTableStatus[j][9] ~=  unitTable.calling or viewModeChanged then
                 lb.UnitsTableStatus[j][9] =  unitTable.calling
                 setManaBar(j,unitTable)
             end
-            if lb.UnitsTableStatus[j][4] ~=  unitTable.role or viewModeChanged then
+            
+           -- if lb.UnitsTableStatus[j][4] ~=  unitTable.role or viewModeChanged then
                 lb.UnitsTableStatus[j][4] =  unitTable.role
                 if unitTable.role then
                     lb.groupRole[j]:SetTexture("LifeBinder",  "Textures/icons/"..tostring(unitTable.calling).."-"..tostring(unitTable.role)..".png")--"Textures/"..unitTable.role..".png")
                 else
                     lb.groupRole[j]:SetTexture("LifeBinder", "Textures/".."blank.png")
                 end
-            end
+            --end
 
-            if lb.UnitsTableStatus[j][2] ~=  unitTable.offline or viewModeChanged then
+            --if lb.UnitsTableStatus[j][2] ~=  unitTable.offline or viewModeChanged then
                 lb.UnitsTableStatus[j][2] =  unitTable.offline
                     if unitTable.offline then
                         lb.groupStatus[j]:SetText("(D/C)")
                         lb.groupHF[j]:SetWidth(1)
 						lb.groupRF[j]:SetWidth(1)
                     end
-            end
+            --end
 
             if targetunit~=nil then
                 if unitident == targetunit.id  or viewModeChanged then
                     lb.UnitsTableStatus[j][6] =  true
                     if lb.UnitsTableStatus[j][6] then
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
                     else
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/backframe.png")
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/backframe.png")
                     end
                 else
                     lb.UnitsTableStatus[j][6] =  false
                 end
             end
 
-            if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
+           -- if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
                 lb.UnitsTableStatus[j][1] =  unitTable.aggro
                 if unitTable.aggro then
-                    lb.groupBF[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
+                    lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
                 else
-                    lb.groupBF[j]:SetTexture("LifeBinder", "Textures/backframe.png")
+                    lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/backframe.png")
                 end
-            end
-            if lb.UnitsTableStatus[j][3] ~=  unitTable.blocked or viewModeChanged then
+            --end
+           -- if lb.UnitsTableStatus[j][3] ~=  unitTable.blocked or viewModeChanged then
                 lb.UnitsTableStatus[j][3] =  unitTable.blocked
-                if unitTable.blocked  then
-                    lb.groupHF[j]:SetTexture("LifeBinder", "Textures/healthlos.png")
-                else
-                    lb.groupHF[j]:SetTexture("LifeBinder", "Textures/"..lbValues.texture)
-                end
-            end
+                lb.styles[lb.currentStyle].setBlockedValue(j,lb.UnitsTableStatus[j][3],lb.UnitsTableStatus[j][10])
+            --end
             if viewModeChanged then
               local  healthtick = unitTable.health
               local  healthmax = unitTable.healthMax
@@ -436,19 +573,18 @@ end
 --Called by the event   Event.Unit.Detail.Aggro
 function  lb.onAggroUpdate(units)
     local details = unitdetail(units)
-
+	
     for unitident, unitTable in pairs(details) do
         local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
         if identif~=nil then
             local j=identif
             if j~=nil then
-
                 --if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
                     lb.UnitsTableStatus[j][1] =  unitTable.aggro
                     if unitTable.aggro then
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
                     else
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/backframe.png")
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/backframe.png")
                     end
                 --end
             end
@@ -470,14 +606,7 @@ function  lb.onBlockedUpdate(units)
                     --print (identif .. tostring(unitTable.blocked))
                     dump(lb.UnitsTableStatus[j])
                     lb.styles[lb.currentStyle].setBlockedValue(j,lb.UnitsTableStatus[j][3],index,lb.UnitsTableStatus[j][10])
---                    if unitTable.blocked  then
---                        lb.groupHF[j]:SetTexture("LifeBinder", "Textures/healthlos.png")
---                     elseif unitTable.blocked==nil  then
---                        lb.groupHF[j]:SetTexture("LifeBinder", "Textures/"..lbValues.texture)
---                    else
---                        lb.groupHF[j]:SetTexture("LifeBinder", "Textures/"..lbValues.texture)
---                    end
-                --end
+--                   
             end
         end
     end
@@ -527,9 +656,9 @@ function  lb.onHpUpdate(units)
                 if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
                     lb.UnitsTableStatus[j][1] =  unitTable.aggro
                     if unitTable.aggro then
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/aggroframe.png")
                     else
-                        lb.groupBF[j]:SetTexture("LifeBinder", "Textures/backframe.png")
+                        lb.groupAggro[j]:SetTexture("LifeBinder", "Textures/backframe.png")
                     end
                 end
             end
@@ -653,12 +782,12 @@ function lb.onMouseOverTargetChanged(unit)
 
      local newindex =GetIndexFromID(unit)
      local lastindex= GetIndexFromID(lb.MouseOverUnit)
-     --if lastindex~=nil then lb.groupReceivingSpell[lastindex]:SetVisible(false) end
+     --if lastindex~=nil then lb.groupAggro[lastindex]:SetVisible(false) end
      if newindex~=nil then
 
         --print (GetIdentifierFromID(unit))
 
-         --lb.groupReceivingSpell[newindex]:SetVisible(true)
+         --lb.groupAggro[newindex]:SetVisible(true)
         lb.MouseOverUnit=unit
      else
         --print (unit)
