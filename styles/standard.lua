@@ -118,7 +118,7 @@ function stTable.initializeIndex(index)
 	lb.WindowFrameTop:SetTexture("Rift","nil")
 	local totalwidth= optionsTable.frameWidth*4
 	local totalheight= optionsTable.frameHeight*5
-	 
+	if  lb.UnitsTableStatus[var][12] then return end
 	local var = index
 	--lb.frames[var].groupBF:SetTexture("LifeBinder", "Textures/backframe.png")
 	
@@ -186,7 +186,7 @@ function stTable.initializeIndex(index)
 
     lb.frames[var].groupStatus:SetFontSize(percfsize)
 
-	lb.frames[var].groupRole:SetTexture("LifeBinder", "Textures/blank.png")
+	--lb.frames[var].groupRole:SetTexture("LifeBinder", "Textures/blank.png")
 	lb.frames[var].groupRole:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", 4*optionsTable.frameWidth*0.009009009,  6*optionsTable.frameHeight*0.023255814 )
 	lb.frames[var].groupRole:SetHeight(20)
 	lb.frames[var].groupRole:SetWidth(20)
@@ -307,6 +307,13 @@ function stTable.setHealthBarText(index,value,maxvalue)
 	local resourcesRatio = value/maxvalue
 	local healthpercent = string.format("%s%%", (math.ceil(value/maxvalue * 100)))
 	lb.frames[index].groupStatus:SetText(healthpercent)
+end
+
+function stTable.setRoleIcon(index,calling,role)
+	if index==nil then return end
+	print ("Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
+	lb.frames[index].groupRole:SetTexture("Lifebinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
+	lb.frames[index].groupRole:SetVisible(true)
 end
 
 function stTable.setBlockedValue(index,losvalue,oorvalue)

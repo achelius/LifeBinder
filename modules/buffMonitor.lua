@@ -27,76 +27,14 @@ function lb.buffMonitor.initializeBuffMonitor()
 --print ( lb.buffMonitor.slotscount )
 	lb.buffMonitor.slotscount = #(lbBuffSlotPositions[lbValues.set])
  	for var=1,20 do
- 		if lb.UnitsTableStatus[var][12]then
-		    for g= 1,  lb.buffMonitor.slotscount do
-		       
-		       local scalex=1--lbValues.mainwidth*0.009009009
-		       local scaley=1--lbValues.mainheight*0.023255814
-		       local lt=lbBuffSlotPositions[lbValues.set][g][3]*scalex
-		       local tp=lbBuffSlotPositions[lbValues.set][g][4]*scaley
-		       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
-		       local Point2=lbBuffSlotPositions[lbValues.set][g][2]
-		       
-		        
-		        local iconwidth=16--*scalex
-		        local iconheight=16--*scaley
-		        local iconl=iconwidth
-		        if iconheight<iconwidth then
-		        	iconl=iconheight
-		        end
-		        local fontfile="fonts/AriBlk.ttf"
-		        local fontsize=12
-		        lb.frames[var].groupHoTSpots[g][1]:SetTexture(lb.frames[var].groupHoTSpotsIcons[g][1],lb.frames[var].groupHoTSpotsIcons[g][2] )
-		        lb.frames[var].groupHoTSpots[g][1]:SetPoint(Point1, lb.groupBF[var], Point2, lt,  tp )
-		        lb.frames[var].groupHoTSpots[g][1]:SetHeight(iconl)
-		        lb.frames[var].groupHoTSpots[g][1]:SetWidth(iconl)
-		        lb.frames[var].groupHoTSpots[g][1]:SetLayer(5)
-		        lb.frames[var].groupHoTSpots[g][1]:SetVisible(lb.frames[var].groupHoTSpotsIcons[g][0])
-		
-		        lb.frames[var].groupHoTSpots[g][2]:SetPoint("CENTER", lb.frames[var].groupHoTSpots[g][1], "CENTER", -5, -7 )
-		        lb.frames[var].groupHoTSpots[g][2]:SetFont("LifeBinder",fontfile)
-		        lb.frames[var].groupHoTSpots[g][2]:SetFontColor(1,1,1,1)
-		        lb.frames[var].groupHoTSpots[g][2]:SetFontSize(fontsize)
-		        lb.frames[var].groupHoTSpots[g][2]:SetText(tostring(lb.frames[var].groupHoTSpotsIcons[g][3]))
-		        lb.frames[var].groupHoTSpots[g][2]:SetLayer(7)
-		        if lb.frames[var].groupHoTSpotsIcons[g][3]==0 then  lb.frames[var].groupHoTSpots[g][2]:SetVisible(false) end
-		
-		        lb.frames[var].groupHoTSpots[g][3]:SetPoint("CENTER", lb.frames[var].groupHoTSpots[g][2], "CENTER",2, 2 )
-		        lb.frames[var].groupHoTSpots[g][3]:SetFont("LifeBinder",fontfile)
-		       --lb.frames[var].groupHoTSpots[g][3]:SetBackgroundColor(1,0,0,1)
-		        lb.frames[var].groupHoTSpots[g][3]:SetFontColor(0,0,0,1)
-		        lb.frames[var].groupHoTSpots[g][3]:SetFontSize(fontsize)
-		        lb.frames[var].groupHoTSpots[g][3]:SetText(tostring(lb.frames[var].groupHoTSpotsIcons[g][3]))
-		        lb.frames[var].groupHoTSpots[g][3]:SetLayer(6)
-		        if lb.frames[var].groupHoTSpotsIcons[g][3]==0 then  lb.frames[var].groupHoTSpots[g][3]:SetVisible(false) end
-		        
-		        lb.frames[var].groupHoTSpots[g][4]:SetPoint("CENTER", lb.frames[var].groupHoTSpots[g][1], "CENTER",0, 7)
-		        lb.frames[var].groupHoTSpots[g][4]:SetFontColor(1,1,1,1)
-		        lb.frames[var].groupHoTSpots[g][4]:SetFont("LifeBinder",fontfile)
-		        lb.frames[var].groupHoTSpots[g][4]:SetFontSize(fontsize)
-		        lb.frames[var].groupHoTSpots[g][4]:SetText("12")
-		        lb.frames[var].groupHoTSpots[g][4]:SetLayer(7)
-		        
-		        lb.frames[var].groupHoTSpots[g][5]:SetPoint("CENTER", lb.frames[var].groupHoTSpots[g][4], "CENTER",2, 2)
-		        lb.frames[var].groupHoTSpots[g][5]:SetFont("LifeBinder",fontfile)
-		        lb.frames[var].groupHoTSpots[g][5]:SetFontColor(0,0,0,1)
-		       -- lb.frames[var].groupHoTSpots[g][5]:SetBackgroundColor(1,0,0,1)
-		        lb.frames[var].groupHoTSpots[g][5]:SetFontSize(fontsize)
-		        lb.frames[var].groupHoTSpots[g][5]:SetText("12")
-		        lb.frames[var].groupHoTSpots[g][5]:SetLayer(6)
-		      
-		        
-		        lb.frames[var].groupHoTSpots[g][4]:SetVisible(lb.frames[var].groupHoTSpotsIcons[g][9])
-			end
-		end
+ 		lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
     end
 end
 
 function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 --print ( lb.buffMonitor.slotscount )
-	
 	lb.buffMonitor.slotscount = #(lbBuffSlotPositions[lbValues.set])
- 	
+	
  		if lb.UnitsTableStatus[var][12]then
 		    for g= 1,  lb.buffMonitor.slotscount do
 		       
@@ -146,6 +84,7 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		        lb.frames[var].groupHoTSpots[g][4]:SetFontSize(fontsize)
 		        lb.frames[var].groupHoTSpots[g][4]:SetText("12")
 		        lb.frames[var].groupHoTSpots[g][4]:SetLayer(7)
+		        if lb.frames[var].groupHoTSpotsIcons[g][3]==0 then  lb.frames[var].groupHoTSpots[g][4]:SetVisible(false) end
 		        
 		        lb.frames[var].groupHoTSpots[g][5]:SetPoint("CENTER", lb.frames[var].groupHoTSpots[g][4], "CENTER",2, 2)
 		        lb.frames[var].groupHoTSpots[g][5]:SetFont("LifeBinder",fontfile)
@@ -154,6 +93,7 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		        lb.frames[var].groupHoTSpots[g][5]:SetFontSize(fontsize)
 		        lb.frames[var].groupHoTSpots[g][5]:SetText("12")
 		        lb.frames[var].groupHoTSpots[g][5]:SetLayer(6)
+		        if lb.frames[var].groupHoTSpotsIcons[g][3]==0 then  lb.frames[var].groupHoTSpots[g][5]:SetVisible(false) end
 		      
 		        
 		        lb.frames[var].groupHoTSpots[g][4]:SetVisible(lb.frames[var].groupHoTSpotsIcons[g][9])
