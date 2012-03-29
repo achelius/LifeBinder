@@ -44,9 +44,9 @@ lb.posData.player.OutOfRange, Event.Unit.Detail.OutOfRange = Utility.Event.Creat
 function onOutOfRange(unit,status)
 	if unit==nil then return end
 	local index= GetIndexFromID(unit)
-	print (tostring(unit) ..tostring(status))
+	--print (tostring(unit) ..tostring(status))
 	if index~=nil then
-		print(index)
+		--print(index)
 		lb.styles[lb.currentStyle].setBlockedValue(index,lb.UnitsTableStatus[index][3],status)
 	end
 end
@@ -67,7 +67,7 @@ function lb.posData.initialize()
 			lb.playerPosition.Z=playdet.coordZ
 		end
 	end
-	dump(lb.playerPosition)
+	--dump(lb.playerPosition)
 	--initialize for group positions
 	lb.posData.units={}
 	for i = 1,20 do
@@ -154,8 +154,8 @@ function lb.posData.updateTargetPosition(x,y,z,noThrottle)
 	
 	lb.posData.Target.distance=lb.posData.getFastDistance(dx,dy,dz)
 	
-    print (lb.posData.Target.distance)
-    print (lb.posData.getFastDistance(dx,dy,dz))
+   -- print (lb.posData.Target.distance)
+    --print (lb.posData.getFastDistance(dx,dy,dz))
     if lb.posData.Target.distancelong>=lbValues.MaxRange then
 		if not lb.posData.targetOORStatus or lb.posData.targetOORStatus==nil then
 			lb.posData.targetOORStatus=true
@@ -203,12 +203,12 @@ function recalculateDistances()
 							if not lb.UnitsTableStatus[i][10] or lb.UnitsTableStatus[i][10]==nil then
 								lb.UnitsTableStatus[i][10]=true
 								lb.posData.player.OutOfRange(lb.UnitsTableStatus[i][5],true)
-								print (i .. "-->in")
+								--print (i .. "-->in")
 							end
 						else
 							if lb.UnitsTableStatus[i][10] or lb.UnitsTableStatus[i][10]==nil then
 								lb.UnitsTableStatus[i][10]=false
-								print (i .. "-->out")
+								--print (i .. "-->out")
 								lb.posData.player.OutOfRange(lb.UnitsTableStatus[i][5],false)
 							end
 						end

@@ -1,76 +1,67 @@
 
 -- planned functions: see: stylescore.lua
 
-lb.styles["standard"]={}
-local stTable=lb.styles["standard"]
+lb.styles["oldstyle"]={}
+local stTable=lb.styles["oldstyle"]
 local optionsTable=nil
-
-function stTable.InitializeOptionsTable()
-	--set values like this (optionsTable.xxxxxx) , they will be saved into the savedvariables of the character
-	optionsTable.Value="cippolippo"
-	if optionsTable.frameWidth==nil then optionsTable.frameWidth=110 end
-	if optionsTable.frameHeight==nil then optionsTable.frameHeight=43 end
+function stTable.setFrames()
+	--now i want to load the settings for the standard style
 	
+	print ("oldstyle")
 end
+
 function stTable.initialize()
-	optionsTable=lb.styles.getConfiguration("standard") --gets configuration from savedvars and stores it into the local optionsTable
+	optionsTable=lb.styles.getConfiguration("oldstyle")
 	
-	stTable.InitializeOptionsTable() --initializes optionsTable
-	lb.WindowFrameTop:SetTexture("Rift","nil")
-	local totalwidth= optionsTable.frameWidth*4
-	local totalheight= optionsTable.frameHeight*5
     for a = 1, 4 do
 		for i = 1, 5 do
 			var = i + ((a-1) * 5)
-			--lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
+			lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
 			lb.groupBF[var]:SetLayer(1)
 			lb.groupBF[var]:SetBackgroundColor(0, 0, 0, 1)
-			lb.groupBF[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a - 1))
-			lb.groupBF[var]:SetHeight(optionsTable.frameHeight)
-			lb.groupBF[var]:SetWidth(optionsTable.frameWidth)
+			lb.groupBF[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", lbValues.mainwidth * (a -1) ,  lbValues.mainheight * (i - 1))
+			lb.groupBF[var]:SetHeight(lbValues.mainheight)
+			lb.groupBF[var]:SetWidth(lbValues.mainwidth)
 			lb.groupBF[var]:SetVisible(false)
 			
-			lb.groupAggro[var]:SetTexture("LifeBinder", "Textures/backframe.png")
-            lb.groupAggro[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 0,  0 )
-            lb.groupAggro[var]:SetHeight(optionsTable.frameHeight)
-            lb.groupAggro[var]:SetWidth(optionsTable.frameWidth)
-            lb.groupAggro[var]:SetLayer(1)
-            lb.groupAggro[var]:SetVisible(true)
-            
 			--Set Resource Frame
-			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupBF[var], "BOTTOMLEFT", 1, -3)
+			lb.groupRF[var]:SetPoint("BOTTOMLEFT", lb.groupBF[var], "BOTTOMLEFT", 5, 0)
 			lb.groupRF[var]:SetHeight(5)
-			lb.groupRF[var]:SetWidth(optionsTable.frameWidth - 4)
+			lb.groupRF[var]:SetWidth(lbValues.mainwidth - 6)
 			lb.groupRF[var]:SetLayer(2)
 			lb.groupRF[var]:SetVisible(true)
 
             lb.groupTarget[var]:SetTexture("LifeBinder", "Textures/targetframe.png")
             lb.groupTarget[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
-            lb.groupTarget[var]:SetHeight(optionsTable.frameHeight - 5)
-            lb.groupTarget[var]:SetWidth(optionsTable.frameWidth - 5)
+            lb.groupTarget[var]:SetHeight(lbValues.mainheight - 5)
+            lb.groupTarget[var]:SetWidth(lbValues.mainwidth - 5)
             lb.groupTarget[var]:SetLayer(3)
             lb.groupTarget[var]:SetVisible(false)
 
-          
-            
+            lb.groupAggro[var]:SetTexture("LifeBinder", "Textures/recframe.png")
+            lb.groupAggro[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
+            lb.groupAggro[var]:SetHeight(lbValues.mainheight - 5)
+            lb.groupAggro[var]:SetWidth(lbValues.mainwidth - 5)
+            lb.groupAggro[var]:SetLayer(4)
+            lb.groupAggro[var]:SetVisible(false)
 
-            lb.groupCastBar[var]:SetTexture("LifeBinder", "Textures/bars/cast.png")
-            lb.groupCastBar[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 0, 0 )
-            lb.groupCastBar[var]:SetHeight(7)
-            lb.groupCastBar[var]:SetWidth(optionsTable.frameWidth-3)
+            lb.groupCastBar[var]:SetTexture("LifeBinder", "Textures/health_r.png")
+            lb.groupCastBar[var]:SetPoint("BOTTOMLEFT", lb.groupBF[var], "BOTTOMLEFT", 0,  -3*lbValues.mainheight*0.023255814 )
+            lb.groupCastBar[var]:SetHeight(6*lbValues.mainheight*0.023255814)
+            lb.groupCastBar[var]:SetWidth(lbValues.mainwidth-5)
             lb.groupCastBar[var]:SetLayer(6)
             lb.groupCastBar[var]:SetVisible(false)
 
 			lb.groupHF[var]:SetTexture("LifeBinder",stTable.getHealthFrameTexture())
 			lb.groupHF[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 2,  2 )
-			lb.groupHF[var]:SetHeight(optionsTable.frameHeight - 9)
-			lb.groupHF[var]:SetWidth(optionsTable.frameWidth - 5)
+			lb.groupHF[var]:SetHeight(lbValues.mainheight - 5)
+			lb.groupHF[var]:SetWidth(lbValues.mainwidth - 5)
 			lb.groupHF[var]:SetLayer(0)
 
 		
-			lb.groupName[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 30*optionsTable.frameWidth*0.009009009, 7*optionsTable.frameHeight*0.023255814)
+			lb.groupName[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 24*lbValues.mainwidth*0.009009009, 3*lbValues.mainheight*0.023255814)
 			lb.groupName[var]:SetLayer(2)
-            local percfsize=round((lbValues.font)*optionsTable.frameHeight*0.023255814*0.8)
+            local percfsize=round((lbValues.font)*lbValues.mainheight*0.023255814*0.8)
 
             if percfsize>12 then
                 percfsize=12
@@ -83,8 +74,8 @@ function stTable.initialize()
 			lb.groupStatus[var]:SetText("100%")
 			lb.groupStatus[var]:SetFontColor(lbCallingColors[5].r, lbCallingColors[5].g, lbCallingColors[5].b, 1)
 			lb.groupStatus[var]:SetLayer(2)
-			lb.groupStatus[var]:SetPoint("BOTTOMRIGHT", lb.groupBF[var], "BOTTOMRIGHT", -10*optionsTable.frameWidth*0.009009009, -10*optionsTable.frameHeight*0.023255814)
-            percfsize=round((lbValues.font)*optionsTable.frameHeight*0.023255814*0.7)
+			lb.groupStatus[var]:SetPoint("TOPRIGHT", lb.groupBF[var], "TOPRIGHT", -10*lbValues.mainwidth*0.009009009, (lbValues.mainheight /2 )*lbValues.mainheight*0.023255814)
+            percfsize=round((lbValues.font)*lbValues.mainheight*0.023255814*0.7)
             if percfsize>12 then
                 percfsize=12
             elseif percfsize<8 then
@@ -94,18 +85,18 @@ function stTable.initialize()
             lb.groupStatus[var]:SetFontSize(percfsize)
 
 			lb.groupRole[var]:SetTexture("LifeBinder", "Textures/blank.png")
-			lb.groupRole[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 4*optionsTable.frameWidth*0.009009009,  6*optionsTable.frameHeight*0.023255814 )
-			lb.groupRole[var]:SetHeight(20)
-			lb.groupRole[var]:SetWidth(20)
+			lb.groupRole[var]:SetPoint("TOPLEFT", lb.groupBF[var], "TOPLEFT", 6*lbValues.mainwidth*0.009009009,  6*lbValues.mainheight*0.023255814 )
+			lb.groupRole[var]:SetHeight(16*lbValues.mainwidth*0.009009009)
+			lb.groupRole[var]:SetWidth(16*lbValues.mainheight*0.023255814)
 			lb.groupRole[var]:SetLayer(2)
 
             
 
-			lb.groupMask[var]:SetLayer(99)
+			lb.groupMask[var]:SetLayer(3)
 			lb.groupMask[var]:SetBackgroundColor(0,0,0,0)
-			lb.groupMask[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a - 1))
-			lb.groupMask[var]:SetHeight(optionsTable.frameHeight)
-			lb.groupMask[var]:SetWidth(optionsTable.frameWidth)
+			lb.groupMask[var]:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", lbValues.mainwidth * (a - 1) + (a * 4),  lbValues.mainheight * (i - 1))
+			lb.groupMask[var]:SetHeight(lbValues.mainheight)
+			lb.groupMask[var]:SetWidth(lbValues.mainwidth)
 			
 			lb.groupMask[var]:SetVisible(false)
 
@@ -119,33 +110,21 @@ function stTable.initialize()
 --        lb.groupMask[var].Event.LeftClick="/target @".. name
 --
 --	end
-	if optionsTable.frameWidth <  95 then
-		size = optionsTable.frameWidth / 4
-		lbValues.font = math.ceil(optionsTable.frameWidth / 6)
+	if lbValues.mainwidth <  95 then
+		size = lbValues.mainwidth / 4
+		lbValues.font = math.ceil(lbValues.mainwidth / 6)
 	else
 		size = 24
 		lbValues.font = 16
 	end
 end
-
-function stTable.showAllFrames()
-	for var= 1,20 do
-		lb.groupBF[var]:SetVisible(true)
-	end
-end
 function stTable.getHealthFrameTexture()
-	return "Textures/bars/health.png"
-end
-function stTable.getFrameWidth()
-	return optionsTable.frameWidth
-end
-function stTable.getFrameHeight()
-	return optionsTable.frameHeight
+	return "Textures/"..lbValues.texture
 end
 
 function stTable.setCastBarValue(index,value,max)
     if value==nil then value=0 end
-    local cwidth=(value/max)*(optionsTable.frameWidth-3)
+    local cwidth=(value/max)*(lbValues.mainheight-3)
     lb.groupCastBar[index]:SetWidth(cwidth)
 end
 
@@ -165,6 +144,14 @@ end
 function stTable.resetCastbarIndex(index)
     stTable.setCastbarVisible(index,false)
     stTable.setCastBarValue(index,(0)*10,1*10)
+end
+
+
+function stTable.getFrameWidth()
+	return lbValues.mainwidth
+end
+function stTable.getFrameHeight()
+	return lbValues.mainheight
 end
 
 function stTable.setManaBar(index,unitTable)
@@ -194,15 +181,13 @@ end
 function stTable.setManaBarValue(index,value,maxvalue)
 	if index==nil then return end
 	local resourcesRatio = value/maxvalue
-	lb.groupRF[index]:SetWidth((optionsTable.frameWidth-4)*(resourcesRatio))
+	lb.groupRF[index]:SetWidth((lbValues.mainwidth-6)*(resourcesRatio))
 end
-
 function stTable.setHealthBarValue(index,value,maxvalue)
 	if index==nil then return end
 	local resourcesRatio = value/maxvalue
-	lb.groupHF[index]:SetWidth((optionsTable.frameWidth-5)*(resourcesRatio))
+	lb.groupHF[index]:SetWidth((lbValues.mainwidth-5)*(resourcesRatio))
 end
-
 function stTable.setHealthBarText(index,value,maxvalue)
 	if index==nil then return end
 	local resourcesRatio = value/maxvalue
@@ -210,20 +195,14 @@ function stTable.setHealthBarText(index,value,maxvalue)
 	lb.groupStatus[index]:SetText(healthpercent)
 end
 
-function stTable.setBlockedValue(index,losvalue,oorvalue)
+function stTable.setBlockedValue(index,value)
 	if index==nil then return end
-	if losvalue or oorvalue then
-			--print("1")
+	if value then
           lb.groupHF[index]:SetTexture("LifeBinder", "Textures/healthlos.png")
-    elseif losvalue==nil and oorvalue then
-    --print("2")
-    	  lb.groupHF[index]:SetTexture("LifeBinder", "Textures/healthlos.png")
-    elseif losvalue==nil and (oorvalue==nil or oorvalue==false)  then
---print("3")
-          	lb.groupHF[index]:SetTexture("LifeBinder","Textures/bars/health.png")
-  
+    elseif value==nil  then
+          lb.groupHF[index]:SetTexture("LifeBinder", "Textures/bars/health.png")
     else
-    	--print("4")
           lb.groupHF[index]:SetTexture("LifeBinder", "Textures/bars/health.png")
     end
 end
+

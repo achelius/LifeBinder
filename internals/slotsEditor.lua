@@ -1,13 +1,14 @@
 lb.slotsGui={}
+lb.slotsGui.initialized=false
 --called when initializing the slot options gui
 local slotdrag=false
 lb.slotsGui.clickOffset = {x = 0, y = 0}
 lb.slotsGui.selectedIndex=-1
-lb.slotsGui.PreviewScale={3,3} --scale of the preview unit frame
+lb.slotsGui.PreviewScale={4,4} --scale of the preview unit frame
 
 function lb.slotsGui.initialize()
-	 local scalex=lbValues.mainwidth*0.009009009
-	 local scaley=lbValues.mainheight*0.023255814
+	 local scalex=1-- lb.styles[lb.currentStyle].getFrameWidth()*0.009009009
+	 local scaley=1--lb.styles[lb.currentStyle].getFrameHeight()*0.023255814
 	 lb.slotsGui.Window=UI.CreateFrame("SimpleWindow", "Options", lb.Context)
 	 lb.slotsGui.Window:SetPoint("CENTER", UIParent, "CENTER")
 	 lb.slotsGui.Window:SetWidth(850)
@@ -15,7 +16,7 @@ function lb.slotsGui.initialize()
 	 lb.slotsGui.Window:SetLayer(10)
 	 lb.slotsGui.Window:SetVisible(true)
 	 lb.slotsGui.Window:SetCloseButtonVisible(true)
-	 lb.slotsGui.Window.Event.Close=function() ClearKeyFocus() end
+	 lb.slotsGui.Window.Event.Close=function()lb.buffMonitor.hideDummyBuffMonitorSlots() ClearKeyFocus() end
 	 -----tab definitions
 	 lb.slotsGui.TabControl=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", lb.slotsGui.Window)
 	 lb.slotsGui.Tabs = {}
@@ -27,11 +28,11 @@ function lb.slotsGui.initialize()
 	 ------initialize tab 1
 	 
 	 lb.slotsGui.Tabs[1].UnitFrame = UI.CreateFrame("Texture", "UnitFrame", lb.slotsGui.Tabs[1].MainFrame )
-	 lb.slotsGui.Tabs[1].UnitFrame:SetPoint("TOPLEFT",lb.slotsGui.Tabs[1].MainFrame , "TOPLEFT", 150, 150)
-	 lb.slotsGui.Tabs[1].UnitFrame:SetWidth(lbValues.mainwidth*lb.slotsGui.PreviewScale[1])
-	 lb.slotsGui.Tabs[1].UnitFrame:SetHeight(lbValues.mainheight*lb.slotsGui.PreviewScale[2])
+	 lb.slotsGui.Tabs[1].UnitFrame:SetPoint("TOPLEFT",lb.slotsGui.Tabs[1].MainFrame , "TOPLEFT", 20, 100)
+	 lb.slotsGui.Tabs[1].UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
+	 lb.slotsGui.Tabs[1].UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.slotsGui.PreviewScale[2])
 	 
-	 lb.slotsGui.Tabs[1].UnitFrame:SetTexture("LifeBinder", "Textures/"..lbValues.texture)
+	 lb.slotsGui.Tabs[1].UnitFrame:SetTexture("LifeBinder", lb.styles[lb.currentStyle].getHealthFrameTexture())
 	 ------initialize Slots
 	 lb.slotsGui.Tabs[1].Slots={}
 	 
@@ -49,10 +50,10 @@ function lb.slotsGui.initialize()
 	 	lb.slotsGui.Tabs[1].Slots[i].Frame:SetWidth(iconl*lb.slotsGui.PreviewScale[1])
 	 	lb.slotsGui.Tabs[1].Slots[i].Frame:SetHeight(iconl*lb.slotsGui.PreviewScale[2])
 	 	lb.slotsGui.Tabs[1].Slots[i].Frame:SetBackgroundColor(0,0,0,1)
-	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.LeftDown=function () onSlotLeftDown(i) end
-	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.LeftUp=function () onSlotLeftUp(i) end
-	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.LeftUpoutside=function () onSlotUpoutside(i) end
-	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.MouseMove=function (n,x,y) OnSlotMouseMove(i,x,y) end
+	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.LeftDown=function () lb.slotsGui.onSlotLeftDown(i) end
+	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.LeftUp=function () lb.slotsGui.onSlotLeftUp(i) end
+	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.onSlotUpoutside(i) end
+	 	lb.slotsGui.Tabs[1].Slots[i].Frame.Event.MouseMove=function (n,x,y) lb.slotsGui.OnSlotMouseMove(i,x,y) end
 	 	lb.slotsGui.Tabs[1].Slots[i].Text= UI.CreateFrame("Text", "UnitFrame", lb.slotsGui.Tabs[1].Slots[i].Frame )
 	 	lb.slotsGui.Tabs[1].Slots[i].Text:SetPoint("CENTER", lb.slotsGui.Tabs[1].Slots[i].Frame ,"CENTER",0,0)
 	 	lb.slotsGui.Tabs[1].Slots[i].Text:SetText(tostring(i))
@@ -88,15 +89,32 @@ function lb.slotsGui.initialize()
 	     counter=counter+1
 	 end
 	 lb.slotsGui.Tabs[1].AbilitesList:SetItems(list)
+	 lb.buffMonitor.showDummyBuffMonitorSlots()
+	 lb.slotsGui.initialized=true
 end
 
-function onSlotLeftDown(index)
+function lb.slotsGui.show()
+	if lb.slotsGui.initialized then
+		lb.slotsGui.Window:SetVisible(true)
+		lb.buffMonitor.showDummyBuffMonitorSlots()
+	else
+		lb.slotsGui.initialize()
+	end
+end
+function lb.slotsGui.hide()
+	if lb.slotsGui.initialized then
+		lb.slotsGui.Window:SetVisible(false)
+		lb.buffMonitor.hideDummyBuffMonitorSlots()
+	end
+end
+function lb.slotsGui.onSlotLeftDown(index)
     if not lbValues.isincombat then
         slotdrag = true
         
         local mouseStatus = Inspect.Mouse()
         lb.slotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(1,0,0,1)
         local slot=lb.slotsGui.Tabs[1].Slots[index]
+        if  lb.slotsGui.selectedIndex~=-1 and lb.slotsGui.selectedIndex~=index then lb.slotsGui.Tabs[1].Slots[lb.slotsGui.selectedIndex].Frame:SetBackgroundColor(0,0,0,1) end 
         lb.slotsGui.selectedIndex=index
         --print (slot:GetPosition()[1])
        	lb.slotsGui.clickOffset ["x"] = mouseStatus.x - slot.X
@@ -104,17 +122,19 @@ function onSlotLeftDown(index)
     end
 end
 
-function onSlotLeftUp(index)
+function lb.slotsGui.onSlotLeftUp(index)
 if  lb.slotsGui.selectedIndex~=index then return end
     slotdrag = false
-    lb.slotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(0,0,0,1)
+    --lb.slotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(0,0,0,1)
 end
-function onSlotUpoutside(index)
+
+function lb.slotsGui.onSlotUpoutside(index)
 if  lb.slotsGui.selectedIndex~=index then return end
     slotdrag = false
-    lb.slotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(0,0,0,1) 
+    --lb.slotsGui.Tabs[1].Slots[index].Frame:SetBackgroundColor(0,0,0,1) 
 end
-function OnSlotMouseMove(index,x,y)
+
+function lb.slotsGui.OnSlotMouseMove(index,x,y)
 if  lb.slotsGui.selectedIndex~=index then return end
     --print (tostring(x).."-"..tostring(y))
     if lbValues.isincombat then
@@ -122,16 +142,17 @@ if  lb.slotsGui.selectedIndex~=index then return end
         return
     end
     if slotdrag == true then
-    	local scalex=lbValues.mainwidth*0.009009009
-	 local scaley=lbValues.mainheight*0.023255814
+    	local scalex=1--lbValues.mainwidth*0.009009009
+	 	local scaley=1--lbValues.mainheight*0.023255814
     	local newx=x-(lb.slotsGui.clickOffset["x"])
     	local newy=y-(lb.slotsGui.clickOffset["y"])
    		lb.slotsGui.Tabs[1].Slots[index].X=newx
 	 	lb.slotsGui.Tabs[1].Slots[index].Y=newy
-	 	
+	 
 	 	---Experimental
 	 	lbBuffSlotPositions[lbValues.set][index][3]=newx/scalex/lb.slotsGui.PreviewScale[1]
 	 	lbBuffSlotPositions[lbValues.set][index][4]=newy/scaley/lb.slotsGui.PreviewScale[2]
+	 	
 	 	----
 	 	lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
 		lb.slotsGui.Tabs[1].Slots[index].Frame:SetPoint("TOPLEFT", lb.slotsGui.Tabs[1].UnitFrame, "TOPLEFT", newx, newy)

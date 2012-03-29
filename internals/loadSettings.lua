@@ -68,8 +68,8 @@ function loadVariables(addonidentifier)
         	{
         		--it's a subtable, because, who knows how i will change in the future, it can be The one table that controls them all, the one ring table
         		{ --buff names set for that slot
-        			"buff1",
-        			"buff2"
+        			["buff1"]={castByMeOnly=true,showCount=true,showDuration=true},
+        			["buff2"]={castByMeOnly=true,showCount=true,showDuration=true}
         		}
         	},
         	{{}},
@@ -111,9 +111,9 @@ function loadVariables(addonidentifier)
     	lbBuffSlotPositions={}
     	for i = 1 , 6 do
     		lbBuffSlotPositions[i]={}
-    		for g = 1 , 8 do
+    		for g = 1 , #(lbPredefinedBuffSlotPos[1]) do
     			lbBuffSlotPositions[i][g]={}
-    			for h=1,6 do --6 because the options are 6 (anchor1,anchor2,left,top,width,height)
+    			for h=1,#(lbPredefinedBuffSlotPos[1][g]) do -- because the options are 6 (anchor1,anchor2,left,top,width,height)
     				lbBuffSlotPositions[i][g][h]=lbPredefinedBuffSlotPos[1][g][h] --set the slot to the x style definition for that slot
     			end
     		end
@@ -156,9 +156,8 @@ function loadVariables(addonidentifier)
     lbValues.islocked=false
     lbValues.isincombat=false
     lbValues.set=nil
-    EnableHandlers()--add event handlers
+    lb.EnableStarterCycle() --start wait for player cycle
         
-lb.initialize() --autostart initialization
-    lb.createWindow() --into the file lifebinderMain.lua
+
 
 end

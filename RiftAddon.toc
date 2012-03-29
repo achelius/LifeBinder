@@ -22,11 +22,11 @@ Dependencies = {
 RunOnStartup = {
 "internals/loadSettings.lua",
 	"LifeBinderMain.lua",
-	"styles/customstyle.lua",
+	"styles/oldstyle.lua",
 	"styles/standard.lua",
 	"styles/stylescore.lua",
 	"internals/posData.lua",
-	
+	"internals/groupManagement.lua",
 	"internals/iconsCache.lua",
 	"internals/buffPositionStyles.lua",
 	"internals/slotsEditor.lua",

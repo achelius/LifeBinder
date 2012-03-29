@@ -2,7 +2,7 @@ local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
 local timeFrame=_G.Inspect.Time.Frame
 local unitLookup= _G.Inspect.Unit.Lookup
-local PlayerFound=false
+local lb.playerFound=false
 lastMode=-1 -- last view mode (solo =0 group=1 raid=0) needed to update hp after view mode change
 local viewModeChanged=false -- true if view mode changes
 local lastUnitUpdate =0
@@ -104,26 +104,26 @@ function UpdateFramesVisibility()
     end
 end
 function waitPlayerAvailable()
-	print ("wp")
+	--print ("wp")
 	lb.PlayerID =Inspect.Unit.Lookup("player")
 	local unitdet=Inspect.Unit.Detail(lb.PlayerID)
-	print("hh"..Inspect.Unit.Lookup("player")) 
+	--print("hh"..Inspect.Unit.Lookup("player")) 
 	if lb.PlayerID~=nil then
 		if unitdet~=nil then
-			print (unitdet.name)
+			--print (unitdet.name)
 		else
-			print("nounit")
+			--print("nounit")
 		end
 	else
-	print("noid")
+	--print("noid")
 	end 
 	if lb.PlayerID ~=nil and unitdet~=nil then
-		print ("unit found")
-		print(lb.PlayerID)
-		print(unitdet.name)
+		--print ("unit found")
+		--print(lb.PlayerID)
+		--print(unitdet.name)
 		remev()
 		--RemoveEventHandler(Event.System.Update.Begin,WaitPlayerEventID)
-		PlayerFound=true
+		lb.playerFound=true
 		lbUnitUpdate()
 		
 	end
@@ -134,8 +134,8 @@ function lbUnitUpdate()
 	--waitPlayerAvailable()
 --   local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
 --    if not timer then return end
-	if not PlayerFound then return end
-	print("loadingjhjkjh")
+	if not lb.playerFound then return end
+	--print("loadingjhjkjh")
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
     if lbValues.isincombat==nil or not lbValues.isincombat then  UpdateFramesVisibility()end -- reads the group status and hide or show players frames
 --    if (lb.MouseOverUnitLastCast~=nil) then
@@ -154,8 +154,8 @@ function lbUnitUpdate()
   
     for unitident, unitTable in pairs(details) do
     	
-    	print("----------"..unitident)
-    	print("----------"..unitTable.name)
+    	--print("----------"..unitident)
+    	--print("----------"..unitTable.name)
     	
        local j=1
        if lastMode==0 then unitident="player"end
@@ -279,7 +279,7 @@ function lbUnitUpdate()
                if needreset then
                    lb.buffMonitor.resetBuffMonitorTexturesForIndex(stripnum(key))
                end
-               if castbarIndexVisible(stripnum(key)) then
+               if lb.styles[lb.currentStyle].isCastbarIndexVisible(stripnum(key)) then
                    resetCastbarIndex(stripnum(key))
                end
 

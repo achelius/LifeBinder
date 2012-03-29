@@ -11,6 +11,7 @@ local timeFrame=_G.Inspect.Time.Frame
 lb.buffMonitor={}
 lb.FullBuffsList={}     -- used by buffmonitor
 lb.FullDeBuffsList={}    -- used by buffmonitor
+lb.buffMonitor.slotscount=0
 local lastdurationcheck=0
 
 function lb.buffMonitor.getDurationThrottle()
@@ -23,12 +24,12 @@ function lb.buffMonitor.getDurationThrottle()
 end
 
 function lb.buffMonitor.initializeBuffMonitor()
---print (#(lbBuffSlotPositions[lbValues.set]) )
-	
+--print ( lb.buffMonitor.slotscount )
+	lb.buffMonitor.slotscount = #(lbBuffSlotPositions[lbValues.set])
  	for var=1,20 do
-	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
-	       local scalex=lbValues.mainwidth*0.009009009
-	       local scaley=lbValues.mainheight*0.023255814
+	    for g= 1,  lb.buffMonitor.slotscount do
+	       local scalex=1--lbValues.mainwidth*0.009009009
+	       local scaley=1--lbValues.mainheight*0.023255814
 	       local lt=lbBuffSlotPositions[lbValues.set][g][3]*scalex
 	       local tp=lbBuffSlotPositions[lbValues.set][g][4]*scaley
 	       local Point1=lbBuffSlotPositions[lbValues.set][g][1]
@@ -89,11 +90,11 @@ function lb.buffMonitor.initializeBuffMonitor()
 end
 
 function lb.buffMonitor.relocateBuffMonitorSlots()
---print (#(lbBuffSlotPositions[lbValues.set]) )
-   local scalex=lbValues.mainwidth*0.009009009
-	local scaley=lbValues.mainheight*0.023255814
+--print ( lb.buffMonitor.slotscount )
+   local scalex=1--lbValues.mainwidth*0.009009009
+	local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
-	    for g= 1, #(lbBuffSlotPositions[lbValues.set]) do
+	    for g= 1,  lb.buffMonitor.slotscount do
 	    
 	       local lt=lbBuffSlotPositions[lbValues.set][g][3]*scalex
 	       local tp=lbBuffSlotPositions[lbValues.set][g][4]*scaley
@@ -116,10 +117,11 @@ function lb.buffMonitor.relocateBuffMonitorSlots()
     	end
     end
 end
+
 function lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
---print (#(lbBuffSlotPositions[lbValues.set]) )
- local scalex=lbValues.mainwidth*0.009009009
- local scaley=lbValues.mainheight*0.023255814
+--print ( lb.buffMonitor.slotscount )
+ local scalex=1--lbValues.mainwidth*0.009009009
+ local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
 	   
 	      
@@ -144,9 +146,52 @@ function lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
     end
 end
 
+function lb.buffMonitor.showDummyBuffMonitorSlots()
+--print ( lb.buffMonitor.slotscount )
+ local scalex=1--lbValues.mainwidth*0.009009009
+ local scaley=1--lbValues.mainheight*0.023255814
+ 	for var=1,20 do
+ 		for g= 1,  lb.buffMonitor.slotscount do
+	        lb.groupHoTSpots[var][g][1]:SetBackgroundColor(0,0,0,1)
+	        lb.groupHoTSpots[var][g][1]:SetVisible(true)
+	    end  	   
+    end
+end
+function lb.buffMonitor.hideDummyBuffMonitorSlots()
+--print ( lb.buffMonitor.slotscount )
+ local scalex=1--lbValues.mainwidth*0.009009009
+ local scaley=1--lbValues.mainheight*0.023255814
+ 	for var=1,20 do
+ 		for g= 1,  lb.buffMonitor.slotscount do
+	        lb.groupHoTSpots[var][g][1]:SetBackgroundColor(0,0,0,0)
+	        lb.groupHoTSpots[var][g][1]:SetVisible(lb.groupHoTSpotsIcons[var][g][0])
+	    end  	   
+    end
+end
+function lb.buffMonitor.showSingleDummyBuffMonitorSlot(index)
+--print ( lb.buffMonitor.slotscount )
+ local scalex=1--lbValues.mainwidth*0.009009009
+ local scaley=1--lbValues.mainheight*0.023255814
+ 	for var=1,20 do
+	        lb.groupHoTSpots[var][index][1]:SetBackgroundColor(0,0,0,1)
+	        lb.groupHoTSpots[var][index][1]:SetVisible(true)
+	        	   
+    end
+end
+function lb.buffMonitor.hideSingleDummyBuffMonitorSlot(index)
+--print ( lb.buffMonitor.slotscount )
+ local scalex=1--lbValues.mainwidth*0.009009009
+ local scaley=1--lbValues.mainheight*0.023255814
+ 	for var=1,20 do
+	        lb.groupHoTSpots[var][index][1]:SetBackgroundColor(0,0,0,0)
+	        lb.groupHoTSpots[var][index][1]:SetVisible(lb.groupHoTSpotsIcons[var][index][0])
+	        	   
+    end
+end
+
 function lb.buffMonitor.updateBuffMonitorTextures()
     for var=1,20 do
-        for g= 1, 10 do
+        for g= 1,  lb.buffMonitor.slotscount do
 
             if lb.groupHoTSpotsIcons[var][g][4] then
                 --just updated
@@ -216,7 +261,7 @@ function lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 end
 function lb.buffMonitor.resetBuffMonitorTextures()
     for var=1,20 do
-        for g= 1, 10 do
+        for g= 1,  lb.buffMonitor.slotscount do
             lb.groupHoTSpotsIcons[var][g][0]=false
             --print (lb.groupHoTSpotsIcons[var][g][0])
             lb.groupHoTSpotsIcons[var][g][4]=false
@@ -246,33 +291,31 @@ function lb.buffMonitor.resetBuffMonitorTextures()
 end
 function lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
 
-        for g= 1, 10 do
+        for g= 1,  lb.buffMonitor.slotscount do
 
             if lb.groupHoTSpotsIcons[var][g][0] then
 
 	            lb.groupHoTSpotsIcons[var][g][0]=false
-	            lb.groupHoTSpotsIcons[var][g][4]=true
+	            
 	            --print (lb.groupHoTSpotsIcons[var][g][0])
 	            lb.groupHoTSpotsIcons[var][g][4]=false
+	            lb.groupHoTSpotsIcons[var][g][9]=false
+	            lb.groupHoTSpotsIcons[var][g][3]=0
 	            lb.groupHoTSpots[var][g][1]:SetTexture(lb.groupHoTSpotsIcons[var][g][1],lb.groupHoTSpotsIcons[var][g][2] )
 	            lb.groupHoTSpots[var][g][1]:SetVisible(lb.groupHoTSpotsIcons[var][g][0])
 	
 	            lb.groupHoTSpots[var][g][2]:SetText(tostring(lb.groupHoTSpotsIcons[var][g][3]))
 	            if (lb.groupHoTSpotsIcons[var][g][3]==0 or lb.groupHoTSpotsIcons[var][g][3]==nil) and {lb.groupHoTSpotsIcons[var][g][0]} then
 	                lb.groupHoTSpots[var][g][2]:SetVisible(false)
+	                lb.groupHoTSpots[var][g][3]:SetVisible(false)
 	            else
 	                lb.groupHoTSpots[var][g][2]:SetVisible(true)
+	                lb.groupHoTSpots[var][g][3]:SetVisible(true)
 	            end
 	
 	            lb.groupHoTSpots[var][g][3]:SetFontColor(0,0,0,1)
 	            lb.groupHoTSpots[var][g][3]:SetText(tostring(lb.groupHoTSpotsIcons[var][g][3]))
-	            
-	
-	            if (lb.groupHoTSpotsIcons[var][g][3]==0 or lb.groupHoTSpotsIcons[var][g][3]==nil) and {lb.groupHoTSpotsIcons[var][g][0]} then
-	                lb.groupHoTSpots[var][g][3]:SetVisible(false)
-	            else
-	                lb.groupHoTSpots[var][g][3]:SetVisible(true)
-	            end
+	       
 	            lb.groupHoTSpots[var][g][4]:SetVisible(lb.groupHoTSpotsIcons[var][g][9])
 	            lb.groupHoTSpots[var][g][5]:SetVisible(lb.groupHoTSpotsIcons[var][g][9])
             end
@@ -285,7 +328,7 @@ function lb.buffMonitor.updateDurations()
 	local now =timeFrame()
 	 for var=1,20 do
 	 	if lb.UnitsTableStatus[var][5]~=nil and lb.UnitsTableStatus[var][5]~=0 then
-	        for g= 1, 10 do
+	        for g= 1,  lb.buffMonitor.slotscount do
 	        	
 	        	
 	        	if lb.groupHoTSpotsIcons[var][g][0] then
@@ -325,7 +368,7 @@ function lb.buffMonitor.updateDurationsOfIndex(index)
 	local now =timeFrame()
 	
  	if lb.UnitsTableStatus[index][5]~=nil and lb.UnitsTableStatus[index][5]~=0 then
-        for g= 1, 10 do
+        for g= 1,  lb.buffMonitor.slotscount do
         	
         	
         	if lb.groupHoTSpotsIcons[index][g][0] then
@@ -368,32 +411,33 @@ end
 function lb.buffMonitor.updateSpellTextures()
     local abilities
     abtextures={}
-    for v, k in pairs(lbSelectedBuffsList) do
-        table.insert(abtextures,"Textures/buffhot.png")
-    end
+   
+--    for v, k in pairs(lbSelectedBuffsList) do
+--        table.insert(abtextures,"Textures/buffhot.png")
+--    end
     abilities =abilitylist()
     abilitydets=abilitydetail(abilities)
     for d,c in pairs(lbSelectedBuffsList[lbValues.set]) do
         --c={"Soothing Stream", "Healing Current","Healing Flood" }
-         
+       
         for j,m in pairs(c) do
-        
+       
 	        for s,a in pairs(m) do
+	      
 	            --a="Soothing Stream" ....
-	            --print("txt"..tostring(a))
+	            --print("txt"..tostring(s))
 	            found=false
-	           
-	            lb.FullBuffsList[a]=true
+	            lb.FullBuffsList[s]=true
 	            for v, k in pairs(abilitydets) do
-	                if a==k.name and a~=nil then
+	                if s==k.name and s~=nil then
 	                    if k.icon ~=nil then
 	                        found=true
-	                        lb.iconsCache.addTextureToCache(a,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
+	                        lb.iconsCache.addTextureToCache(s,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
 	                    end
 	                end
 	            end
 	            if not found then
-	                lb.NoIconsBuffList[a]=true
+	                lb.NoIconsBuffList[s]=true
 	                --print (a)
 	            end
 	
@@ -422,7 +466,7 @@ function lb.buffMonitor.onBuffAdd(unit, buffs)
         name=buffTable.name
         if buffTable.debuff==nil then
             if lb.FullBuffsList[name]~=nil then
-                if buffTable.caster== lb.PlayerID then
+                
                     local texture=nil
                     if lb.iconsCache.hasTextureInCache(name) then
                         texture= lb.iconsCache.getTextureFromCache(name)
@@ -434,38 +478,50 @@ function lb.buffMonitor.onBuffAdd(unit, buffs)
                     end
 
                     for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
-                        --c={"Soothing Stream", "Healing Current","Healing Flood" }
+                        
                          for j,m in pairs(c) do
 	                        for s,a in pairs(m) do
-	                            --a="Soothing Stream" ....
-	                            if a==name and a~=nil then
+	                        	--s=ability name
+	                            --a=options
+	                            if s==name and s~=nil then
+	                            	local enable=false
+	                            	if a["castByMeOnly"]==true then --look if this buff is set as cast by me only or cast by everyone
+		                            	if buffTable.caster== lb.PlayerID then
+		                            		enable=true
+		                            	end
+		                           	else
+		                           		enable=true
+	                            	end
+	                            	
 	                                --print (frameindex)
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][0]=true
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][1]=texture[1]
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][2]=texture[2]
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][3]=buffTable.stack
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][4]=true
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][5]=buffTable.id
-	                                lb.groupHoTSpotsIcons[frameindex][slotindex][6]=false
-	                                if buffTable.duration~=nil then
-	                                	lb.groupHoTSpotsIcons[frameindex][slotindex][9]=true
-		                                lb.groupHoTSpotsIcons[frameindex][slotindex][10]=round(buffTable.duration)
-		                                lb.groupHoTSpotsIcons[frameindex][slotindex][11]=timeFrame()
-	                                else
-	                                	lb.groupHoTSpotsIcons[frameindex][slotindex][9]=false
-		                                lb.groupHoTSpotsIcons[frameindex][slotindex][10]=1
-		                                lb.groupHoTSpotsIcons[frameindex][slotindex][11]=0
+	                                if enable then
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][0]=true
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][1]=texture[1]
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][2]=texture[2]
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][3]=buffTable.stack
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][4]=true
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][5]=buffTable.id
+		                                lb.groupHoTSpotsIcons[frameindex][slotindex][6]=false
+		                                if buffTable.duration~=nil then
+		                                	lb.groupHoTSpotsIcons[frameindex][slotindex][9]=true
+			                                lb.groupHoTSpotsIcons[frameindex][slotindex][10]=round(buffTable.duration)
+			                                lb.groupHoTSpotsIcons[frameindex][slotindex][11]=timeFrame()
+		                                else
+		                                	lb.groupHoTSpotsIcons[frameindex][slotindex][9]=false
+			                                lb.groupHoTSpotsIcons[frameindex][slotindex][10]=1
+			                                lb.groupHoTSpotsIcons[frameindex][slotindex][11]=0
+		                                end
+		                                --print (lb.groupHoTSpotsIcons[frameindex][slotindex][4])
+		                                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
+		                                updatebuffs=true
 	                                end
-	                                --print (lb.groupHoTSpotsIcons[frameindex][slotindex][4])
-	                                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
-	                                updatebuffs=true
 	                            end
 	
 	
 	                        end
                         end
                     end
-                end
+                
             end
             if updatebuffs then
                 --print(true)

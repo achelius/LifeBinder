@@ -10,7 +10,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -18,7 +19,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -26,7 +28,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -34,7 +37,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -42,7 +46,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -50,7 +55,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -58,7 +64,8 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
+					16,
+					false
 				},
 				{
 					"TOPLEFT",
@@ -66,73 +73,7 @@ lbPredefinedBuffSlotPos[1]={
 					0,
 					0,
 					16,
-					16
-				}
-		}
---Two Rows style
-lbPredefinedBuffSlotPos[2]={	
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
 					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16
+					false
 				}
 		}

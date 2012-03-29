@@ -58,29 +58,7 @@ function resetManaBars()
 
 end
 
-function setManaBar(index,unitTable)
-	if unitTable.calling then
-		for i = 1, 4 do
-			--initializeResourceBar(unitTable.calling) -- Set Resource Bar Color
-			if (unitTable.calling == "mage" or unitTable.calling == "cleric") then
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/mana.png")
-			elseif(unitTable.calling == "warrior") then
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/energy.png")
-			elseif(unitTable.calling == "rogue") then
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/energy.png")
-			else
-				lb.groupRF[index]:SetTexture("LifeBinder", "textures/bars/resource_plain.png")
-			end
-			
-			
-			if unitTable.calling == lb.Calling[i] then
-				lb.groupName[index]:SetFontColor(lbCallingColors[i].r, lbCallingColors[i].g, lbCallingColors[i].b, 1)
-			end
-		end
-	else
-		lb.groupName[index]:SetFontColor(1, 1, 1, 1)
-	end
-end
+
 
 function hideManaBar(index)
 

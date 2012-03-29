@@ -108,7 +108,7 @@ function slashCommands(cmdLine)
 		print ("Addon enabled, write /reloadui to reload the interface")
 	end
 	if(cmdLine == "slotseditor") then
-		lb.slotsGui.initialize()
+		lb.slotsGui.show()
 	end
 	if(cmdLine == "stylereinit") then
 		lb.styles[lb.currentStyle].initialize()

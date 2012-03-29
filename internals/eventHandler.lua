@@ -1,5 +1,11 @@
 table.insert(Event.Addon.SavedVariables.Load.End, {loadVariables, "LifeBinder", "lbLoadVariables"})
-function EnableHandlers()
+lb.waitPlayerEventID={waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
+function lb.EnableStarterCycle()
+	
+	table.insert(Event.System.Update.Begin, lb.waitPlayerEventID)
+	
+end
+function lb.EnableHandlers()
 	if not lbValues.AddonDisabled then
 	 
 			table.insert(Event.Unit.Detail.Health, {lb.onHpUpdate, "LifeBinder", "Update_Health"})
@@ -11,6 +17,7 @@ function EnableHandlers()
 			table.insert(Event.Unit.Detail.EnergyMax, {updateResourceBar, "LifeBinder", "Update_Max_Energy"})
 			table.insert(Event.Unit.Detail.Aggro, {lb.onAggroUpdate, "LifeBinder", "Update_Aggro_Flags"})
 			table.insert(Event.Unit.Detail.Blocked, {lb.onBlockedUpdate, "LifeBinder", "Update_Blocked_Flags"})
+			table.insert(Event.Unit.Detail.Offline, {lb.onOfflineUpdate, "LifeBinder", "Update_Offline_Flags"})
 			table.insert(Event.Ability.Add, {lb.onAbilityAdded, "LifeBinder", "lb.onAbilityAdded"})
 			table.insert(Event.System.Secure.Enter, {lb.onSecureEnter, "LifeBinder", "lb.onSecureEnter"})
 			table.insert(Event.System.Secure.Leave, {lb.onSecureExit, "LifeBinder", "lb.onSecureExit"})
@@ -40,10 +47,10 @@ function EnableHandlers()
 				
 			
 			-- safesraidmanager events
-			table.insert(Event.SafesRaidManager.Player.Ready, {waitPlayerAvailable , "LifeBinder", "PlayerReady"})
-			table.insert(Event.SafesRaidManager.Group.Join, {lbUnitUpdate , "LifeBinder", "GroupJoin"})
-			table.insert(Event.SafesRaidManager.Group.Leave, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
-			table.insert(Event.SafesRaidManager.Group.Change, {lbUnitUpdate , "LifeBinder", "GroupLeave"})
+			
+			table.insert(Event.SafesRaidManager.Group.Join, {lb.onGroupJoin , "LifeBinder", "GroupJoin"})
+			table.insert(Event.SafesRaidManager.Group.Leave, {lb.onGroupLeave , "LifeBinder", "GroupLeave"})
+			table.insert(Event.SafesRaidManager.Group.Change, {lb.onGroupChange , "LifeBinder", "GroupLeave"})
 			table.insert(Event.SafesRaidManager.Player.Join, {lbUnitUpdate , "LifeBinder", "PlayerJoin"})
 			table.insert(Event.SafesRaidManager.Player.Leave,{lbUnitUpdate , "LifeBinder", "PlayerLeave"})
 			--player available wait
@@ -54,7 +61,7 @@ end
 
 function remev()
 	for id, eventData in ipairs(Event.System.Update.Begin) do
-		if eventData == WaitPlayerEventID then
+		if eventData == lb.waitPlayerEventID then
 			
 			table.remove(Event.System.Update.Begin, id)
 			break

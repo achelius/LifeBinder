@@ -65,7 +65,7 @@ function castbarUpdate()
     if details==nil then
         -- print ("endvis")
         local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-        if unitIndex~=nil then  setCastbarVisible(unitIndex,false) end
+        if unitIndex~=nil then  lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false) end
         lb.MouseOverUnitLastCast=nil
 
         return
@@ -75,8 +75,8 @@ function castbarUpdate()
 
         if unitIndex~=nil then
             
-            setCastbarVisible(unitIndex,true)
-            setCastBarValue(unitIndex,(details.duration-details.remaining)*10,details.duration*10)
+            lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,true)
+            lb.styles[lb.currentStyle].setCastBarValue(unitIndex,(details.duration-details.remaining)*10,details.duration*10)
 
         end
 

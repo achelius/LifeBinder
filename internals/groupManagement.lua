@@ -1,0 +1,21 @@
+function lb.onGroupJoin(unitID, specifier)
+	--print("join->"..tostring(unitID)..tostring(specifier))
+	local index=stripnum(specifier)
+	lb.UnitsTableStatus[index][11]=true
+end
+function lb.onGroupLeave(unitID, specifier)
+	--print("leave->"..tostring(unitID)..tostring(specifier))
+	local index=stripnum(specifier)
+	lb.UnitsTableStatus[index][11]=true
+end
+function lb.onGroupChange(unitID, oldspecifier,newspecifier)
+	--print("change->"..tostring(unitID)..tostring(oldspecifier)..tostring(newspecifier))
+	local oldindex=stripnum(oldspecifier)
+	local newindex=stripnum(newspecifier)
+	
+	lb.UnitsTableStatus[oldindex][11]=true
+	lb.UnitsTableStatus[newindex][11]=true
+	
+	--dump(Inspect.Unit.Detail(oldspecifier))
+	--dump(Inspect.Unit.Detail(newspecifier))
+end
