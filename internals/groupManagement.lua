@@ -6,6 +6,7 @@ end
 function lb.onGroupLeave(unitID, specifier)
 	--print("leave->"..tostring(unitID)..tostring(specifier))
 	local index=stripnum(specifier)
+	lb.UnitsTableStatus[index][5]=0
 	lb.UnitsTableStatus[index][11]=true
 end
 function lb.onGroupChange(unitID, oldspecifier,newspecifier)

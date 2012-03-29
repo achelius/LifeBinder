@@ -27,13 +27,13 @@ function onCastbarChanged(units)
             if details==nil then
 
                 local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-                if unitIndex~=nil then  setCastbarVisible(unitIndex,false) end
+                if unitIndex~=nil then  lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false) end
                 lb.MouseOverUnitLastCast=nil
 
                 return
             else
                 local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-                if unitIndex~=nil then  setCastbarVisible(unitIndex,false) end
+                if unitIndex~=nil then  lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false) end
                 --print(details.abilityName)
             end
             if (lb.MouseOverUnit~=nil) then
@@ -99,13 +99,4 @@ function resetCastbarIndex(index)
     lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false)
      lb.styles[lb.currentStyle].setCastBarValue(unitIndex,0*10,1*10)
 
-end
-function setCastBarValue(index,value,max)
-    if value==nil then value=0 end
-    local cwidth=(value/max)*lbValues.mainwidth
-    lb.groupCastBar[index]:SetWidth(cwidth)
-end
-
-function setCastbarVisible(index,value)
-    lb.groupCastBar[index]:SetVisible(value)
 end

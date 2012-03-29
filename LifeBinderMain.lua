@@ -233,7 +233,7 @@ function UpdatePlayerFrame()
 
 	for i = 1,20 do
 		
-		updatebuffdurationindex(i)
+		if lb.UnitsTableStatus[i][12] then updatebuffdurationindex(i)end
 		if lb.UnitsTableStatus[i][11] then
 			local queryName="player"
 		    if lastMode~=0 then
@@ -259,6 +259,11 @@ function UpdatePlayerFrame()
 					lbUnitUpdateIndex(i)
 					
 					lb.UnitsTableStatus[i][11]=false
+				end
+			else
+				if lb.UnitsTableStatus[i][12] then
+					lb.UnitsTableStatus[i][11]=false
+					lb.styles[lb.currentStyle].hideFrame(i)
 				end
 			end
 		end

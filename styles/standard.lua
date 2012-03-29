@@ -201,6 +201,7 @@ function stTable.initializeIndex(index)
 end
 
 
+
 function stTable.initialize()
 
     for a = 1, 4 do
@@ -224,10 +225,14 @@ function stTable.initialize()
 		lbValues.font = 16
 	end
 end
-
+function stTable.hideFrame(index)
+	if lb.UnitsTableStatus[index][12] then 
+		lb.frames[index].groupBF:SetVisible(false)
+	end
+end
 function stTable.showAllFrames()
 	for var= 1,20 do
-		if lb.UnitsTableStatus[index][12] then 
+		if lb.UnitsTableStatus[var][12] then 
 			lb.frames[var].groupBF:SetVisible(true)
 		end
 	end
@@ -292,12 +297,16 @@ end
 
 function stTable.setManaBarValue(index,value,maxvalue)
 	if index==nil then return end
+	if maxvalue==nil then return end
+	if value==nil then return end
 	local resourcesRatio = value/maxvalue
 	lb.frames[index].groupRF:SetWidth((optionsTable.frameWidth-4)*(resourcesRatio))
 end
 
 function stTable.setHealthBarValue(index,value,maxvalue)
 	if index==nil then return end
+	if maxvalue==nil then return end
+	if value==nil then return end
 	local resourcesRatio = value/maxvalue
 	lb.frames[index].groupHF:SetWidth((optionsTable.frameWidth-5)*(resourcesRatio))
 end
