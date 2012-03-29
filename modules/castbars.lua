@@ -1,6 +1,6 @@
 local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
-local timeFrame=_G.Inspect.Time.Frame
+local timeFrame=_G.Inspect.Time.Real
 local castbardetail=_G.Inspect.Unit.Castbar
 local lastUnitUpdate2 = 0
 local function getThrottle2()

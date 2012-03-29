@@ -1,5 +1,5 @@
 local unitdetail = _G.Inspect.Unit.Detail
-local timeFrame=_G.Inspect.Time.Frame
+local timeFrame=_G.Inspect.Time.Real
 
 local lastUnitUpdate = 0
 

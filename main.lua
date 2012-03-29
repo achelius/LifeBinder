@@ -1,6 +1,6 @@
 local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
-local timeFrame=_G.Inspect.Time.Frame
+local timeFrame=_G.Inspect.Time.Real
 local unitLookup= _G.Inspect.Unit.Lookup
 local lb.playerFound=false
 lastMode=-1 -- last view mode (solo =0 group=1 raid=0) needed to update hp after view mode change

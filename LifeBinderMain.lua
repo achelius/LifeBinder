@@ -1,8 +1,10 @@
 local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
-local timeFrame=_G.Inspect.Time.Frame
+local timeFrame=_G.Inspect.Time.Real
 local unitLookup= _G.Inspect.Unit.Lookup
 local updatebuffdurationindex=nil
+
+
 lb = {}
 lb.clickOffset = {x = 0, y = 0}
 lb.initialized=false
@@ -41,6 +43,7 @@ end
 
 function lb.initialize()
 	if lbValues.AddonDisabled then return end
+	print ("1"..tostring(timeFrame()))
 	lb.initialized=true
 	lb.Context = UI.CreateContext("Context")
 	lb.Context:SetSecureMode("restricted")
@@ -52,6 +55,7 @@ function lb.initialize()
 	lb.CombatStatus= UI.CreateFrame("Texture", "Texture", lb.Window)
 	lb.CenterFrame = UI.CreateFrame("Frame", "Texture", lb.WindowFrameTop)
 	lb.CenterFrame:SetSecureMode("restricted")
+	print ("2"..tostring(timeFrame()))
 	lb.groupMask = {} --mouse click masks
 	lb.groupBF = {} --frames backgrounds
 	lb.groupTarget={} --targer outline (enabled only if frame is target)
@@ -65,7 +69,7 @@ function lb.initialize()
 	lb.groupHoTSpotsIcons = {} --hots icons info
 	lb.groupCastBar = {} --castbar frame
 	
-	
+	print ("3"..tostring(timeFrame()))
 	lb.QueryTable = {} --current table containing the current group identifiers
 	lb.RaidTable = {} --table that contains al 20 identifiers
 	lb.GroupTable = {} --table that contains the 5 group player identifiers
@@ -80,8 +84,9 @@ function lb.initialize()
 	lb.UnitsTableStatus={}
 	
 	--raid frames initialization (definitions only, styles will be added later)
-	
+	print ("4->"..tostring(timeFrame()))
 	for i = 1, 20 do
+		print ("4.1->"..tostring(timeFrame()))
 	 	local name=string.format("group%.2d", i)
 	    lb.groupHoTSpots[i]= {}
 	    lb.groupHoTSpotsIcons[i]= {}
@@ -97,7 +102,7 @@ function lb.initialize()
 		lb.groupMask[i] = UI.CreateFrame("Frame", "group"..i, lb.Window)
 		lb.groupMask[i]:SetSecureMode("restricted")
 		--lb.groupTooltip[i] = UI.CreateFrame("SimpleTooltip","groupT"..i, lb.CenterFrame)
-		
+		print ("4.2->"..tostring(timeFrame()))
 		table.insert(lb.UnitsTable,name);
 	    lb.UnitsTableStatus[i]={}
 	    lb.UnitsTableStatus[i][1]=false --aggro
@@ -111,8 +116,9 @@ function lb.initialize()
 		lb.UnitsTableStatus[i][9]="none" --Calling
 		lb.UnitsTableStatus[i][10]=false --out of range
 		lb.UnitsTableStatus[i][11]=false --needs an update
+		lb.UnitsTableStatus[i][12]=false --Frame Created
 		lb.RaidTable[string.format("group%.2d", i)] = true --populate raid query table
-		
+		print ("4.3->"..tostring(timeFrame()))
 		for g= 1,10 do
 			lb.groupHoTSpots[i][g] = {}
 	        lb.groupHoTSpots[i][g][0]=true --icon
@@ -138,10 +144,10 @@ function lb.initialize()
 	        lb.groupHoTSpotsIcons[i][g][12]=0   --current duration displayed
 	        
 		end
-		
+		print ("4.4->"..tostring(timeFrame()))
 		
 	end
-	
+	print ("5"..tostring(timeFrame()))
 	
 	
 	--constants
@@ -150,7 +156,7 @@ function lb.initialize()
 	lb.ResizeButton = UI.CreateFrame("Texture", "ResizeButton", lb.Window)
 	lb.clickOffset = {x = 0, y = 0}
 	lb.resizeOffset = {x = 0, y = 0}	
-	
+	print ("6"..tostring(timeFrame()))
 	
 end
 
@@ -240,29 +246,31 @@ function waitPlayerAvailable()
 	local timer= lb.getLastWaitPlayerThrottle()
 	if not timer then return end
 	if lb.playerFound==true then return end
-	print (Inspect.Time.Frame())
+	
 	lb.PlayerID=Inspect.Unit.Lookup("player")
 	local unitdet=Inspect.Unit.Detail(lb.PlayerID)
-
+	print (timeFrame())
 	if lb.PlayerID ~=nil and unitdet~=nil then
 		lb.playerFound=true
+		print (timeFrame())
 		remev()
-		print(tostring(os.time()))
+		print ("preinit"..tostring(timeFrame()))
 		lb.initialize() --autostart initialization
-		
+		print ("afterinit"..tostring(timeFrame()))
     	lb.createWindow() --into the file lifebinderMain.lua
-    	
+    	print (timeFrame())
 		
 		lb.EnableHandlers()--add event handlers
-		
+		print (timeFrame())
 		lb.posData.initialize()--positional module initialized here to be sure to have player info
-		
+		print (timeFrame())
 		lbUnitUpdate()
-		print(tostring(os.time()))
+		print (timeFrame())
 		updatebuffdurationindex=_G.lb.buffMonitor.updateDurationsOfIndex
+		print (timeFrame())
 		
 	end
-	print (Inspect.Time.Frame())
+	print (timeFrame())
 end
 lb.debugflag=false
 function UpdatePlayerFrame()
