@@ -96,8 +96,8 @@ end
 
 function resetCastbarIndex(index)
     
-    setCastbarVisible(index,false)
-    setCastBarValue(index,(0)*10,1*10)
+    lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false)
+     lb.styles[lb.currentStyle].setCastBarValue(unitIndex,0*10,1*10)
 
 end
 function setCastBarValue(index,value,max)

@@ -118,7 +118,7 @@ function stTable.initializeIndex(index)
 	lb.WindowFrameTop:SetTexture("Rift","nil")
 	local totalwidth= optionsTable.frameWidth*4
 	local totalheight= optionsTable.frameHeight*5
-	if  lb.UnitsTableStatus[var][12] then return end
+	
 	local var = index
 	--lb.frames[var].groupBF:SetTexture("LifeBinder", "Textures/backframe.png")
 	
@@ -190,7 +190,7 @@ function stTable.initializeIndex(index)
 	lb.frames[var].groupRole:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", 4*optionsTable.frameWidth*0.009009009,  6*optionsTable.frameHeight*0.023255814 )
 	lb.frames[var].groupRole:SetHeight(20)
 	lb.frames[var].groupRole:SetWidth(20)
-	lb.frames[var].groupRole:SetLayer(2)
+	lb.frames[var].groupRole:SetLayer(3)
 
     
 
@@ -311,8 +311,8 @@ end
 
 function stTable.setRoleIcon(index,calling,role)
 	if index==nil then return end
-	print ("Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
-	lb.frames[index].groupRole:SetTexture("Lifebinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
+	
+	lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
 	lb.frames[index].groupRole:SetVisible(true)
 end
 

@@ -707,11 +707,8 @@ function onUnitRoleChanged(units)
                 if lb.UnitsTableStatus[j][4] ~=  unitTable.role or viewModeChanged then
                 lb.UnitsTableStatus[j][4] =  unitTable.role
                 
-                if unitTable.role then
-                    lb.frames[j].groupRole:SetTexture("LifeBinder", "Textures/icons/"..tostring(unitTable.calling).."-"..tostring(unitTable.role)..".png")--"Textures/"..unitTable.role..".png")
-                else
-                    lb.frames[j].groupRole:SetTexture("LifeBinder", "Textures/".."blank.png")
-                end
+                  
+	            lb.styles[lb.currentStyle].setRoleIcon(j,unitTable.calling,unitTable.role)
             end
             end
         end
