@@ -6,6 +6,54 @@ function lb.mouseBinds.setMouseActions()
     for i = 1,20 do
         local fname=""
         --print (lastMode)
+        if lb.UnitsTableStatus[i][12] then
+	        if lastMode == 0 then
+	            if i==1 then
+	                fname="self"
+	            else
+	                fname=string.format("group%.2d", i)
+	            end
+	        else
+	            fname=string.format("group%.2d", i)
+	        end
+	        for key,value in pairs(associations) do
+	            --print(tostring(i).."->"..key)
+	            if key==1 then
+	                --leftclick
+	                --if i==1 then print   ("left"..lb.mouseBinds.generateMacro(value,fname))end
+	                lb.frames[i].groupMask.Event.LeftDown=lb.mouseBinds.generateMacro(value,fname)
+	            elseif key==2 then
+	                -- righeclick
+	                --if i==1 then print   ("right"..lb.mouseBinds.generateMacro(value,fname))end
+	                lb.frames[i].groupMask.Event.RightDown=lb.mouseBinds.generateMacro(value,fname)
+	            elseif key==3 then
+	                -- middleclick
+	                --print(lb.mouseBinds.generateMacro(value,fname))
+	                lb.frames[i].groupMask.Event.MiddleDown=lb.mouseBinds.generateMacro(value,fname)
+	            elseif key==4 then
+	                -- mouse4
+	                --print(lb.mouseBinds.generateMacro(value,fname))
+	                lb.frames[i].groupMask.Event.Mouse4Down=lb.mouseBinds.generateMacro(value,fname)
+	            elseif key==5 then
+	                -- mouse5
+	                --print(lb.mouseBinds.generateMacro(value,fname))
+	                lb.frames[i].groupMask.Event.Mouse5Down=lb.mouseBinds.generateMacro(value,fname)
+	            end
+	
+	        end
+        end
+    end
+
+end
+
+function lb.mouseBinds.setMouseActionsForIndex(index)
+    if lbValues.set==nil then return end
+    if lbValues.isincombat then return end
+    local i=index
+    local associations =lbMacroButton[lbValues.set]
+    
+        local fname=""
+        --print (lastMode)
         if lastMode == 0 then
             if i==1 then
                 fname="self"
@@ -20,27 +68,27 @@ function lb.mouseBinds.setMouseActions()
             if key==1 then
                 --leftclick
                 --if i==1 then print   ("left"..lb.mouseBinds.generateMacro(value,fname))end
-                lb.groupMask[i].Event.LeftDown=lb.mouseBinds.generateMacro(value,fname)
+                lb.frames[i].groupMask.Event.LeftDown=lb.mouseBinds.generateMacro(value,fname)
             elseif key==2 then
                 -- righeclick
                 --if i==1 then print   ("right"..lb.mouseBinds.generateMacro(value,fname))end
-                lb.groupMask[i].Event.RightDown=lb.mouseBinds.generateMacro(value,fname)
+                lb.frames[i].groupMask.Event.RightDown=lb.mouseBinds.generateMacro(value,fname)
             elseif key==3 then
                 -- middleclick
                 --print(lb.mouseBinds.generateMacro(value,fname))
-                lb.groupMask[i].Event.MiddleDown=lb.mouseBinds.generateMacro(value,fname)
+                lb.frames[i].groupMask.Event.MiddleDown=lb.mouseBinds.generateMacro(value,fname)
             elseif key==4 then
                 -- mouse4
                 --print(lb.mouseBinds.generateMacro(value,fname))
-                lb.groupMask[i].Event.Mouse4Down=lb.mouseBinds.generateMacro(value,fname)
+                lb.frames[i].groupMask.Event.Mouse4Down=lb.mouseBinds.generateMacro(value,fname)
             elseif key==5 then
                 -- mouse5
                 --print(lb.mouseBinds.generateMacro(value,fname))
-                lb.groupMask[i].Event.Mouse5Down=lb.mouseBinds.generateMacro(value,fname)
+                lb.frames[i].groupMask.Event.Mouse5Down=lb.mouseBinds.generateMacro(value,fname)
             end
 
         end
-    end
+    
 
 end
 

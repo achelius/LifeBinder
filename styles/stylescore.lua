@@ -42,7 +42,7 @@ function lb.styles.getConfiguration(styleName)
 end 
 
 function lb.styles.applyStyle(styleName)
-	lb.styles[styleName].initialize()
+	lb.styles[styleName].fastInitialize()
 end
 
 
