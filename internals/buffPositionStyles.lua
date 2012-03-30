@@ -2,13 +2,22 @@
 
 lbPredefinedBuffSlotPos={}
 
---X style
+--old style
 lbPredefinedBuffSlotPos[1]={	
 				{
+					"TOPLEFT",--anchor1
+					"TOPLEFT",--anchor2
+					3,--left
+					19,--top
+					16,--width
+					16,--height
+					false --allowdebuffs
+				},
+				{
 					"TOPLEFT",
 					"TOPLEFT",
-					0,
-					0,
+					20,
+					19,
 					16,
 					16,
 					false
@@ -16,8 +25,17 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					0,
-					0,
+					37,
+					19,
+					16,
+					16,
+					true
+				},
+				{
+					"TOPLEFT",
+					"TOPLEFT",
+					93,
+					1,
 					16,
 					16,
 					false
@@ -25,8 +43,8 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					0,
-					0,
+					76,
+					1,
 					16,
 					16,
 					false
@@ -34,8 +52,8 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					0,
-					0,
+					58,
+					1,
 					16,
 					16,
 					false
@@ -43,8 +61,8 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					0,
-					0,
+					69,
+					-17,
 					16,
 					16,
 					false
@@ -52,26 +70,8 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					0,
-					0,
-					16,
-					16,
-					false
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
-					16,
-					16,
-					false
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					0,
-					0,
+					89,
+					-17,
 					16,
 					16,
 					false

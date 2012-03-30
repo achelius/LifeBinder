@@ -41,15 +41,7 @@ lb.posData.targetOORStatus=nil
 lb.posData.CurrentTarget=nil
 lb.posData.player.OutOfRange, Event.Unit.Detail.OutOfRange = Utility.Event.Create("Rift", "Unit.Detail.OutOfRange")
 --lb.LastTarget
-function onOutOfRange(unit,status)
-	if unit==nil then return end
-	local index= GetIndexFromID(unit)
-	--print (tostring(unit) ..tostring(status))
-	if index~=nil then
-		--print(index)
-		lb.styles[lb.currentStyle].setBlockedValue(index,lb.UnitsTableStatus[index][3],status)
-	end
-end
+
 
 function lb.posData.initialize()
 	local playdet =unitdetail("player")

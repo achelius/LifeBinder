@@ -31,7 +31,7 @@ end
 
 
 
-function UpdateFramesVisibility()
+function lb.UpdateFramesVisibility()
    local lbgroupfound = false
    local lbraidfound = false
    local lbsolofound = true
@@ -137,7 +137,7 @@ function lbUnitUpdate()
 	if not lb.playerFound then return end
 	--print("loadingjhjkjh")
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
-    if lbValues.isincombat==nil or not lbValues.isincombat then  UpdateFramesVisibility()end -- reads the group status and hide or show players frames
+    if lbValues.isincombat==nil or not lbValues.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
 --    if (lb.MouseOverUnitLastCast~=nil) then
 --        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
 --        if unitIndex~=nil then lb.groupAggro[unitIndex]:SetVisible(false) end
@@ -272,7 +272,7 @@ function lbUnitUpdate()
                local needreset=false
 
                for i = 1,5 do
-                   if lb.groupHoTSpotsIcons[stripnum(key)][i][0] then
+                   if lb.buffs.groupSpotsIcons[stripnum(key)][i][0] then
                        needreset=true
                    end
                end

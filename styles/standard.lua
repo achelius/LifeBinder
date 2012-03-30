@@ -20,8 +20,6 @@ function stTable.CreateFrame(index)
 	if lb.frames[i]==nil then lb.frames[i]={} end
 	
  	
-    lb.frames[i].groupHoTSpots= {}
-    lb.frames[i].groupHoTSpotsIcons= {}
 	--lb.frames[i].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame)
 	lb.frames[i].groupHF = UI.CreateFrame("Texture", "Health", lb.frames[i].groupBF)
 	lb.frames[i].groupRF = UI.CreateFrame("Texture", "Resource", lb.frames[i].groupBF)
@@ -33,32 +31,6 @@ function stTable.CreateFrame(index)
 	lb.frames[i].groupRole = UI.CreateFrame("Texture", "Role", lb.frames[i].groupBF)
 	--lb.frames[i].groupMask = UI.CreateFrame("Frame", "group"..i, lb.frames[i].Window)
 	--lb.frames[i].groupMask:SetSecureMode("restricted")
-	
-	for g= 1,10 do
-			lb.frames[i].groupHoTSpots[g] = {}
-	        lb.frames[i].groupHoTSpots[g][0]=true --icon
-	        lb.frames[i].groupHoTSpots[g][1]=UI.CreateFrame("Texture", "HoT" .. tostring(g), lb.frames[i].groupBF)
-	        lb.frames[i].groupHoTSpots[g][2]=UI.CreateFrame("Text", "HoTText" .. tostring(g), lb.frames[i].groupBF)
-	        lb.frames[i].groupHoTSpots[g][3]=UI.CreateFrame("Text", "HoTTextShadow" .. tostring(g), lb.frames[i].groupBF)
-	        lb.frames[i].groupHoTSpots[g][4]=UI.CreateFrame("Text", "Duration" .. tostring(g), lb.frames[i].groupBF)
-	        lb.frames[i].groupHoTSpots[g][5]=UI.CreateFrame("Text", "DurationShadow" .. tostring(g), lb.frames[i].groupBF)
-	
-	        lb.frames[i].groupHoTSpotsIcons[g]={}
-	        lb.frames[i].groupHoTSpotsIcons[g][0]=false
-	        lb.frames[i].groupHoTSpotsIcons[g][1]="LifeBinder"
-	        lb.frames[i].groupHoTSpotsIcons[g][2]="Textures/buffhot.png"
-	        lb.frames[i].groupHoTSpotsIcons[g][3]=0 --stacks
-	        lb.frames[i].groupHoTSpotsIcons[g][4]=false    --updated  (true if icon has just updated)
-	        lb.frames[i].groupHoTSpotsIcons[g][5]=nil    --buff spell ID     (used for remove buff )
-	        lb.frames[i].groupHoTSpotsIcons[g][6]=false    --is debuff    true if the debuff applied is a debuff
-	        lb.frames[i].groupHoTSpotsIcons[g][7]=false    --is from whitelist
-	        lb.frames[i].groupHoTSpotsIcons[g][8]=false    --accepts Debuffs (true is this slot accepts debuffs
-	        lb.frames[i].groupHoTSpotsIcons[g][9]=false    --has duration
-	        lb.frames[i].groupHoTSpotsIcons[g][10]=1    --buff duration
-	        lb.frames[i].groupHoTSpotsIcons[g][11]=0   --timeframe of the moment this buff was set
-	        lb.frames[i].groupHoTSpotsIcons[g][12]=0   --current duration displayed
-	        
-		end
 	
 	stTable.initializeIndex(i)
 	lb.UnitsTableStatus[i][12]=true --Frame Created

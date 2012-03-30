@@ -20,8 +20,9 @@ Dependencies = {
 };
 
 RunOnStartup = {
-"internals/loadSettings.lua",
+	"internals/loadSettings.lua",
 	"LifeBinderMain.lua",
+	"internals/eventFunctions.lua",
 	"styles/oldstyle.lua",
 	"styles/standard.lua",
 	"styles/stylescore.lua",
@@ -51,7 +52,6 @@ SavedVariables = {
 	lbSelectedBuffsList = 'character',
 	lbDeBuffList = 'character',
 	lbDeBuffListBlackList='character',
-	lbBuffSlotPositions='character',
 	lbBuffSlotOptions='character',
 	lbStylesOptions='character',
 	lbDebuffCacheList = 'account'

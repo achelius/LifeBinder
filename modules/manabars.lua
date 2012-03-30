@@ -3,24 +3,18 @@ local timeFrame=_G.Inspect.Time.Real
 
 local lastUnitUpdate = 0
 
-local function getThrottle()
-    local now =  timeFrame()
-    local elapsed = now - lastUnitUpdate
-    if (elapsed >= (1.0)) then -- 1 second since all abilities are on a 1.5s GCD (except pyro at 1s GCD)
-        lastUnitUpdate = now
-        return true
-    end
-end
-
-
-
 -- mana bar manager
+lb.manaBars={}
 
-
-function updateResourceBar(units)
-	-- local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
-	-- if not timer then return end
-	
+--update mana bars throttled every .5 seconds (trying throttling options if it's necessary)
+function lb.manaBars.updateResourceBar(units)
+	--now is set by the updateplayerframe cycle
+	local elapsed = now - lastUnitUpdate
+    if (elapsed < (.5)) then --half a second
+        return 
+    else
+    	lastUnitUpdate = now
+    end
 	local details = unitdetail(units)
 	for unitident, unitTable in pairs(details) do
 		local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
@@ -52,19 +46,4 @@ function updateResourceBar(units)
 			end
 		end
 	end
-end
-
-function resetManaBars()
-
-end
-
-
-
-function hideManaBar(index)
-
-end
-
-function showManaBar(index)
-
-	lb.groupRF[j]:SetWidth((lbValues.mainwidth)*(resourcesRatio))
 end

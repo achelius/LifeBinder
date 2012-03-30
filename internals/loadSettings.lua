@@ -89,10 +89,20 @@ function loadVariables(addonidentifier)
     end
     if lbDeBuffList == nil then
         lbDeBuffList ={}
-        lbDeBuffList[1]={ }
+        lbDeBuffList[1]={
+        		{	
+        			["debuff1"]={}
+        		},
+        		{	
+        			["debuff2"]={}
+        		}
+        	 }
         lbDeBuffList[2]={ }
         lbDeBuffList[3]={ }
-        lbDeBuffList[4]={ }
+        lbDeBuffList[4]={ 	
+        			["Gathering of the Ancestors"]={},
+        			["Crippling Shot"]={}
+        		}
         lbDeBuffList[5]={ }
         lbDeBuffList[6]={ }
     end
@@ -107,30 +117,21 @@ function loadVariables(addonidentifier)
     end
     --slot position info, separated from the slot options because i only load this once 
     --can be more or less slots, but default will be 8 and the style will be X style
-    if lbBuffSlotPositions==nil then
-    	lbBuffSlotPositions={}
+    if lbBuffSlotOptions==nil then
+    	lbBuffSlotOptions={}
     	for i = 1 , 6 do
-    		lbBuffSlotPositions[i]={}
+    		lbBuffSlotOptions[i]={}
     		for g = 1 , #(lbPredefinedBuffSlotPos[1]) do
-    			lbBuffSlotPositions[i][g]={}
-    			for h=1,#(lbPredefinedBuffSlotPos[1][g]) do -- because the options are 6 (anchor1,anchor2,left,top,width,height)
-    				lbBuffSlotPositions[i][g][h]=lbPredefinedBuffSlotPos[1][g][h] --set the slot to the x style definition for that slot
+    			lbBuffSlotOptions[i][g]={}
+    			for h=1,#(lbPredefinedBuffSlotPos[1][g]) do 
+    				lbBuffSlotOptions[i][g][h]=lbPredefinedBuffSlotPos[1][g][h] --set the slot to the x style definition for that slot
     			end
     		end
     	end
     	
     end
-    --Slot informations for buffs association i can use the lbSelectedBuffsList but i have to create a new buffList that contains all the defined buffs
-    if lbBuffSlotOptions ==nil then
-    	lbBuffSlotOptions={}
-    	for i = 1 , 6 do
-    		lbBuffSlotOptions[i]={}
-    		for g = 1 , 8 do
-    			lbBuffSlotOptions[i]={AllowDebuffs=false,AllowForAutoSortBuffs=false,AllowForAutoSortDebuffs=false}
-    		end
-    	end
-    end
-    --Buffs List
+   
+    --Buffs List (deprecated)
     if lbBuffList == nil then
         lbBuffList ={}
         lbBuffList[1]={ }

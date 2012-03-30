@@ -6,6 +6,9 @@ local updatebuffdurationindex=nil
 
 
 lb = {}
+lb.UnitsTableStatus={}
+lb.frames={} --table containing all the unit frames tables
+lb.playerFound=false
 lb.clickOffset = {x = 0, y = 0}
 lb.initialized=false
 --initializes the raid window
@@ -18,29 +21,24 @@ lb.ReloadWhileInCombat=false --true if lbUnitUpdate is called during combat
  --had to set these here because of dependencies problems
 lb.styles={}
 lb.WindowDrag = {}
-lb.frames={} --table containing all the unit frames tables
+
 --
 local lastUpdatePlayerFrameCheck=0
-
-function lb.getUpdatePlayerFrameThrottle()
-    local now =  timeFrame()
-    local elapsed = now - lastUpdatePlayerFrameCheck
-    if (elapsed >= (.5)) then --half a second
-        lastdurationcheck = now
-        return true
-    end
-end
 
 local lastWaitPlayer=0
 
 function lb.getLastWaitPlayerThrottle()
     local now =  timeFrame()
     local elapsed = now - lastWaitPlayer
-    if (elapsed >= (.5)) then
+    if (elapsed >= (1)) then
         lastdurationcheck = now
         return true
     end
 end
+
+local updateplayerthrottle=getUpdatePlayerFrameThrottle
+
+
 
 function lb.initialize()
 	if lbValues.AddonDisabled then return end
@@ -67,7 +65,7 @@ function lb.initialize()
 	lb.UnitTable = {"player"}
 	lb.UnitsTable = {}
 	lb.SoloTable={"player","player.pet"}
-	lb.UnitsTableStatus={}
+	
 	
 
 	
@@ -75,11 +73,11 @@ function lb.initialize()
 	
 	--raid frames initialization (definitions only, styles will be added later)
 	for i = 1, 20 do
-		print ("4.1->"..tostring(timeFrame()))
+		
 		local name=string.format("group%.2d", i)
 		
 		--lb.frames[i].groupTooltip = UI.CreateFrame("SimpleTooltip","groupT"..i, lb.CenterFrame)
-		print ("4.2->"..tostring(timeFrame()))
+		
 		table.insert(lb.UnitsTable,name);
 	    lb.UnitsTableStatus[i]={}
 	    lb.UnitsTableStatus[i][1]=false --aggro
@@ -96,12 +94,10 @@ function lb.initialize()
 		lb.UnitsTableStatus[i][12]=false --Frame Created
 		lb.UnitsTableStatus[i][13]=false --Frame Creating (to avoid double initilizations)
 		lb.RaidTable[string.format("group%.2d", i)] = true --populate raid query table
-		print ("4.3->"..tostring(timeFrame()))
 		
-		print ("4.4->"..tostring(timeFrame()))
 		
 	end
-	print ("5"..tostring(timeFrame()))
+	
 	
 	
 	--constants
@@ -110,7 +106,7 @@ function lb.initialize()
 	lb.ResizeButton = UI.CreateFrame("Texture", "ResizeButton", lb.Window)
 	lb.clickOffset = {x = 0, y = 0}
 	lb.resizeOffset = {x = 0, y = 0}	
-	print ("6"..tostring(timeFrame()))
+	
 	
 end
 
@@ -205,7 +201,7 @@ function waitPlayerAvailable()
 	if lb.PlayerID ~=nil and unitdet~=nil then
 		lb.playerFound=true
 		lbValues.set=Inspect.TEMPORARY.Role();
-		remev()
+		lb.remWaitPlayerHook()
 		print ("preinit"..tostring(timeFrame()))
 		lb.initialize() --autostart initialization
 		print ("afterinit"..tostring(timeFrame()))
@@ -225,44 +221,45 @@ function waitPlayerAvailable()
 	
 end
 
-function UpdatePlayerFrame()
-	local timer=lb.getUpdatePlayerFrameThrottle()
-	if not timer then return end
+function lb.UpdatePlayerFrame()
+ 	now =  timeFrame()
+    local elapsed = now - lastUpdatePlayerFrameCheck
+    if (elapsed < (.25)) then --half a second
+        return 
+    else
+    	
+    	lastUpdatePlayerFrameCheck=now
+    end
+	
 	if not lb.playerFound then return end
 	local unitupd=false
 
 	for i = 1,20 do
-		
-		if lb.UnitsTableStatus[i][12] then updatebuffdurationindex(i)end
-		if lb.UnitsTableStatus[i][11] then
+		local ut=lb.UnitsTableStatus[i]
+		if ut[12] then updatebuffdurationindex(i) end
+		if ut[11] then
 			local queryName="player"
 		    if lastMode~=0 then
 		    	queryName=	string.format("group%.2d", i)
 		    end
-		    print("searcdata"..tostring(i))
-			--print(lb.UnitsTableStatus[i][5])
+		 
 			local detail =unitdetail(queryName)
 			if detail ~=nil then
-				print("hasdata"..tostring(i))
-				if not lb.UnitsTableStatus[i][13] and not lb.UnitsTableStatus[i][12] then
-					lb.UnitsTableStatus[i][13]=true --Frame Creating
-					print("createframes"..tostring(i))
-					lb.styles[lb.currentStyle].CreateFrame(i)
-					lb.buffMonitor.initializeBuffMonitorFrameIndex(i)
-					lb.mouseBinds.setMouseActionsForIndex(i)
+				
+				if not ut[13] and not ut[12] then
+					lb.createNewFrame(i)
+				elseif ut[12] then
 					lb.buffMonitor.resetBuffMonitorTexturesForIndex(i)
-					lb.UnitsTableStatus[i][13]=false --Frame Created
+					
 				end
 				if detail.calling~=nil or detail.offline~=nil then
-					--print(lb.UnitsTableStatus[i][5])
 					unitupd=true
 					lbUnitUpdateIndex(i)
-					
-					lb.UnitsTableStatus[i][11]=false
+					ut[11]=false
 				end
 			else
-				if lb.UnitsTableStatus[i][12] then
-					lb.UnitsTableStatus[i][11]=false
+				if ut[12] then
+					ut[11]=false
 					lb.styles[lb.currentStyle].hideFrame(i)
 				end
 			end
@@ -274,11 +271,28 @@ function UpdatePlayerFrame()
 		--lbUnitUpdate()
 	end
 end
-
-function UpdateFramesVisibility()
+function lb.createNewFrame(index)
+	if lb.UnitsTableStatus[index][12] then return end
+	lb.UnitsTableStatus[index][13]=true --Frame Creating
+	lb.styles[lb.currentStyle].CreateFrame(index)
+	lb.buffMonitor.initializeBuffMonitorFrameIndex(index)
+	lb.buffMonitor.resetBuffMonitorTexturesForIndex(index)
+	lb.mouseBinds.setMouseActionsForIndex(index)
+	lb.UnitsTableStatus[index][13]=false --Frame Created
+	lb.UnitsTableStatus[index][11]=true --set the frame for update
+end
+function lb.UpdateFramesVisibility()
    local lbgroupfound = false
    local lbraidfound = false
    local lbsolofound = true
+   local gCount=LibSRM.GroupCount()
+   if gCount==0 then
+   		lbsolofound=true
+   elseif gCount<6 then
+   		lbgroupfound=true
+   else
+		lbraidfound=true   	
+   end
     for k, v in pairs(lb.UnitsTable) do
         if unitLookup(v) then
             if k < 6 then lbraidfound = false lbgroupfound = true end
@@ -296,7 +310,7 @@ function UpdateFramesVisibility()
         if lastMode~=0 then
             viewModeChanged=true
             lastMode=0
-            lb.mouseBinds.setMouseActions()
+            lb.mouseBinds.setMouseActions() -- sets macros for frames
         end
         lb.QueryTable = lb.SoloTable
         lb.frames[1].groupBF:SetVisible(true)
@@ -307,7 +321,7 @@ function UpdateFramesVisibility()
         if lastMode~=1 then
             viewModeChanged=true
             lastMode=1
-            lb.mouseBinds.setMouseActions()
+            lb.mouseBinds.setMouseActions()-- sets macros for frames
         end
         lb.QueryTable = lb.GroupTable
     end
@@ -315,15 +329,9 @@ function UpdateFramesVisibility()
         if lastMode~=2 then
             viewModeChanged=true
             lastMode=2
-            if lastmode==0 then
---            
-            end
-            lb.mouseBinds.setMouseActions()
-        
+            lb.mouseBinds.setMouseActions() --sets macros for frames
         end
         lb.QueryTable = lb.RaidTable
-
-      
     end
 end
 function lbUnitUpdateIndex(index)
@@ -336,7 +344,7 @@ function lbUnitUpdateIndex(index)
 --		lb.styles[lb.currentStyle].CreateFrame(index)
 --		lb.UnitsTableStatus[index][13]=false --Frame Created
 --	end
-	UpdateFramesVisibility()
+	lb.UpdateFramesVisibility()
 	
 	if lbValues.isincombat then  
     	lb.ReloadWhileInCombat=true 
@@ -359,14 +367,7 @@ function lbUnitUpdateIndex(index)
     	local j =index
     	if lb.UnitsTableStatus[j][5]~=unitTable.id  then
     		if not lb.UnitsTableStatus[index][13] and not lb.UnitsTableStatus[index][12] then
-				lb.UnitsTableStatus[index][13]=true --Frame Creating
-				print("createframes"..tostring(index))
-				lb.styles[lb.currentStyle].CreateFrame(index)
-				lb.buffMonitor.initializeBuffMonitorFrameIndex(index)
-				lb.buffMonitor.resetBuffMonitorTexturesForIndex(index)
-				lb.mouseBinds.setMouseActionsForIndex(index)
-				lb.UnitsTableStatus[index][13]=false --Frame Created
-				lb.UnitsTableStatus[j][11]=true
+				lb.createNewFrame(index)
 			end
     	end
     	local name = unitTable.name
@@ -493,8 +494,8 @@ function lbUnitUpdate()
 	if not lb.playerFound then return end
 --	
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
---    --if lbValues.isincombat==nil or not lbValues.isincombat then  UpdateFramesVisibility()end -- reads the group status and hide or show players frames
-    UpdateFramesVisibility()
+--    --if lbValues.isincombat==nil or not lbValues.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
+    lb.UpdateFramesVisibility()
     for i = 1,20 do
     	lbUnitUpdateIndex(i)
     end
@@ -625,7 +626,7 @@ function lbUnitUpdate()
 --               local needreset=false
 --
 --               for i = 1,5 do
---                   if lb.frames[0].groupHoTSpotsIcons[key][i] then
+--                   if lb.frames[0].buffs.groupSpotsIcons[key][i] then
 --                       needreset=true
 --                   end
 --               end
@@ -643,114 +644,6 @@ function lbUnitUpdate()
 --    viewModeChanged=false
 end
 --Called by the event   Event.Unit.Detail.Aggro
-function  lb.onAggroUpdate(units)
-    local details = unitdetail(units)
-	
-    for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
-        if identif~=nil then
-            local j=identif
-            if j~=nil then
-                --if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
-                    lb.UnitsTableStatus[j][1] =  unitTable.aggro
-                    if unitTable.aggro then
-                        lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
-                    else
-                        lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
-                    end
-                --end
-            end
-        end
-    end
-end
---Called by the event   Event.Unit.Detail.Blocked
-function  lb.onBlockedUpdate(units)
-    local details = unitdetail(units)
-
-    for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
-        if identif~=nil then
-            local j=identif
-            if j~=nil then
-					if unitTable.offline==nil or unitTable.offline==false then
-	                --if lb.UnitsTableStatus[identif][3] ~=  unitTable.blocked or viewModeChanged then
-	                    lb.UnitsTableStatus[j][3] =  unitTable.blocked
-	                    --print (identif .. tostring(unitTable.blocked))
-	                    --dump(lb.UnitsTableStatus[j])
-	                    lb.styles[lb.currentStyle].setBlockedValue(j,lb.UnitsTableStatus[j][3],index,lb.UnitsTableStatus[j][10])
-                    end
---                   
-            end
-        end
-    end
-end
-function lb.onOfflineUpdate(units)
-	local details = unitdetail(units)
-
-    for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
-        if identif~=nil then
-            local j=identif
-            if j~=nil then
-                    
-                    lb.UnitsTableStatus[j][2]=unitTable.offline
-                    lb.UnitsTableStatus[j][11] =  true
-                    
-            end
-        end
-    end
-end
-function onUnitRoleChanged(units)
-	local details = unitdetail(units)
-
-    for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
-        if identif~=nil then
-            local j=identif
-            if j~=nil then
-				
-                if lb.UnitsTableStatus[j][4] ~=  unitTable.role or viewModeChanged then
-                lb.UnitsTableStatus[j][4] =  unitTable.role
-                
-                  
-	            lb.styles[lb.currentStyle].setRoleIcon(j,unitTable.calling,unitTable.role)
-            end
-            end
-        end
-    end
-end
-
---Called by the event   Event.Unit.Detail.Health e Event.Unit.Detail.HealthMax
-function  lb.onHpUpdate(units)
-
-  --  timer = getThrottle2()--throttle to limit cpu usage (period set to 0.25 sec)
-   -- if not timer then return end
-    local details = unitdetail(units)
-    for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
-        if identif~=nil then
-            local j=identif
-            if j~=nil then
-                local healthtick = unitTable.health
-                local healthmax = unitTable.healthMax
-                if healthtick~=nil and healthmax ~= nil then
-                    
-                    lb.styles[lb.currentStyle].setHealthBarValue(j,healthtick,healthmax)
-                    lb.styles[lb.currentStyle].setHealthBarText(j,healthtick,healthmax)
-                    
-                end
-                if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
-                    lb.UnitsTableStatus[j][1] =  unitTable.aggro
-                    if unitTable.aggro then
-                        lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
-                    else
-                        lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
-                    end
-                end
-            end
-        end
-    end
-end
 
 
 function GetIndexFromID(ID)
@@ -780,109 +673,8 @@ function getIdentifierFromIndex(index)
 	return nil
 end
 
-function lb.onRoleChanged(role)
-    lbValues.set=role;
-    --call abilities
-    lb.buffMonitor.initializeBuffMonitor()--initializes buff monitor
-    --initializeSpecButtons()
-    lb.buffMonitor.updateSpellTextures() --update textures cache and populate the lb.NoIconsBuffList table
-    lb.buffMonitor.resetBuffMonitorTextures() --hide every buff slot
-    lb.mouseBinds.setMouseActions()
-    --lbUpdateRequiredSpellsList()
 
-    --createTableBuffs()--gui
-    --createTableDebuffs() --gui
-    --UpdateMouseAssociationsTextFieldsValues() --gui
-    --lb.slotsGui.initialize()
-   -- hideAll()
-end
 
-function lb.onAbilityAdded(abilities)
-    if lbValues.set==nil then
-        if lb.PlayerID==nil then lb.PlayerID=Inspect.Unit.Lookup("player") end
-        lb.onRoleChanged( Inspect.TEMPORARY.Role())
-         
-    end
-end
-
-function lb.onSecureEnter()
-    lbValues.isincombat=true
-    lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot2.png")
-    lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
-   -- lb.specButtons.hideAll()
-end
-function lb.onSecureExit()
-    lbValues.isincombat=false
-    lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
-    lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
-    --lb.specButtons.showAll()
-    if lb.ReloadWhileInCombat then
-    	lbUnitUpdate()
-    end
-end
-
-function lb.onPlayerTargetChanged(unit)
-    -- print (unit)
-    if unit==false then 
-     	lb.LastTarget =nil
-     	lb.currentTarget=nil
-     	
-    else
-    	lb.currentTarget=unit
-    end
-    
-    local found = false
-
-    for i = 1 , 20 do
-        local name=string.format("group%.2d", i)
-        if lb.UnitsTableStatus[i][12] then
-	         if lb.UnitsTableStatus[i][5]== unit then
-	             lb.UnitsTableStatus[i][6]=true
-	             lb.frames[i].groupTarget:SetVisible(true)
-	             found=true
-	             lb.LastTarget=unit
-	             --print(tostring(i)..name.."true")
-	         else
-	             lb.UnitsTableStatus[i][6]=false
-	             lb.frames[i].groupTarget:SetVisible(false)
-	             --print(tostring(i)..name.."false")
-	         end
-	    end
-    end
-    if lastMode== 0 then
-    if lb.UnitsTableStatus[1][5]== unit then
-        lb.UnitsTableStatus[1][6]=true
-        lb.frames[1].groupTarget:SetVisible(true)
-        found=true
-        lb.LastTarget=unit
-
-        --print(tostring(i).."Playertrue")
-    else
-        lb.UnitsTableStatus[1][6]=false
-        lb.frames[1].groupTarget:SetVisible(false)
-        --print(tostring(i).."Playerfalse")
-    end
-    end
-    if not found then
-        lb.LastTarget=nil
-    end
-end
-function lb.onMouseOverTargetChanged(unit)
-
-     local newindex =GetIndexFromID(unit)
-     local lastindex= GetIndexFromID(lb.MouseOverUnit)
-     --if lastindex~=nil then lb.frames[lastindex].groupAggro:SetVisible(false) end
-     if newindex~=nil then
-
-        --print (GetIdentifierFromID(unit))
-
-         --lb.frames[newindex].groupAggro:SetVisible(true)
-        lb.MouseOverUnit=unit
-     else
-        --print (unit)
-         lb.MouseOverUnit=nil
-     end
-end
 
 
 

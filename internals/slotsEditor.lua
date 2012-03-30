@@ -36,8 +36,8 @@ function lb.slotsGui.initialize()
 	 ------initialize Slots
 	 lb.slotsGui.Tabs[1].Slots={}
 	 
-	 for i =1 ,#(lbBuffSlotPositions[lbValues.set]) do
-	 	local slotinfo=lbBuffSlotPositions[lbValues.set][i]
+	 for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
+	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
 	 	lb.slotsGui.Tabs[1].Slots[i]={}
 	 	lb.slotsGui.Tabs[1].Slots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  lb.slotsGui.Tabs[1].UnitFrame )
 	 	lb.slotsGui.Tabs[1].Slots[i].Frame:SetPoint(slotinfo[1],lb.slotsGui.Tabs[1].UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
@@ -150,8 +150,8 @@ if  lb.slotsGui.selectedIndex~=index then return end
 	 	lb.slotsGui.Tabs[1].Slots[index].Y=newy
 	 
 	 	---Experimental
-	 	lbBuffSlotPositions[lbValues.set][index][3]=newx/scalex/lb.slotsGui.PreviewScale[1]
-	 	lbBuffSlotPositions[lbValues.set][index][4]=newy/scaley/lb.slotsGui.PreviewScale[2]
+	 	lbBuffSlotOptions[lbValues.set][index][3]=newx/scalex/lb.slotsGui.PreviewScale[1]
+	 	lbBuffSlotOptions[lbValues.set][index][4]=newy/scaley/lb.slotsGui.PreviewScale[2]
 	 	
 	 	----
 	 	lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
