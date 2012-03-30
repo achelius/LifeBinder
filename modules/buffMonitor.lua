@@ -289,34 +289,7 @@ function lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 end
 function lb.buffMonitor.resetBuffMonitorTextures()
     for var=1,20 do
-    	if lb.UnitsTableStatus[var][12]then
-	        for g= 1,  lb.buffMonitor.slotscount do
-	            lb.frames[var].groupHoTSpotsIcons[g][0]=false
-	            --print (lb.frames[var].groupHoTSpotsIcons[g][0])
-	            lb.frames[var].groupHoTSpotsIcons[g][4]=false
-	            lb.frames[var].groupHoTSpots[g][1]:SetTexture(lb.frames[var].groupHoTSpotsIcons[g][1],lb.frames[var].groupHoTSpotsIcons[g][2] )
-	            lb.frames[var].groupHoTSpots[g][1]:SetVisible(lb.frames[var].groupHoTSpotsIcons[g][0])
-	
-	            lb.frames[var].groupHoTSpots[g][2]:SetText(tostring(lb.frames[var].groupHoTSpotsIcons[g][3]))
-	            if (lb.frames[var].groupHoTSpotsIcons[g][3]==0 or lb.frames[var].groupHoTSpotsIcons[g][3]==nil) and {lb.frames[var].groupHoTSpotsIcons[g][0]} then
-	                lb.frames[var].groupHoTSpots[g][2]:SetVisible(false)
-	            else
-	                lb.frames[var].groupHoTSpots[g][2]:SetVisible(true)
-	            end
-	
-	            lb.frames[var].groupHoTSpots[g][3]:SetFontColor(0,0,0,1)
-	            lb.frames[var].groupHoTSpots[g][3]:SetText(tostring(lb.frames[var].groupHoTSpotsIcons[g][3]))
-	            
-	
-	            if (lb.frames[var].groupHoTSpotsIcons[g][3]==0 or lb.frames[var].groupHoTSpotsIcons[g][3]==nil) and {lb.frames[var].groupHoTSpotsIcons[g][0]} then
-	                lb.frames[var].groupHoTSpots[g][3]:SetVisible(false)
-	            else
-	                lb.frames[var].groupHoTSpots[g][3]:SetVisible(true)
-	            end
-	            lb.frames[var].groupHoTSpots[g][4]:SetVisible(lb.frames[var].groupHoTSpotsIcons[g][9])
-	            lb.frames[var].groupHoTSpots[g][5]:SetVisible(lb.frames[var].groupHoTSpotsIcons[g][9])
-	        end
-	    end
+    	lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
     end
 end
 function lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
