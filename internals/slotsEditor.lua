@@ -110,8 +110,8 @@ function lb.slotsGui.initialize()
 	 
 	 --initializing table 2
 	 
-	 lb.slotsGui.Tabs[2] = UI.CreateFrame("Frame", "OptionsWindowA", lb.slotsGui.TabControl)
-	 lb.slotsGui.TabControl:AddTab("Slots Associations",lb.slotsGui.Tabs[2])
+	 lb.slotsGui.Tabs[2] = UI.CreateFrame("Frame", "BuffAssociationsTab", lb.slotsGui.TabControl)
+	 lb.slotsGui.TabControl:AddTab("Slots buffs associations",lb.slotsGui.Tabs[2])
 	 --initializing sidetable
 	 lb.slotsGui.Tabs[2].SideTable=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", lb.slotsGui.Tabs[2])
 	 lb.slotsGui.Tabs[2].SideTable:SetPoint("TOPLEFT", lb.slotsGui.Tabs[2], "TOPLEFT", 600, 50)
@@ -145,33 +145,39 @@ function lb.slotsGui.initialize()
 	 lb.slotsGui.Tabs[2].AbilitesList:SetItems(list)
 	 
      
-     --initialize debuffs list
-     lb.slotsGui.Tabs[2].SideTable.Tabs[2] = UI.CreateFrame("Frame", "BuffTab", lb.slotsGui.Tabs[2].SideTable)
-	 lb.slotsGui.Tabs[2].SideTable:AddTab("Debuffs",lb.slotsGui.Tabs[2].SideTable.Tabs[2])
-	 lb.slotsGui.Tabs[2].DebuffsList=UI.CreateFrame("AbilitiesList", "DebuffsList",lb.slotsGui.Tabs[2].SideTable.Tabs[2])
-	 
-	 lb.slotsGui.Tabs[2].DebuffsListView=UI.CreateFrame("SimpleScrollView", "List", lb.slotsGui.Tabs[2].SideTable.Tabs[2])
-	 lb.slotsGui.Tabs[2].DebuffsListView:SetPoint("TOPLEFT", lb.slotsGui.Tabs[2].SideTable.Tabs[2], "TOPLEFT",10, 20)
-     lb.slotsGui.Tabs[2].DebuffsListView:SetWidth(200)
-     lb.slotsGui.Tabs[2].DebuffsListView:SetHeight(350)
-     lb.slotsGui.Tabs[2].DebuffsListView:SetLayer(1)
-     lb.slotsGui.Tabs[2].DebuffsListView:SetBorder(1, 1, 1, 1, 1)
-     lb.slotsGui.Tabs[2].DebuffsListView:SetContent( lb.slotsGui.Tabs[2].DebuffsList)
-        
-	 local dbList={}
-	 local dbDetails=Inspect.Ability.Detail(Inspect.Ability.List())
-	 local dbcounter=1
-	 for k,ab in pairs(dbDetails) do
-		local name=ab.name
-		local texture=lb.iconsCache.getTextureFromCache(name)
-	     dbList[dbcounter]={name,"Rift",ab.icon}
-	     dbcounter=dbcounter+1
-	 end
-	 lb.slotsGui.Tabs[2].DebuffsList:SetItems(dbList)
+--     --initialize debuffs list
+--     lb.slotsGui.Tabs[2].SideTable.Tabs[2] = UI.CreateFrame("Frame", "BuffTab", lb.slotsGui.Tabs[2].SideTable)
+--	 lb.slotsGui.Tabs[2].SideTable:AddTab("Debuffs",lb.slotsGui.Tabs[2].SideTable.Tabs[2])
+--	 lb.slotsGui.Tabs[2].DebuffsList=UI.CreateFrame("AbilitiesList", "DebuffsList",lb.slotsGui.Tabs[2].SideTable.Tabs[2])
+--	 
+--	 lb.slotsGui.Tabs[2].DebuffsListView=UI.CreateFrame("SimpleScrollView", "List", lb.slotsGui.Tabs[2].SideTable.Tabs[2])
+--	 lb.slotsGui.Tabs[2].DebuffsListView:SetPoint("TOPLEFT", lb.slotsGui.Tabs[2].SideTable.Tabs[2], "TOPLEFT",10, 20)
+--     lb.slotsGui.Tabs[2].DebuffsListView:SetWidth(200)
+--     lb.slotsGui.Tabs[2].DebuffsListView:SetHeight(350)
+--     lb.slotsGui.Tabs[2].DebuffsListView:SetLayer(1)
+--     lb.slotsGui.Tabs[2].DebuffsListView:SetBorder(1, 1, 1, 1, 1)
+--     lb.slotsGui.Tabs[2].DebuffsListView:SetContent( lb.slotsGui.Tabs[2].DebuffsList)
+--        
+--	 local dbList={}
+--	 local dbDetails=Inspect.Ability.Detail(Inspect.Ability.List())
+--	 local dbcounter=1
+--	 for k,ab in pairs(dbDetails) do
+--		local name=ab.name
+--		local texture=lb.iconsCache.getTextureFromCache(name)
+--	     dbList[dbcounter]={name,"Rift",ab.icon}
+--	     dbcounter=dbcounter+1
+--	 end
+--	 lb.slotsGui.Tabs[2].DebuffsList:SetItems(dbList)
 	
 	 -- custom names
 	 lb.slotsGui.Tabs[2].SideTable.Tabs[3] = UI.CreateFrame("Frame", "CustomNamesTab", lb.slotsGui.Tabs[2].SideTable)
 	 lb.slotsGui.Tabs[2].SideTable:AddTab("Custom Names",lb.slotsGui.Tabs[2].SideTable.Tabs[3])
+	 
+	 
+	  --initializing table 3
+	 
+	 lb.slotsGui.Tabs[3] = UI.CreateFrame("Frame", "DebuffManagementTab", lb.slotsGui.TabControl)
+	 lb.slotsGui.TabControl:AddTab("Debuff management",lb.slotsGui.Tabs[3])
 	 
 	 
 	 
@@ -267,7 +273,15 @@ if  lb.slotsGui.selectedType~=type then return end
     end
 end
 
-
+function lb.slotsGui.OnTabChanged(index)
+	if index==1 then
+		lb.slotsGui.Tabs[1].UnitFrame:SetVisible(true)
+	elseif index==2 then
+		lb.slotsGui.Tabs[1].UnitFrame:SetVisible(true)
+	elseif index==3 then
+		lb.slotsGui.Tabs[1].UnitFrame:SetVisible(false)
+	end
+end
 
 
 
