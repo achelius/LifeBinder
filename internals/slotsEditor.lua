@@ -4,7 +4,7 @@ lb.slotsGui.initialized=false
 local slotdrag=false
 lb.slotsGui.clickOffset = {x = 0, y = 0}
 lb.slotsGui.selectedIndex=-1
-lb.slotsGui.selectedtype=-1
+lb.slotsGui.selectedType=-1
 lb.slotsGui.PreviewScale={4,4} --scale of the preview unit frame
 
 function lb.slotsGui.initialize()
@@ -29,7 +29,7 @@ function lb.slotsGui.initialize()
 	 ------initialize tab 1
 	 
 	 lb.slotsGui.Tabs[1].UnitFrame = UI.CreateFrame("Texture", "UnitFrame", lb.slotsGui.Tabs[1].MainFrame )
-	 lb.slotsGui.Tabs[1].UnitFrame:SetPoint("TOPLEFT",lb.slotsGui.Tabs[1].MainFrame , "TOPLEFT", 20, 100)
+	 lb.slotsGui.Tabs[1].UnitFrame:SetPoint("TOPLEFT",lb.slotsGui.Tabs[1].MainFrame , "TOPLEFT", 20, 50)
 	 lb.slotsGui.Tabs[1].UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
 	 lb.slotsGui.Tabs[1].UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.slotsGui.PreviewScale[2])
 	 
@@ -153,8 +153,14 @@ function lb.slotsGui.onSlotLeftDown(type,index)
         local slots=nil
         if type==0 then slots= lb.slotsGui.Tabs[1].buffSlots end
         if type==1 then slots= lb.slotsGui.Tabs[1].debuffSlots end
-        slots[index].Frame:SetBackgroundColor(1,0,0,1) 
-        if  lb.slotsGui.selectedIndex~=-1 and lb.slotsGui.selectedIndex~=index then slots[lb.slotsGui.selectedIndex].Frame:SetBackgroundColor(0,0,0,1) end 
+        slots[index].Frame:SetBackgroundColor(0,0,1,1) 
+        if  (lb.slotsGui.selectedIndex~=-1 and lb.slotsGui.selectedIndex~=index) or (lb.slotsGui.selectedType~=-1 and lb.slotsGui.selectedType~=index) then
+        	if lb.slotsGui.selectedType==0 then
+         		lb.slotsGui.Tabs[1].buffSlots[lb.slotsGui.selectedIndex].Frame:SetBackgroundColor(0,1,0,1)
+         	elseif lb.slotsGui.selectedType==1 then
+         		lb.slotsGui.Tabs[1].debuffSlots[lb.slotsGui.selectedIndex].Frame:SetBackgroundColor(1,0,0,1)
+         	end
+        end 
         lb.slotsGui.selectedIndex=index
         lb.slotsGui.selectedType=type
         --print (slot:GetPosition()[1])
@@ -205,7 +211,7 @@ if  lb.slotsGui.selectedType~=type then return end
 	 	
 	 	----
 	 	if type==0 then lb.buffMonitor.relocateSingleBuffMonitorSlot(index) end
-	 	if type==1 then lb.debuffMonitor.relocateSingleBuffMonitorSlot(index) end
+	 	if type==1 then lb.debuffMonitor.relocateSingleDebuffMonitorSlot(index) end
 		slots[index].Frame:SetPoint("TOPLEFT", lb.slotsGui.Tabs[1].UnitFrame, "TOPLEFT", newx, newy)
 		
     end

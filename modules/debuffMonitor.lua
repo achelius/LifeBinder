@@ -10,7 +10,7 @@ local Debufflist=   _G.Inspect.Buff.List
 local timeFrame=_G.Inspect.Time.Real
 lb.debuffMonitor={}
 lb.FullDebuffsList={}     -- used by Debuffmonitor
-
+lb.NoIconsDebuffList={}
 lb.debuffMonitor.slotscount=0
 local lastdurationcheck=0
 
@@ -54,7 +54,7 @@ function lb.debuffMonitor.initializeDebuffMonitorFrameIndex(var)
 		        lb.frames[var].Debuffs.groupSpotsIcons[g]={}
 		        lb.frames[var].Debuffs.groupSpotsIcons[g][0]=false
 		        lb.frames[var].Debuffs.groupSpotsIcons[g][1]="LifeBinder"
-		        lb.frames[var].Debuffs.groupSpotsIcons[g][2]="Textures/Debuffhot.png"
+		        lb.frames[var].Debuffs.groupSpotsIcons[g][2]="Textures/buffhot2.png"
 		        lb.frames[var].Debuffs.groupSpotsIcons[g][3]=0 --stacks
 		        lb.frames[var].Debuffs.groupSpotsIcons[g][4]=false    --updated  (true if icon has just updated)
 		        lb.frames[var].Debuffs.groupSpotsIcons[g][5]=nil    --Debuff spell ID     (used for remove Debuff )
@@ -125,7 +125,7 @@ end
 
 
 
-function lb.debuffMonitor.relocatedebuffMonitorSlots()
+function lb.debuffMonitor.relocateDebuffMonitorSlots()
 --print ( lb.debuffMonitor.slotscount )
    local scalex=1--lbValues.mainwidth*0.009009009
 	local scaley=1--lbValues.mainheight*0.023255814
@@ -156,7 +156,7 @@ function lb.debuffMonitor.relocatedebuffMonitorSlots()
     end
 end
 
-function lb.debuffMonitor.relocateSingledebuffMonitorSlot(index)
+function lb.debuffMonitor.relocateSingleDebuffMonitorSlot(index)
 --print ( lb.debuffMonitor.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
@@ -420,33 +420,24 @@ function lb.debuffMonitor.updateSpellTextures()
 --        table.insert(abtextures,"Textures/Debuffhot.png")
 --    end
     abilities =abilitylist()
-    abilitydets=abilitydetail(abilities)
-    for d,c in pairs(lbSelectedDebuffsList[lbValues.set]) do
-        --c={"Soothing Stream", "Healing Current","Healing Flood" }
-       
-        for j,m in pairs(c) do
-       
-	        for s,a in pairs(m) do
-	      
-	            --a="Soothing Stream" ....
-	            --print("txt"..tostring(s))
-	            found=false
-	            lb.FullDebuffsList[s]=true
-	            for v, k in pairs(abilitydets) do
-	                if s==k.name and s~=nil then
-	                    if k.icon ~=nil then
-	                        found=true
-	                        lb.iconsCache.addTextureToCache(s,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
-	                    end
-	                end
-	            end
-	            if not found then
-	                lb.NoIconsDebuffList[s]=true
-	                --print (a)
-	            end
-	
-	        end
+    local abilitydets=abilitydetail(abilities)
+    for dbName,c in pairs(lbDebuffWhitelist[lbValues.set]) do
+        --print("txt"..tostring(s))
+        found=false
+        lb.FullDebuffsList[dbName ]=true
+        for v, k in pairs(abilitydets) do
+            if dbName==k.name and dbName~=nil then
+                if k.icon ~=nil then
+                    found=true
+                    lb.iconsCache.addTextureToCache(dbName,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
+                end
+            end
         end
+        if not found then
+            lb.NoIconsDebuffList[dbName]=true
+            --print (a)
+        end
+	
     end
     
 end
@@ -554,50 +545,66 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
 				if lbDebuffBlackList[name]~=nil then
 					--I don't do anything because it's on the blacklist
 				else
-					--It's not on the blacklist so is a low priority deDebuff, it will be shown if an allowing-deDebuff slot is empty
-					local texture=nil
-                    if lb.iconsCache.hasTextureInCache(name) then
-                        texture= lb.iconsCache.getTextureFromCache(name)
-                        --print("cache"..lb.iconsCache.getTextureFromCache(name)[2])
-                    else
-                        lb.iconsCache.addTextureToCache(name,"Rift",DebuffTable.icon)
-                        texture={"Rift", DebuffTable.icon}
-                        --print("added"..lb.iconsCache.getTextureFromCache(name)[2])
-                    end
-					local slotscount=#(lb.frames[frameindex].Debuffs.groupSpotsIcons)
-					for i = 1 , slotscount do
-						
-						--searching into the slots
-						
-						if not lb.frames[frameindex].Debuffs.groupSpotsIcons[i][0] then
-							--slot is empty so i add here my Debuff
-							--print(i)
-							--print ("free")
-							lb.frames[frameindex].Debuffs.groupSpotsIcons[i][0]=true
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][1]=texture[1]
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][2]=texture[2]
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][3]=DebuffTable.stack
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][4]=true
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][5]=DebuffTable.id
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][6]=true
-                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][7]=false
-                            if DebuffTable.duration~=nil then
-                            	lb.frames[frameindex].Debuffs.groupSpotsIcons[i][9]=true
-                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][10]=round(DebuffTable.duration)
-                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=timeFrame()
-                            else
-                            	lb.frames[frameindex].Debuffs.groupSpotsIcons[i][9]=false
-                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][10]=1
-                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=0
-                            end
-                            --print (lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
-                            lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,i)
-                            updateDebuffs=true
-                            break
-
+					local enable=false
+					if lbDebuffOptions[lbValues.set].showCurableOnly then
+						if DebuffTable.poison and lbDebuffOptions[lbValues.set].poison then
+							enable=true
 						end
+						if DebuffTable.curse and lbDebuffOptions[lbValues.set].curse then
+							enable=true
+						end
+						if DebuffTable.disease and lbDebuffOptions[lbValues.set].disease then
+							enable=true
+						end 
+					else
+						enable=true
+					end
+					if enable then
+						--It's not on the blacklist so is a low priority deDebuff, it will be shown if an allowing-deDebuff slot is empty
+						local texture=nil
+	                    if lb.iconsCache.hasTextureInCache(name) then
+	                        texture= lb.iconsCache.getTextureFromCache(name)
+	                        --print("cache"..lb.iconsCache.getTextureFromCache(name)[2])
+	                    else
+	                        lb.iconsCache.addTextureToCache(name,"Rift",DebuffTable.icon)
+	                        texture={"Rift", DebuffTable.icon}
+	                        --print("added"..lb.iconsCache.getTextureFromCache(name)[2])
+	                    end
+						local slotscount=#(lb.frames[frameindex].Debuffs.groupSpotsIcons)
+						for i = 1 , slotscount do
 							
-						
+							--searching into the slots
+							
+							if not lb.frames[frameindex].Debuffs.groupSpotsIcons[i][0] then
+								--slot is empty so i add here my Debuff
+								--print(i)
+								--print ("free")
+								lb.frames[frameindex].Debuffs.groupSpotsIcons[i][0]=true
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][1]=texture[1]
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][2]=texture[2]
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][3]=DebuffTable.stack
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][4]=true
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][5]=DebuffTable.id
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][6]=true
+	                            lb.frames[frameindex].Debuffs.groupSpotsIcons[i][7]=false
+	                            if DebuffTable.duration~=nil then
+	                            	lb.frames[frameindex].Debuffs.groupSpotsIcons[i][9]=true
+	                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][10]=round(DebuffTable.duration)
+	                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=timeFrame()
+	                            else
+	                            	lb.frames[frameindex].Debuffs.groupSpotsIcons[i][9]=false
+	                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][10]=1
+	                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=0
+	                            end
+	                            --print (lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
+	                            lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,i)
+	                            updateDebuffs=true
+	                            break
+	
+							end
+								
+							
+						end
 					end
 				end
 				

@@ -200,6 +200,7 @@ end
 function lb.onRoleChanged(role)
     lbValues.set=role;
     --call abilities
+    lb.autosetDebuffOptions(Inspect.TEMPORARY.Role())
     lb.buffMonitor.resetBuffMonitorTextures() --hide every buff slot
     lb.buffMonitor.initializeBuffMonitor()--initializes buff monitor
     --initializeSpecButtons()
@@ -217,10 +218,12 @@ function lb.onRoleChanged(role)
 end
 
 function lb.onAbilityAdded(abilities)
+
     if lbValues.set==nil then
+    
         if lb.PlayerID==nil then lb.PlayerID=Inspect.Unit.Lookup("player") end
         lb.onRoleChanged( Inspect.TEMPORARY.Role())
-         
+        
     end
 end
 

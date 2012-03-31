@@ -115,6 +115,10 @@ function loadVariables(addonidentifier)
         lbDebuffBlackList[5]={ }
         lbDebuffBlackList[6]={ }
     end
+    if lbDebuffOptions == nil then
+        lbDebuffOptions ={}
+        
+    end
     --slot position info, separated from the slot options because i only load this once 
     --can be more or less slots, but default will be 8 and the style will be X style
     if lbBuffSlotOptions==nil then
@@ -172,7 +176,9 @@ function loadVariables(addonidentifier)
     lbValues.isincombat=false
     lbValues.set=nil
     lb.EnableStarterCycle() --start wait for player cycle
-        
-
-
+   
 end
+
+
+
+

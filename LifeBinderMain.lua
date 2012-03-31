@@ -205,7 +205,7 @@ function waitPlayerAvailable()
 		lb.remWaitPlayerHook()
 		print ("preinit"..tostring(timeFrame()))
 		lb.initialize() --autostart initialization
-		print ("afterinit"..tostring(timeFrame()))
+		
     	lb.createWindow() --into the file lifebinderMain.lua
     	
 		
@@ -214,11 +214,16 @@ function waitPlayerAvailable()
 		lb.posData.initialize()--positional module initialized here to be sure to have player info
 		
 		lbUnitUpdate()
+		lb.autosetDebuffOptions(Inspect.TEMPORARY.Role())
 		lb.buffMonitor.updateSpellTextures()
+		lb.debuffMonitor.updateSpellTextures()
 		
 		updatebuffdurationindex=_G.lb.buffMonitor.updateDurationsOfIndex
 		updatedebuffdurationindex=_G.lb.debuffMonitor.updateDurationsOfIndex
+		
+         
 		lb.EnableHandlers()--add event handlers
+		print ("afterinit"..tostring(timeFrame()))
 	end
 	
 end
@@ -650,7 +655,47 @@ function lbUnitUpdate()
 --
 --    viewModeChanged=false
 end
---Called by the event   Event.Unit.Detail.Aggro
+
+--cleansing abilities array
+lb.CleansingAbilitiesList=
+	{
+		{name="Cleansing Prayer",poison=true,curse=true,disease=true},
+		{name="Cleansing Waters",poison=true,curse=true,disease=true},
+		{name="Nature's Cleansing",poison=true,curse=true,disease=true},
+		{name="Cleansing Flames",poison=false,curse=true,disease=false},
+		{name="Cauterize",poison=true,curse=true,disease=true},
+		{name="Empowering Light",poison=true,curse=true,disease=true}
+		
+	}
+--must be called when abilities can be retrieved
+function lb.autosetDebuffOptions(role)
+	dump (lbDebuffOptions)
+	dump( role)
+	if lbDebuffOptions[role]==nil then
+		print ("AutoSetting cleansing parameters")
+		local abilitiesList =Inspect.Ability.List()
+		local abilitiesDetails =Inspect.Ability.Detail(abilitiesList)
+		local poison=false
+		local curse=false
+		local disease=false
+		for abID,abDet in pairs(abilitiesDetails) do
+			for	id, CleansingAbilityDet in pairs(lb.CleansingAbilitiesList) do
+				if abDet.name==CleansingAbilityDet.name then
+					poison = poison or CleansingAbilityDet.poison
+					curse = curse or CleansingAbilityDet.curse
+					disease = poison or CleansingAbilityDet.disease
+				end
+			end
+		end
+		lbDebuffOptions[role]={showCurableOnly=false,poison=poison,curse=curse,disease=disease}
+--		lbDebuffOptions[role].showCurable=poison or curse or disease
+--		lbDebuffOptions[role].poison=poison
+--		lbDebuffOptions[role].curse=curse
+--		lbDebuffOptions[role].disease=disease
+			
+	end
+	
+end
 
 
 function GetIndexFromID(ID)
