@@ -100,8 +100,8 @@ function loadVariables(addonidentifier)
         lbDebuffWhitelist[2]={ }
         lbDebuffWhitelist[3]={ }
         lbDebuffWhitelist[4]={ 	
-        			["Gathering of the Ancestors"]={},
-        			["Crippling Shot"]={}
+        			["Gathering of the Ancestors"]={castByMe=true},
+        			["Crippling Shot"]={castByMe=false}
         		}
         lbDebuffWhitelist[5]={ }
         lbDebuffWhitelist[6]={ }

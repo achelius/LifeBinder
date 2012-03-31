@@ -208,6 +208,9 @@ function lb.onRoleChanged(role)
     lb.buffMonitor.updateSpellTextures() --update textures cache and populate the lb.NoIconsBuffList table
     
     lb.mouseBinds.setMouseActions()
+    if lb.slotsGui.initialized then
+    	lb.slotsGui.updateOptions()
+    end
     --lbUpdateRequiredSpellsList()
 
     --createTableBuffs()--gui

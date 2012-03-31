@@ -653,4 +653,7 @@ function lb.debuffMonitor.onDebuffRemove(unit, debuffID,frameindex)
 
 end
 
-
+function lb.debuffMonitor.copySettingsFromRole(Role)
+	--copies the settings from the selected role into the current role
+	--must copy lbDebuffWhitelist[role] ,lbDebuffBlackList[role] , lbDebuffSlotOptions[role] , lbDebuffOptions[role]
+end

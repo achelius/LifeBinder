@@ -15,6 +15,39 @@ local function UpdateSelection(self)
   end
 end
 
+local function CreateDragFrame(self,parent)
+	print ( parent:GetParent():GetParent():GetParent():GetParent():GetParent():GetParent():GetParent():GetName())
+	self.dragFrame = UI.CreateFrame("Texture", "DragTexture", parent:GetParent():GetParent():GetParent():GetParent():GetParent():GetParent())
+	self.dragFrame:SetPoint("TOPLEFT",parent,"TOPLEFT",0,0)
+	self.dragFrame:SetWidth(32)
+	self.dragFrame:SetHeight(32)
+	self.dragFrame:SetLayer(99)
+	self.dragFrame:SetTexture("LibSimpleWidgets","textures/drag.png")
+	self.dragFrame:SetVisible(false)
+end
+local function SetDragFrameToMousePosition(self,x,y)
+	self.dragFrame:SetPoint("TOPLEFT",self,"TOPLEFT",x-16-self:GetLeft(),y-16-self:GetTop())
+	self.dragFrame.lastPositionX=x
+	self.dragFrame.lastPositionY=y
+end
+
+local function SetDragFrameVisibility(self,value)
+	self.dragFrame:SetVisible(value)
+end
+local function checkDragFramePosition(self)
+	local x=self.dragFrame.lastPositionX
+	local y=self.dragFrame.lastPositionY
+	local left =self:GetLeft()
+	local right =self:GetRight()
+	local top =self:GetTop()
+	local bottom =self:GetBottom()
+	if x<right and x>left then
+		if y<bottom and y>top then
+			return false
+		end
+	end
+	return true
+end
 
 -- Item Frame Events
 
@@ -35,6 +68,41 @@ local function ItemClick(self)
     else
       widget:AddSelectedIndex(self.index)
     end
+  end
+end
+
+local function ItemDown(self)
+  local widget = self:GetParent()
+  if not widget.enabled then return end
+  if not ItemIsSelectable(widget, self.index) then return end
+  widget.enableDrag=true
+  SetDragFrameToMousePosition(widget,0,0)
+  SetDragFrameVisibility(widget,true)
+  
+end
+local function ItemUp(self)
+  local widget = self:GetParent()
+  if not widget.enabled then return end
+  widget.enableDrag=false
+  SetDragFrameVisibility(widget,false)
+  
+end
+
+local function ItemUpoutside(self)
+  local widget = self:GetParent()
+  if not widget.enabled then return end
+  widget.enableDrag=false
+  SetDragFrameVisibility(widget,false)
+  --find out if the item was dragged outside of the frames
+  local isOutside=checkDragFramePosition(widget)
+  print(widget:GetName()..tostring(isOutside))
+end
+local function ItemMouseMove(self,x,y)
+  local widget = self:GetParent()
+  if not widget.enabled then return end
+  if not ItemIsSelectable(widget, self.index) then return end
+  if widget.enableDrag then 
+   	SetDragFrameToMousePosition(widget,x,y)
   end
 end
 
@@ -85,8 +153,12 @@ local function LayoutItems(self)
       bgFrame:SetPoint("LEFT", self, "LEFT")
       bgFrame:SetPoint("RIGHT", self, "RIGHT")
       bgFrame.Event.LeftClick = function() ItemClick(itemFrame) end
+      bgFrame.Event.LeftDown = function() ItemDown(itemFrame) end
+      bgFrame.Event.LeftUpoutside = function() ItemUpoutside(itemFrame) end
+      bgFrame.Event.LeftUp = function() ItemUp(itemFrame) end
       bgFrame.Event.MouseIn = function() ItemMouseIn(itemFrame) end
       bgFrame.Event.MouseOut = function() ItemMouseOut(itemFrame) end
+      bgFrame.Event.MouseMove = function(buttons,x,y) ItemMouseMove(itemFrame,x,y) end
       itemFrame.index = i
       itemFrame.bgFrame = bgFrame
       self.itemFrames[i] = itemFrame
@@ -128,6 +200,7 @@ local function LayoutItems(self)
 	
     height = height + itemFrame:GetHeight()
     prevItemFrame = itemFrame
+  
   end
 
   self:SetHeight(height)
@@ -559,6 +632,7 @@ function Library.LibSimpleWidgets.AbilitiesList(name, parent)
   widget.SetSelectedValues = SetSelectedValues
 
   Library.LibSimpleWidgets.EventProxy(widget, {"ItemSelect", "SelectionChange"})
-
+ 
+  CreateDragFrame(widget,parent)
   return widget
 end
