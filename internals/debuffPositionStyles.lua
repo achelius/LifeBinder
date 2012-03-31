@@ -1,32 +1,23 @@
 --buff positions styles array
 
-lbPredefinedBuffSlotPos={}
+lbPredefinedDebuffSlotPos={}
 
 --old style
-lbPredefinedBuffSlotPos[1]={	
+lbPredefinedDebuffSlotPos[1]={	
 				{
 					"TOPLEFT",--anchor1
 					"TOPLEFT",--anchor2
-					3,--left
-					19,--top
+					93,--left
+					1,--top
 					16,--width
 					16,--height
-					false --allowdebuffs
+					true --allowdebuffs
 				},
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					20,
-					19,
-					16,
-					16,
-					false
-				},
-				{
-					"TOPLEFT",
-					"TOPLEFT",
-					37,
-					19,
+					73,
+					1,
 					16,
 					16,
 					true
@@ -34,11 +25,19 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					93,
+					53,
 					1,
 					16,
 					16,
-					false
+					true
+				},
+				{
+					"TOPLEFT",
+					"TOPLEFT",
+					33,
+					1,
+					16,
+					16,
+					true
 				}
-				
 		}

@@ -3,6 +3,7 @@ local unitdetail = _G.Inspect.Unit.Detail
 local timeFrame=_G.Inspect.Time.Real
 local unitLookup= _G.Inspect.Unit.Lookup
 local updatebuffdurationindex=nil
+local updatedebuffdurationindex=nil
 
 
 lb = {}
@@ -214,8 +215,9 @@ function waitPlayerAvailable()
 		
 		lbUnitUpdate()
 		lb.buffMonitor.updateSpellTextures()
-		updatebuffdurationindex=_G.lb.buffMonitor.updateDurationsOfIndex
 		
+		updatebuffdurationindex=_G.lb.buffMonitor.updateDurationsOfIndex
+		updatedebuffdurationindex=_G.lb.debuffMonitor.updateDurationsOfIndex
 		lb.EnableHandlers()--add event handlers
 	end
 	
@@ -237,6 +239,7 @@ function lb.UpdatePlayerFrame()
 	for i = 1,20 do
 		local ut=lb.UnitsTableStatus[i]
 		if ut[12] then updatebuffdurationindex(i) end
+		if ut[12] then updatedebuffdurationindex(i) end
 		if ut[11] then
 			local queryName="player"
 		    if lastMode~=0 then
@@ -250,6 +253,7 @@ function lb.UpdatePlayerFrame()
 					lb.createNewFrame(i)
 				elseif ut[12] then
 					lb.buffMonitor.resetBuffMonitorTexturesForIndex(i)
+					lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(i)
 					
 				end
 				if detail.calling~=nil or detail.offline~=nil then
@@ -275,6 +279,8 @@ function lb.createNewFrame(index)
 	if lb.UnitsTableStatus[index][12] then return end
 	lb.UnitsTableStatus[index][13]=true --Frame Creating
 	lb.styles[lb.currentStyle].CreateFrame(index)
+	lb.debuffMonitor.initializeDebuffMonitorFrameIndex(index)
+	lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(index)
 	lb.buffMonitor.initializeBuffMonitorFrameIndex(index)
 	lb.buffMonitor.resetBuffMonitorTexturesForIndex(index)
 	lb.mouseBinds.setMouseActionsForIndex(index)
@@ -377,6 +383,7 @@ function lbUnitUpdateIndex(index)
 			if lb.UnitsTableStatus[j][5]~=unitTable.id then
 				  if Event.Unit.Detail.Coord~=nil then lb.posData.resetUnitPositionofIndex(j,unitTable.coordX,unitTable.coordY,unitTable.coordZ) end
 				  lb.buffMonitor.resetBuffMonitorTexturesForIndex(j)
+				  lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(j)
 	              lb.UnitsTableStatus[j][5]=unitTable.id
 	        end
 			

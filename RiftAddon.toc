@@ -30,6 +30,7 @@ RunOnStartup = {
 	"internals/groupManagement.lua",
 	"internals/iconsCache.lua",
 	"internals/buffPositionStyles.lua",
+	"internals/debuffPositionStyles.lua",
 	"internals/slotsEditor.lua",
 	
 	"view.lua",
@@ -37,6 +38,7 @@ RunOnStartup = {
 	
 	"internals/slashCmds.lua",
 	"modules/buffMonitor.lua",
+	"modules/debuffMonitor.lua",
 	"modules/castbars.lua",
 	"modules/manabars.lua",
 	"modules/mouseBinds.lua",
@@ -50,8 +52,9 @@ SavedVariables = {
 	lbMacroText = 'character',
 	lbMacroButton = 'character',
 	lbSelectedBuffsList = 'character',
-	lbDeBuffList = 'character',
-	lbDeBuffListBlackList='character',
+	lbDebuffWhitelist = 'character',
+	lbDebuffWhitelistBlackList='character',
+	lbDebuffSlotOptions='character',
 	lbBuffSlotOptions='character',
 	lbStylesOptions='character',
 	lbDebuffCacheList = 'account'

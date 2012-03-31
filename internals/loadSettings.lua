@@ -87,9 +87,9 @@ function loadVariables(addonidentifier)
         lbSelectedBuffsList[5]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
         lbSelectedBuffsList[6]={{{}},{{}},{{}},{{}},{{}},{{}},{{}},{{}}}
     end
-    if lbDeBuffList == nil then
-        lbDeBuffList ={}
-        lbDeBuffList[1]={
+    if lbDebuffWhitelist == nil then
+        lbDebuffWhitelist ={}
+        lbDebuffWhitelist[1]={
         		{	
         			["debuff1"]={}
         		},
@@ -97,23 +97,23 @@ function loadVariables(addonidentifier)
         			["debuff2"]={}
         		}
         	 }
-        lbDeBuffList[2]={ }
-        lbDeBuffList[3]={ }
-        lbDeBuffList[4]={ 	
+        lbDebuffWhitelist[2]={ }
+        lbDebuffWhitelist[3]={ }
+        lbDebuffWhitelist[4]={ 	
         			["Gathering of the Ancestors"]={},
         			["Crippling Shot"]={}
         		}
-        lbDeBuffList[5]={ }
-        lbDeBuffList[6]={ }
+        lbDebuffWhitelist[5]={ }
+        lbDebuffWhitelist[6]={ }
     end
-    if lbDeBuffListBlackList == nil then
-        lbDeBuffListBlackList ={}
-        lbDeBuffListBlackList[1]={ }
-        lbDeBuffListBlackList[2]={ }
-        lbDeBuffListBlackList[3]={ }
-        lbDeBuffListBlackList[4]={ }
-        lbDeBuffListBlackList[5]={ }
-        lbDeBuffListBlackList[6]={ }
+    if lbDebuffBlackList == nil then
+        lbDebuffBlackList ={}
+        lbDebuffBlackList[1]={ }
+        lbDebuffBlackList[2]={ }
+        lbDebuffBlackList[3]={ }
+        lbDebuffBlackList[4]={ }
+        lbDebuffBlackList[5]={ }
+        lbDebuffBlackList[6]={ }
     end
     --slot position info, separated from the slot options because i only load this once 
     --can be more or less slots, but default will be 8 and the style will be X style
@@ -125,6 +125,20 @@ function loadVariables(addonidentifier)
     			lbBuffSlotOptions[i][g]={}
     			for h=1,#(lbPredefinedBuffSlotPos[1][g]) do 
     				lbBuffSlotOptions[i][g][h]=lbPredefinedBuffSlotPos[1][g][h] --set the slot to the x style definition for that slot
+    			end
+    		end
+    	end
+    	
+    end
+    
+     if lbDebuffSlotOptions==nil then
+    	lbDebuffSlotOptions={}
+    	for i = 1 , 6 do
+    		lbDebuffSlotOptions[i]={}
+    		for g = 1 , #(lbPredefinedDebuffSlotPos[1]) do
+    			lbDebuffSlotOptions[i][g]={}
+    			for h=1,#(lbPredefinedDebuffSlotPos[1][g]) do 
+    				lbDebuffSlotOptions[i][g][h]=lbPredefinedDebuffSlotPos[1][g][h] --set the slot to the x style definition for that slot
     			end
     		end
     	end

@@ -271,7 +271,7 @@ function addDebuffToWatch(debuffName)
     local set= lbValues.set
     if set==nil then return end
     if debuffName==nil then return end
-    local debuffnames=lbDeBuffList[set]
+    local debuffnames=lbDebuffWhitelist[set]
     table.insert(debuffnames,debuffName)
     lb.buffMonitor.updateSpellTextures()
     createTableDebuffs()
@@ -280,7 +280,7 @@ end
 function removeDebuffFromWatch(debuffName)
     local set= lbValues.set
     if set==nil then return end
-    local debuffnames=lbDeBuffList[set]
+    local debuffnames=lbDebuffWhitelist[set]
 
     if selectedIndex==nil then return end
     for index,debname in pairs(debuffnames) do
@@ -299,7 +299,7 @@ end
 function createTableDebuffs()
     local set= lbValues.set
     if set==nil then return end
-    local debuffnames=lbDeBuffList[set]
+    local debuffnames=lbDebuffWhitelist[set]
     lb.DebuffsList:SetItems(debuffnames)
     lb.DebuffsList:GetItems()
     lb.DebuffsCacheList:SetItems(getDebuffCacheNames())
@@ -332,7 +332,7 @@ end
 function removeSelectedDebuffFromWatch()
     local set= lbValues.set
     if set==nil then return end
-    local debuffnames=lbDeBuffList[set]
+    local debuffnames=lbDebuffWhitelist[set]
     local selectedIndex=lb.DebuffsList:GetSelectedIndex()
     if selectedIndex==nil then return end
     table.remove(debuffnames,selectedIndex)
@@ -344,7 +344,7 @@ end
 function lb.DebuffsListMoveUp.Event.LeftClick()
     local set= lbValues.set
     if set==nil then return end
-    local debuffnames=lbDeBuffList[set]
+    local debuffnames=lbDebuffWhitelist[set]
     local selectedIndex=lb.DebuffsList:GetSelectedIndex()
     if selectedIndex~=nil then
         if selectedIndex~=1 then
@@ -361,7 +361,7 @@ end
 function lb.DebuffsListMoveDown.Event.LeftClick()
     local set= lbValues.set
     if set==nil then return end
-    local debuffnames=lbDeBuffList[set]
+    local debuffnames=lbDebuffWhitelist[set]
     local selectedIndex=lb.DebuffsList:GetSelectedIndex()
     if selectedIndex~=nil then
         if selectedIndex~=#debuffnames then

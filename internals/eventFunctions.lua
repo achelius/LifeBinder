@@ -2,6 +2,8 @@ local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
 local timeFrame=_G.Inspect.Time.Real
 local unitLookup= _G.Inspect.Unit.Lookup
+local buffdetail=   _G.Inspect.Buff.Detail
+local bufflist=   _G.Inspect.Buff.List
 
 
 
@@ -236,4 +238,37 @@ function lb.onSecureExit()
     if lb.ReloadWhileInCombat then
     	lbUnitUpdate()
     end
+end
+
+function lb.onBuffAdd(unit,buffs)
+	 local frameindex=GetIndexFromID(unit)
+     if frameindex==nil then return end
+     local updatebuffs=false
+     if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
+ 	 buffs=buffdetail(unit,buffs)
+ 	  for key,buffTable in pairs(buffs) do
+ 	  		local name=buffTable.name
+        	if buffTable.debuff==nil then
+        		lb.buffMonitor.onBuffAddTest(unit,buffTable,frameindex)
+        	else
+        		lb.debuffMonitor.onBuffAdd(unit,buffTable,frameindex)
+        	end
+ 	  end
+end
+
+function lb.onBuffRemove(unit,buffs)
+	 local frameindex=GetIndexFromID(unit)
+	 
+     if frameindex==nil then return end
+     local updatebuffs=false
+     if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
+ 	  for buffID,ph in pairs(buffs) do
+ 	  		
+        		
+        	local isbuff=lb.buffMonitor.onBuffRemoveTest(unit,buffID,frameindex)
+        	
+        		
+        		if not isbuff then lb.debuffMonitor.onDebuffRemove(unit,buffID,frameindex) end
+        	
+ 	  end
 end

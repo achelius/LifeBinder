@@ -481,26 +481,16 @@ function lb.buffMonitor.updateSpellTextures()
 	        end
         end
     end
-    lb.buffMonitor.createDebuffFullList()
+
 end
 
-function lb.buffMonitor.createDebuffFullList()
-    lb.FullDeBuffsList={}
-    for slotindex,c in pairs(lbDeBuffList[lbValues.set]) do
-        --c="Soothing Stream" ....
-            lb.FullDeBuffsList[c]=true
-    end
-end
 
-function lb.buffMonitor.onBuffAdd(unit, buffs)
-     buffs=buffdetail(unit,buffs)
-     local frameindex=GetIndexFromID(unit)
-     if frameindex==nil then return end
-     local updatebuffs=false
-     if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
 
-     for key,buffTable in pairs(buffs) do
-        name=buffTable.name
+
+function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
+     
+        
+        local name=buffTable.name
         if buffTable.debuff==nil then
             if lb.FullBuffsList[name]~=nil then
                 
@@ -567,123 +557,19 @@ function lb.buffMonitor.onBuffAdd(unit, buffs)
                 --lb.buffMonitor.updateBuffMonitorTextures()
             end
         else
-        	--adding debuff to the cache (if enabled)
-        	if lbValues.CacheDebuffs then
-                addDebuffToCache(buffTable)
-            end
-			--is a debuff so now we check if it's in a whitelist
-			local debWCount = #(lbDeBuffList[lbValues.set])
-			local debBCount = #(lbDeBuffListBlackList[lbValues.set])
-			--print (name)
-			--dump(lbDeBuffList[lbValues.set])
-            if lbDeBuffList[lbValues.set][name]~=nil then
-				-- it's into the whitelist
-                    local texture=nil
-                    if lb.iconsCache.hasTextureInCache(name) then
-                        texture= lb.iconsCache.getTextureFromCache(name)
-                        --print("cache"..lb.iconsCache.getTextureFromCache(name)[2])
-                    else
-                        lb.iconsCache.addTextureToCache(name,"Rift",buffTable.icon)
-                        texture={"Rift", buffTable.icon}
-                        --print("added"..lb.iconsCache.getTextureFromCache(name)[2])
-                    end
-					local frame =lb.frames[frameindex]
-					--now i search from the first debuff enable slot without a whitelisted debuff
-					--used values
---			        lb.frames[var].buffs.groupSpotsIcons[g][6]=false    --is debuff    true if the debuff applied is a debuff
---			        lb.frames[var].buffs.groupSpotsIcons[g][7]=false    --is from whitelist
---			        lb.frames[var].buffs.groupSpotsIcons[g][8]=false    --accepts Debuffs (true is this slot accepts debuffs
-					--print (#(frame.buffs.groupSpotsIcons))
-					local slotscount=#(frame.buffs.groupSpotsIcons)
-					for i = 1 , slotscount do
-						--searching into the slots
-						--print (frame.buffs.groupSpotsIcons[i][8])
-						if frame.buffs.groupSpotsIcons[i][8] then
-							--this slot accepts debuffs so i search if there is something
-							if not frame.buffs.groupSpotsIcons[i][0] then
-								--slot is empty so i add here my debuff
-								--print(i)
-								--print ("free")
-								lb.frames[frameindex].buffs.groupSpotsIcons[i][0]=true
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][1]=texture[1]
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][2]=texture[2]
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][3]=buffTable.stack
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][4]=true
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][5]=buffTable.id
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][6]=true
-	                            lb.frames[frameindex].buffs.groupSpotsIcons[i][7]=true
-	                            if buffTable.duration~=nil then
-	                            	lb.frames[frameindex].buffs.groupSpotsIcons[i][9]=true
-	                                lb.frames[frameindex].buffs.groupSpotsIcons[i][10]=round(buffTable.duration)
-	                                lb.frames[frameindex].buffs.groupSpotsIcons[i][11]=timeFrame()
-	                            else
-	                            	lb.frames[frameindex].buffs.groupSpotsIcons[i][9]=false
-	                                lb.frames[frameindex].buffs.groupSpotsIcons[i][10]=1
-	                                lb.frames[frameindex].buffs.groupSpotsIcons[i][11]=0
-	                            end
-	                            --print (lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
-	                            lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,i)
-	                            updatebuffs=true
-	                            break
-							else
-								--print ("nonfree")
-								-- the slot is full but now i check if is a low priority debuff
-								if not frame.buffs.groupSpotsIcons[i][7] then
-									lb.frames[frameindex].buffs.groupSpotsIcons[i][0]=true
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][1]=texture[1]
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][2]=texture[2]
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][3]=buffTable.stack
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][4]=true
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][5]=buffTable.id
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][6]=true
-		                            lb.frames[frameindex].buffs.groupSpotsIcons[i][7]=true
-		                            if buffTable.duration~=nil then
-		                            	lb.frames[frameindex].buffs.groupSpotsIcons[i][9]=true
-		                                lb.frames[frameindex].buffs.groupSpotsIcons[i][10]=round(buffTable.duration)
-		                                lb.frames[frameindex].buffs.groupSpotsIcons[i][11]=timeFrame()
-		                            else
-		                            	lb.frames[frameindex].buffs.groupSpotsIcons[i][9]=false
-		                                lb.frames[frameindex].buffs.groupSpotsIcons[i][10]=1
-		                                lb.frames[frameindex].buffs.groupSpotsIcons[i][11]=0
-		                            end
-		                            --print (lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
-		                            lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,i)
-		                            updatebuffs=true
-		                            break
-								end
-							end
-							
-						end
-					end
-                  
-			else
-				--it's not in the whitelist so i check if it's on the blacklist
-				if lbDeBuffListBlackList[name]~=nil then
-					--I don't do anything because it's on the blacklist
-				else
-					--It's not on the blacklist so is a low priority debuff, it will be shown if an allowing-debuff slot is empty
-					
-				end
-				
-            end
-            if updatebuffs then
-                --print(true)
-                --lb.buffMonitor.updateBuffMonitorTextures()
-            end
+        	
         end
-    end
+    
 
 end
-function lb.buffMonitor.onBuffRemove(unit, buffs)
+
+
+function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
     --buffs=buffdetail(unit,buffs)
     --print ("remove")
-    local frameindex=GetIndexFromID(unit)
-    local buffcount=lb.buffMonitor.slotscount
-    if frameindex==nil then return end
     local updatebuffs=false
-    for buffID,placeholder in pairs(buffs) do
        -- for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
-       
+	local buffcount=lb.buffMonitor.slotscount
 	        for slotindex= 1, buffcount do
 	           
 	            if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][5]== buffID then
@@ -704,7 +590,7 @@ function lb.buffMonitor.onBuffRemove(unit, buffs)
 	                    for idb,BuffDet in pairs(newbuffsdetails) do
 	                        if BuffDet.debuff~=nil then
 	                            local lastdebuffID
-	                            for i,debuffname in pairs(lbDeBuffList[lbValues.set]) do
+	                            for i,debuffname in pairs(lbDebuffWhitelist[lbValues.set]) do
 	                                if debuffname==BuffDet.name then
 	                                    lastdebuffID=BuffDet.id
 	                                    break
@@ -752,31 +638,31 @@ function lb.buffMonitor.onBuffRemove(unit, buffs)
 		
        -- end
        
-        for i,debuffname in pairs(lbDeBuffList[lbValues.set]) do
-            --c={"Soothing Stream", "Healing Current","Healing Flood" }
-            --print (tostring(slotindex)..tostring(buffID))
-            if lb.frames[frameindex].buffs.groupSpotsIcons[5][5]== buffID then
-                --print (frameindex)
-                lb.frames[frameindex].buffs.groupSpotsIcons[5][0]=false
-                lb.frames[frameindex].buffs.groupSpotsIcons[5][3]=nil
-                lb.frames[frameindex].buffs.groupSpotsIcons[5][4]=true
-                lb.frames[frameindex].buffs.groupSpotsIcons[5][5]=nil
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][9]=false
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][10]=1
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][11]=0
-                --print ("rem"..lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
-                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,5)
+--        for i,debuffname in pairs(lbDebuffWhitelist[lbValues.set]) do
+--            --c={"Soothing Stream", "Healing Current","Healing Flood" }
+--            --print (tostring(slotindex)..tostring(buffID))
+--            if lb.frames[frameindex].buffs.groupSpotsIcons[5][5]== buffID then
+--                --print (frameindex)
+--                lb.frames[frameindex].buffs.groupSpotsIcons[5][0]=false
+--                lb.frames[frameindex].buffs.groupSpotsIcons[5][3]=nil
+--                lb.frames[frameindex].buffs.groupSpotsIcons[5][4]=true
+--                lb.frames[frameindex].buffs.groupSpotsIcons[5][5]=nil
+----                lb.frames[frameindex].buffs.groupSpotsIcons[5][9]=false
+----                lb.frames[frameindex].buffs.groupSpotsIcons[5][10]=1
+----                lb.frames[frameindex].buffs.groupSpotsIcons[5][11]=0
+--                --print ("rem"..lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
+--                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,5)
+--
+--                updatebuffs=true
+--            end
+--
+--        end
+--        if updatebuffs then
+--            --print(true)
+--            --lb.buffMonitor.updateBuffMonitorTextures()
+--        end
+	return updatebuffs
 
-                updatebuffs=true
-            end
-
-        end
-        if updatebuffs then
-            --print(true)
-            --lb.buffMonitor.updateBuffMonitorTextures()
-        end
-
-    end
 end
 
 
