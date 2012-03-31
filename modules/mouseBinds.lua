@@ -6,7 +6,7 @@ function lb.mouseBinds.setMouseActions()
     for i = 1,20 do
         local fname=""
         --print (lastMode)
-        if lb.UnitsTableStatus[i][12] then
+        
 	        if lastMode == 0 then
 	            if i==1 then
 	                fname="self"
@@ -41,7 +41,7 @@ function lb.mouseBinds.setMouseActions()
 	            end
 	
 	        end
-        end
+        
     end
 
 end
