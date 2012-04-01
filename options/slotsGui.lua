@@ -35,8 +35,7 @@ function lb.slotsGui.initialize()
 	 lb.slotsGui.Tabs[2]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 --lb.slotsGui.Tabs[2]=lb.slotsGui.slotsEditor.createTable(lb.slotsGui.TabControl)
 	 lb.slotsGui.TabControl:AddTab("Slots Editor",lb.slotsGui.Tabs[2])
-	 lb.buffMonitor.showDummyBuffMonitorSlots()
-	 lb.debuffMonitor.showDummyDebuffMonitorSlots() 
+	 
 	
 -------------------------------------------------------------------------initializing table 3
 	 lb.slotsGui.Tabs[3]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
@@ -61,6 +60,8 @@ function lb.slotsGui.OnTabChanged(tab,index)
 		if lb.slotsGui.Tabs[2]:GetName()=="placeholder" then
 			lb.slotsGui.Tabs[2]=lb.slotsGui.slotsEditor.createTable(lb.slotsGui.TabControl)
 			lb.slotsGui.TabControl:SetTabContent(2,lb.slotsGui.Tabs[2])
+			lb.buffMonitor.showDummyBuffMonitorSlots()
+	 		lb.debuffMonitor.showDummyDebuffMonitorSlots() 
 		end
 	elseif index==3 then
 		if lb.slotsGui.Tabs[3]:GetName()=="placeholder" then
@@ -75,6 +76,8 @@ function lb.slotsGui.OnTabChanged(tab,index)
 			lb.slotsGui.TabControl:SetTabContent(4,lb.slotsGui.Tabs[4])
 		end
 	end
+	lb.buffMonitor.hideDummyBuffMonitorSlots()
+    lb.debuffMonitor.hideDummyDebuffMonitorSlots()
 end
 
 
@@ -115,13 +118,6 @@ function lb.slotsGui.updateOptions()
 	if lb.slotsGui.Tabs[4]:GetName()~="placeholder" then lb.slotsGui.debuffManager.updateData() end	
 	if lb.slotsGui.Tabs[3]:GetName()~="placeholder" then lb.slotsGui.buffAssociations.updateData() end	
 end
-
-
-
-
-
-
-
 
 
 

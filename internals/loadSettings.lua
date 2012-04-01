@@ -40,7 +40,9 @@ function loadVariables(addonidentifier)
     if lbValues.MaxRange==nil then
         lbValues.MaxRange=35*35
     end
-
+	if lbDebuffCacheList==nil then
+		lbDebuffCacheList={}
+	end
 
     if lbMacroText == nil then
         lbMacroText = {}

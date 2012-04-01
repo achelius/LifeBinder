@@ -141,6 +141,7 @@ function lb.slotsGui.buffAssociations.ReadSlotData(slotindex)
 	table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
 	frame.SlotDetailsList:SetItems(list)
 	frame.SlotDetailsListView:SetVisible(true)
+	frame.SlotDetailsOptions:SetVisible(false)
 end
 
 function lb.slotsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
