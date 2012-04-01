@@ -559,34 +559,34 @@ function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
 	
 	                local newbuffsdetails=buffdetail(unit,buffs)
 	
-	                if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][6] then
-	                else
-	                    --was a buff
-	                    for idb,BuffDet in pairs(newbuffsdetails) do
-	                        if BuffDet.debuff==nil then
-	                            local slotbuffs=  lbSelectedBuffsList[lbValues.set][slotindex]
-	
-	                            if slotbuffs~=nil then
-	                                local lastdebuffID
-	
-	                                for buffname,buffopt in pairs(slotbuffs) do
-	
-	                                    if buffname==BuffDet.name then
-	
-	                                        lastdebuffID=BuffDet.id
-	                                        break
-	                                    end
-	                                end
-	                                if lastdebuffID~=nil then
-	
-	                                    lb.buffMonitor.onBuffAdd(unit,{lastdebuffID})
-	                                end
-	
-	                            end
-	
-	                        end
-	                    end
-	                end
+	                
+                    --was a buff
+                    for idb,BuffDet in pairs(newbuffsdetails) do
+                        if BuffDet.debuff==nil then
+                            local slotbuffs=  lbSelectedBuffsList[lbValues.set][slotindex][1]
+
+                            if slotbuffs~=nil then
+                                local nextBuff=nil
+
+                                for buffname,buffopt in pairs(slotbuffs) do
+									
+                                    if buffname==BuffDet.name then
+                                    	
+						
+                                        nextBuff=BuffDet
+                                        
+                                    end
+                                end
+                                if nextBuff~=nil then
+
+                                    lb.buffMonitor.onBuffAddTest(unit,nextBuff,frameindex)
+                                end
+
+                            end
+
+                        end
+                    end
+                
 	
 	                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 	                --print ("rem"..lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])

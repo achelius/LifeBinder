@@ -31,7 +31,13 @@ RunOnStartup = {
 	"internals/iconsCache.lua",
 	"internals/buffPositionStyles.lua",
 	"internals/debuffPositionStyles.lua",
-	"internals/slotsEditor.lua",
+	
+	"options/slotsGui.lua",
+	"options/tabs/addonInfo.lua",
+	"options/tabs/bossDebuffs.lua",
+	"options/tabs/buffAssociations.lua",
+	"options/tabs/debuffManager.lua",
+	"options/tabs/slotsEditor.lua",
 	
 	"view.lua",
 	"internals/debuffCache.lua",
