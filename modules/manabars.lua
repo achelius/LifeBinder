@@ -9,12 +9,12 @@ lb.manaBars={}
 --update mana bars throttled every .5 seconds (trying throttling options if it's necessary)
 function lb.manaBars.updateResourceBar(units)
 	--now is set by the updateplayerframe cycle
---	local elapsed = now - lastUnitUpdate
---    if (elapsed < (.5)) then --half a second
---        return 
---    else
---    	lastUnitUpdate = now
---    end
+	local elapsed = now - lastUnitUpdate
+    if (elapsed < (.05)) then --half a second
+        return 
+    else
+    	lastUnitUpdate = now
+    end
 	local details = unitdetail(units)
 	for unitident, unitTable in pairs(details) do
 		local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier

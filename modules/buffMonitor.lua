@@ -237,36 +237,8 @@ function lb.buffMonitor.updateBuffMonitorTextures()
     for var=1,20 do
     	if lb.UnitsTableStatus[var][12]then
 	        for g= 1,  lb.buffMonitor.slotscount do
-	
-	            if lb.frames[var].buffs.groupSpotsIcons[g][4] then
-	                --just updated
-	                --print (lb.frames[var].buffs.groupSpotsIcons[g][3])
-	                lb.frames[var].buffs.groupSpotsIcons[g][4]=false
-	                lb.frames[var].buffs.groupSpots[g][1]:SetTexture(lb.frames[var].buffs.groupSpotsIcons[g][1],lb.frames[var].buffs.groupSpotsIcons[g][2] )
-	                lb.frames[var].buffs.groupSpots[g][1]:SetVisible(lb.frames[var].buffs.groupSpotsIcons[g][0])
-	                --print (lb.frames[var].buffs.groupSpots[g][1]:GetVisible())
-	
-	                lb.frames[var].buffs.groupSpots[g][2]:SetText(tostring(lb.frames[var].buffs.groupSpotsIcons[g][3]))
-	                if (lb.frames[var].buffs.groupSpotsIcons[g][3]==0 or lb.frames[var].buffs.groupSpotsIcons[g][3]==nil) and {lb.frames[var].buffs.groupSpotsIcons[g][0]} then
-	                    --print("nostack")
-	                    lb.frames[var].buffs.groupSpots[g][2]:SetVisible(false)
-	                else
-	                    -- print("stack")
-	                    lb.frames[var].buffs.groupSpots[g][2]:SetVisible(true)
-	                end
-	
-	                lb.frames[var].buffs.groupSpots[g][3]:SetFontColor(0,0,0,1)
-	                lb.frames[var].buffs.groupSpots[g][3]:SetText(tostring(lb.frames[var].buffs.groupSpotsIcons[g][3]))
-	                
-	                if (lb.frames[var].buffs.groupSpotsIcons[g][3]==0 or lb.frames[var].buffs.groupSpotsIcons[g][3]==nil) and {lb.frames[var].buffs.groupSpotsIcons[g][0]} then
-	                    lb.frames[var].buffs.groupSpots[g][3]:SetVisible(false)
-	                else
-	                    lb.frames[var].buffs.groupSpots[g][3]:SetVisible(true)
-	                end
-	                
-	                lb.frames[var].buffs.groupSpots[g][4]:SetVisible(lb.frames[var].buffs.groupSpotsIcons[g][9])
-	                lb.frames[var].buffs.groupSpots[g][5]:SetVisible(lb.frames[var].buffs.groupSpotsIcons[g][9])
-	            end
+				lb.buffMonitor.updateBuffMonitorTexturesIndex(var,g)
+	            
 	        end
 	    end
     end
@@ -300,6 +272,8 @@ function lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
                     lb.frames[frameindex].buffs.groupSpots[slotindex][3]:SetVisible(true)
                 end
                 --print()
+                lb.frames[frameindex].buffs.groupSpots[slotindex][4]:SetText("")
+                lb.frames[frameindex].buffs.groupSpots[slotindex][5]:SetText("")
                 lb.frames[frameindex].buffs.groupSpots[slotindex][4]:SetVisible(lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][9])
                 lb.frames[frameindex].buffs.groupSpots[slotindex][5]:SetVisible(lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][9])
             end
@@ -586,22 +560,6 @@ function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
 	                local newbuffsdetails=buffdetail(unit,buffs)
 	
 	                if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][6] then
-	                    --was a debuff
-	                    for idb,BuffDet in pairs(newbuffsdetails) do
-	                        if BuffDet.debuff~=nil then
-	                            local lastdebuffID
-	                            for i,debuffname in pairs(lbDebuffWhitelist[lbValues.set]) do
-	                                if debuffname==BuffDet.name then
-	                                    lastdebuffID=BuffDet.id
-	                                    break
-	                                end
-	                            end
-	                            if lastdebuffID~=nil then
-	                                lb.buffMonitor.onBuffAdd(unit,{lastdebuffID})
-	                            end
-	                        end
-	                    end
-	
 	                else
 	                    --was a buff
 	                    for idb,BuffDet in pairs(newbuffsdetails) do
@@ -611,7 +569,7 @@ function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
 	                            if slotbuffs~=nil then
 	                                local lastdebuffID
 	
-	                                for i,buffname in pairs(slotbuffs) do
+	                                for buffname,buffopt in pairs(slotbuffs) do
 	
 	                                    if buffname==BuffDet.name then
 	

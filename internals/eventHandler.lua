@@ -49,8 +49,8 @@ function lb.EnableHandlers()
 			table.insert(Event.SafesRaidManager.Group.Join, {lb.onGroupJoin , "LifeBinder", "GroupJoin"})
 			table.insert(Event.SafesRaidManager.Group.Leave, {lb.onGroupLeave , "LifeBinder", "GroupLeave"})
 			table.insert(Event.SafesRaidManager.Group.Change, {lb.onGroupChange , "LifeBinder", "GroupLeave"})
-			table.insert(Event.SafesRaidManager.Player.Join, {lbUnitUpdate , "LifeBinder", "PlayerJoin"})
-			table.insert(Event.SafesRaidManager.Player.Leave,{lbUnitUpdate , "LifeBinder", "PlayerLeave"})
+			table.insert(Event.SafesRaidManager.Player.Join, {lb.onPlayerJoin , "LifeBinder", "PlayerJoin"})
+			table.insert(Event.SafesRaidManager.Player.Leave,{lb.onPlayerLeave, "LifeBinder", "PlayerLeave"})
 			
 	end
 end

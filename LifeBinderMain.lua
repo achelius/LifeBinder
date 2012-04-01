@@ -499,10 +499,6 @@ function lbUnitUpdateIndex(index)
 end
 function lbUnitUpdate()
 
-
-	--waitPlayerAvailable()
---   local timer = getThrottle()--throttle to limit cpu usage (period set to 0.25 sec)
---    if not timer then return end
 	if not lb.playerFound then return end
 --	
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
@@ -512,148 +508,6 @@ function lbUnitUpdate()
     	lbUnitUpdateIndex(i)
     end
     
---    if lbValues.isincombat then  
---    	lb.ReloadWhileInCombat=true 
---    else
---    	lb.ReloadWhileInCombat=false 
---    end
-----    if (lb.MouseOverUnitLastCast~=nil) then
-----        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
-----        if unitIndex~=nil then lb.frames[unitIndex].groupAggro:SetVisible(false) end
-----  end
---	
---    local details = unitdetail(lb.QueryTable)--lb.QueryTable)
---  	
---    local targetunit=unitdetail("player.target")
-----    for key,val in pairs(lb.UnitsTableStatus) do
-----        if key~= "player" then
-----        	lb.UnitsTableStatus[key][8]=false
-----        end
-----    end
---  
---    for unitident, unitTable in pairs(details) do
---       local j=1
---       if lastMode==0 then unitident="player"end
---       if unitident~=1 then 
---       		j= stripnum(unitident)   --calculate key from unit identifier
---       else
---     
---       end
---       local name = unitTable.name
---
---        if string.len(name) > 5 then name = string.sub(name, 1, 5).."" end --restrict names to 8 letters
---        lb.frames[j].groupName:SetText(name)
---
---        if unitTable == nil  then
---
---        else
---
---            lb.UnitsTableStatus[j][8]=true
---            if lb.UnitsTableStatus[j][5]~=unitTable.id then
---				  if Event.Unit.Detail.Coord~=nil then lb.posData.resetUnitPositionofIndex(j,unitTable.coordX,unitTable.coordY,unitTable.coordZ) end
---				  lb.buffMonitor.resetBuffMonitorTexturesForIndex(j)
---				  
---                  lb.UnitsTableStatus[j][5]=unitTable.id
---            end
---            if not lbValues.isincombat then
---                lb.frames[j].groupMask:SetMouseoverUnit(unitTable.id)
---            else
---            	--reorganizeMasks()
---            end
---            if unitTable.calling==nil then
---           		 lb.UnitsTableStatus[j][11]=true
---            else
---            	--print (tostring(j).."calling")
---            end
---			if lb.UnitsTableStatus[j][9] ~=  unitTable.calling or viewModeChanged then
---                lb.UnitsTableStatus[j][9] =  unitTable.calling
---                lb.styles[lb.currentStyle].setManaBar(j,unitTable)
---            end
---            
---           -- if lb.UnitsTableStatus[j][4] ~=  unitTable.role or viewModeChanged then
---                lb.UnitsTableStatus[j][4] =  unitTable.role
---                if unitTable.role then
---                    lb.frames[j].groupRole:SetTexture("LifeBinder",  "Textures/icons/"..tostring(unitTable.calling).."-"..tostring(unitTable.role)..".png")--"Textures/"..unitTable.role..".png")
---                else
---                    lb.frames[j].groupRole:SetTexture("LifeBinder", "Textures/".."blank.png")
---                end
---            --end
---			lb.UnitsTableStatus[j][3] =  unitTable.blocked
---            lb.styles[lb.currentStyle].setBlockedValue(j,lb.UnitsTableStatus[j][3],lb.UnitsTableStatus[j][10])
---            if lb.UnitsTableStatus[j][2] ~=  unitTable.offline or viewModeChanged then
---                lb.UnitsTableStatus[j][2] =  unitTable.offline
---               	lb.UnitsTableStatus[j][11]=true 
---                    if unitTable.offline then
---                        lb.frames[j].groupStatus:SetText("(D/C)")
---                        lb.frames[j].groupHF:SetWidth(1)
---						lb.frames[j].groupRF:SetWidth(1)
---                    end
---            end
---            
---			  
---            if targetunit~=nil then
---                if unitident == targetunit.id  or viewModeChanged then
---                    lb.UnitsTableStatus[j][6] =  true
---                    if lb.UnitsTableStatus[j][6] then
---                        lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
---                    else
---                        lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
---                    end
---                else
---                    lb.UnitsTableStatus[j][6] =  false
---                end
---            end
---
---           -- if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
---                lb.UnitsTableStatus[j][1] =  unitTable.aggro
---                if unitTable.aggro then
---                    lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
---                else
---                    lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
---                end
---            --end
---           -- if lb.UnitsTableStatus[j][3] ~=  unitTable.blocked or viewModeChanged then
---             
---            --end
---            if viewModeChanged then
---              local  healthtick = unitTable.health
---              local  healthmax = unitTable.healthMax
---                if healthtick~=nil and healthmax ~= nil then
---                	lb.styles[lb.currentStyle].setHealthBarValue(j,healthtick,healthmax)
---                    lb.styles[lb.currentStyle].setHealthBarText(j,healthtick,healthmax)
---                end
---            end
---
---        end
---
---    end
---
---   for key,val in pairs(lb.UnitsTableStatus) do
---		
---       if not lb.UnitsTableStatus[key][8] then
---           lb.UnitsTableStatus[key][5]=0
---
---           if lastMode==0 and key=="group01" then
---           else
---               local needreset=false
---
---               for i = 1,5 do
---                   if lb.frames[0].buffs.groupSpotsIcons[key][i] then
---                       needreset=true
---                   end
---               end
---               if needreset then
---                   lb.buffMonitor.resetBuffMonitorTexturesForIndex(key)
---               end
---               if lb.styles[lb.currentStyle].isCastbarIndexVisible(key) then
---                   resetCastbarIndex(key)
---               end
---
---           end
---       end
---   end
---
---    viewModeChanged=false
 end
 
 --cleansing abilities array
@@ -667,6 +521,7 @@ lb.CleansingAbilitiesList=
 		{name="Empowering Light",poison=true,curse=true,disease=true}
 		
 	}
+	
 --must be called when abilities can be retrieved
 function lb.autosetDebuffOptions(role)
 	dump (lbDebuffOptions)

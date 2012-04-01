@@ -53,10 +53,11 @@ SavedVariables = {
 	lbMacroButton = 'character',
 	lbSelectedBuffsList = 'character',
 	lbDebuffWhitelist = 'character',
-	lbDebuffWhitelistBlackList='character',
+	lbDebuffBlackList='character',
 	lbDebuffSlotOptions='character',
 	lbDebuffOptions='character',
 	lbBuffSlotOptions='character',
 	lbStylesOptions='character',
-	lbDebuffCacheList = 'account'
+	lbDebuffCacheList = 'account',
+	lbCustomNamesList='account'
 }

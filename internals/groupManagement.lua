@@ -20,3 +20,18 @@ function lb.onGroupChange(unitID, oldspecifier,newspecifier)
 	--dump(Inspect.Unit.Detail(oldspecifier))
 	--dump(Inspect.Unit.Detail(newspecifier))
 end
+
+function lb.onPlayerJoin(units)
+--	print ("pj")
+--	print (units)
+--    dump(units)
+--    print("pj-")
+    lb.UnitsTableStatus[1][11]=true
+	lbUnitUpdate()
+end
+
+function lb.onPlayerLeave()
+	--print ("pl")
+	  lb.UnitsTableStatus[1][11]=true
+	  lbUnitUpdate()
+end

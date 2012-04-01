@@ -8,8 +8,9 @@ function addDebuffToCache(debuff)
 
     end
     DebuffCaching=true
+    
     if lbValues.CacheDebuffs then
-
+	  
        if debuff==nil then return end
        if lbDebuffCacheList==nil then lbDebuffCacheList={} end
        local name = debuff.name

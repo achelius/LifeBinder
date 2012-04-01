@@ -237,36 +237,8 @@ function lb.debuffMonitor.updatedebuffMonitorTextures()
     for var=1,20 do
     	if lb.UnitsTableStatus[var][12]then
 	        for g= 1,  lb.debuffMonitor.slotscount do
-	
-	            if lb.frames[var].Debuffs.groupSpotsIcons[g][4] then
-	                --just updated
-	                --print (lb.frames[var].Debuffs.groupSpotsIcons[g][3])
-	                lb.frames[var].Debuffs.groupSpotsIcons[g][4]=false
-	                lb.frames[var].Debuffs.groupSpots[g][1]:SetTexture(lb.frames[var].Debuffs.groupSpotsIcons[g][1],lb.frames[var].Debuffs.groupSpotsIcons[g][2] )
-	                lb.frames[var].Debuffs.groupSpots[g][1]:SetVisible(lb.frames[var].Debuffs.groupSpotsIcons[g][0])
-	                --print (lb.frames[var].Debuffs.groupSpots[g][1]:GetVisible())
-	
-	                lb.frames[var].Debuffs.groupSpots[g][2]:SetText(tostring(lb.frames[var].Debuffs.groupSpotsIcons[g][3]))
-	                if (lb.frames[var].Debuffs.groupSpotsIcons[g][3]==0 or lb.frames[var].Debuffs.groupSpotsIcons[g][3]==nil) and {lb.frames[var].Debuffs.groupSpotsIcons[g][0]} then
-	                    --print("nostack")
-	                    lb.frames[var].Debuffs.groupSpots[g][2]:SetVisible(false)
-	                else
-	                    -- print("stack")
-	                    lb.frames[var].Debuffs.groupSpots[g][2]:SetVisible(true)
-	                end
-	
-	                lb.frames[var].Debuffs.groupSpots[g][3]:SetFontColor(0,0,0,1)
-	                lb.frames[var].Debuffs.groupSpots[g][3]:SetText(tostring(lb.frames[var].Debuffs.groupSpotsIcons[g][3]))
-	                
-	                if (lb.frames[var].Debuffs.groupSpotsIcons[g][3]==0 or lb.frames[var].Debuffs.groupSpotsIcons[g][3]==nil) and {lb.frames[var].Debuffs.groupSpotsIcons[g][0]} then
-	                    lb.frames[var].Debuffs.groupSpots[g][3]:SetVisible(false)
-	                else
-	                    lb.frames[var].Debuffs.groupSpots[g][3]:SetVisible(true)
-	                end
-	                
-	                lb.frames[var].Debuffs.groupSpots[g][4]:SetVisible(lb.frames[var].Debuffs.groupSpotsIcons[g][9])
-	                lb.frames[var].Debuffs.groupSpots[g][5]:SetVisible(lb.frames[var].Debuffs.groupSpotsIcons[g][9])
-	            end
+				lb.debuffMonitor.updatedebuffMonitorTexturesIndex(var,g)
+	            
 	        end
 	    end
     end
@@ -299,7 +271,10 @@ function lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
                 else
                     lb.frames[frameindex].Debuffs.groupSpots[slotindex][3]:SetVisible(true)
                 end
+                
                 --print()
+                lb.frames[frameindex].Debuffs.groupSpots[slotindex][4]:SetText("")
+                lb.frames[frameindex].Debuffs.groupSpots[slotindex][5]:SetText("")
                 lb.frames[frameindex].Debuffs.groupSpots[slotindex][4]:SetVisible(lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][9])
                 lb.frames[frameindex].Debuffs.groupSpots[slotindex][5]:SetVisible(lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][9])
             end
@@ -452,8 +427,8 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
             
         else
         	--adding deDebuff to the cache (if enabled)
-        	if lbValues.CacheDeDebuffs then
-                addDeDebuffToCache(DebuffTable)
+        	if lbValues.CacheDebuffs then
+                addDebuffToCache(DebuffTable)
             end
 			--is a deDebuff so now we check if it's in a whitelist
 			local debWCount = #(lbDebuffWhitelist[lbValues.set])
@@ -542,7 +517,7 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
                   
 			else
 				--it's not in the whitelist so i check if it's on the blacklist
-				if lbDebuffBlackList[name]~=nil then
+				if lbDebuffBlackList[lbValues.set][name]~=nil then
 					--I don't do anything because it's on the blacklist
 				else
 					local enable=false
