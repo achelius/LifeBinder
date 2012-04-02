@@ -37,6 +37,7 @@ RunOnStartup = {
 	"options/tabs/bossDebuffs.lua",
 	"options/tabs/buffAssociations.lua",
 	"options/tabs/debuffManager.lua",
+	"options/tabs/mouseBinds.lua",
 	"options/tabs/slotsEditor.lua",
 	
 	"view.lua",
@@ -55,8 +56,7 @@ RunOnStartup = {
 SavedVariables = {
 	lbValues = 'character',
 	lbCallingColors = 'character',
-	lbMacroText = 'character',
-	lbMacroButton = 'character',
+	lbMouseBinds = 'character',
 	lbSelectedBuffsList = 'character',
 	lbDebuffWhitelist = 'character',
 	lbDebuffBlackList='character',

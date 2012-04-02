@@ -44,7 +44,10 @@ function lb.slotsGui.initialize()
 -------------------------------------------------------------------------initializing table 4
 	 lb.slotsGui.Tabs[4]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Debuff management",lb.slotsGui.Tabs[4])
-
+-------------------------------------------------------------------------initializing table 5
+	 lb.slotsGui.Tabs[5]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.TabControl:AddTab("Mouse binds",lb.slotsGui.Tabs[5])
+	 
 	 lb.slotsGui.initialized=true
 end
 
@@ -53,13 +56,14 @@ function lb.slotsGui.OnTabChanged(tab,index)
 	if index==1 then
 		if lb.slotsGui.Tabs[1]:GetName()=="placeholder" then
 			lb.slotsGui.Tabs[1]=lb.slotsGui.addonInfo.createTable( lb.slotsGui.TabControl)
-			lb.slotsGui.TabControl:SetTabContent(2,lb.slotsGui.Tabs[1])
+			lb.slotsGui.TabControl:SetTabContent(1,lb.slotsGui.Tabs[1])
 		end
 	elseif index==2 then
 		if lb.slotsGui.Tabs[2]:GetName()=="placeholder" then
 			lb.slotsGui.Tabs[2]=lb.slotsGui.slotsEditor.createTable(lb.slotsGui.TabControl)
 			lb.slotsGui.TabControl:SetTabContent(2,lb.slotsGui.Tabs[2])
-			
+		else
+			lb.slotsGui.slotsEditor.updateData()
 		end
 		showdummies=true
 	elseif index==3 then
@@ -73,6 +77,15 @@ function lb.slotsGui.OnTabChanged(tab,index)
 		if lb.slotsGui.Tabs[4]:GetName()=="placeholder" then
 			lb.slotsGui.Tabs[4]=lb.slotsGui.debuffManager.createTable(lb.slotsGui.TabControl)
 			lb.slotsGui.TabControl:SetTabContent(4,lb.slotsGui.Tabs[4])
+		else
+			lb.slotsGui.debuffManager.updateData()
+		end
+	elseif index==5 then
+		if lb.slotsGui.Tabs[5]:GetName()=="placeholder" then
+			lb.slotsGui.Tabs[5]=lb.slotsGui.mouseBinds.createTable(lb.slotsGui.TabControl)
+			lb.slotsGui.TabControl:SetTabContent(5,lb.slotsGui.Tabs[5])
+		else
+			 lb.slotsGui.mouseBinds.updateData()
 		end
 	end
 	if showdummies then
@@ -102,8 +115,8 @@ function lb.slotsGui.isPointInFrame(frame,x,y)
 end
 function lb.slotsGui.show()
 	if lb.slotsGui.initialized then
+		lb.slotsGui.updateOptions()
 		lb.slotsGui.Window:SetVisible(true)
-		if lb.slotsGui.Tabs[4]:GetName()~="placeholder" then lb.slotsGui.debuffManager.updateData() end
 	else
 		lb.slotsGui.initialize()
 	end
@@ -113,13 +126,15 @@ function lb.slotsGui.hide()
 		lb.slotsGui.Window:SetVisible(false)
 		lb.buffMonitor.hideDummyBuffMonitorSlots()
 		lb.debuffMonitor.hideDummyDebuffMonitorSlots()
+		 
 	end
 end
 
 function lb.slotsGui.updateOptions()
 	if lb.slotsGui.Tabs[2]:GetName()~="placeholder" then lb.slotsGui.slotsEditor.updateData() end
 	if lb.slotsGui.Tabs[4]:GetName()~="placeholder" then lb.slotsGui.debuffManager.updateData() end	
-	if lb.slotsGui.Tabs[3]:GetName()~="placeholder" then lb.slotsGui.buffAssociations.updateData() end	
+	if lb.slotsGui.Tabs[3]:GetName()~="placeholder" then lb.slotsGui.buffAssociations.updateData() end
+	if lb.slotsGui.Tabs[5]:GetName()~="placeholder" then lb.slotsGui.mouseBinds.updateData() end	
 end
 
 
@@ -130,4 +145,10 @@ focushack:SetVisible(false)
 function ClearKeyFocus()
     focushack:SetKeyFocus(true)
     focushack:SetKeyFocus(false)
+end
+
+function writeText(text,name,parent,left,top)
+    local tp=UI.CreateFrame("Text", name, parent)
+    tp:SetPoint("TOPLEFT", parent, "TOPLEFT", left, top)
+    tp:SetText(text)
 end

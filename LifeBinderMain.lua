@@ -203,7 +203,7 @@ function waitPlayerAvailable()
 		lb.playerFound=true
 		lbValues.set=Inspect.TEMPORARY.Role();
 		lb.remWaitPlayerHook()
-		print ("preinit"..tostring(timeFrame()))
+		--print ("preinit"..tostring(timeFrame()))
 		lb.initialize() --autostart initialization
 		
     	lb.createWindow() --into the file lifebinderMain.lua
@@ -223,7 +223,7 @@ function waitPlayerAvailable()
 		
          
 		lb.EnableHandlers()--add event handlers
-		print ("afterinit"..tostring(timeFrame()))
+		--print ("afterinit"..tostring(timeFrame()))
 	end
 	
 end
@@ -524,8 +524,8 @@ lb.CleansingAbilitiesList=
 	
 --must be called when abilities can be retrieved
 function lb.autosetDebuffOptions(role)
-	dump (lbDebuffOptions)
-	dump( role)
+	--dump (lbDebuffOptions)
+	--dump( role)
 	if lbDebuffOptions[role]==nil then
 		print ("AutoSetting cleansing parameters")
 		local abilitiesList =Inspect.Ability.List()

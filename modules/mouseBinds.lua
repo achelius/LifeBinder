@@ -2,7 +2,7 @@ lb.mouseBinds={}
 function lb.mouseBinds.setMouseActions()
     if lbValues.set==nil then return end
     if lbValues.isincombat then return end
-    local associations =lbMacroButton[lbValues.set]
+    local associations =lbMouseBinds[lbValues.set]
     for i = 1,20 do
         local fname=""
         --print (lastMode)
@@ -50,7 +50,7 @@ function lb.mouseBinds.setMouseActionsForIndex(index)
     if lbValues.set==nil then return end
     if lbValues.isincombat then return end
     local i=index
-    local associations =lbMacroButton[lbValues.set]
+    local associations =lbMouseBinds[lbValues.set]
     
         local fname=""
         --print (lastMode)
@@ -93,38 +93,117 @@ function lb.mouseBinds.setMouseActionsForIndex(index)
 end
 
 function lb.mouseBinds.generateMacro(associations,name)
+	
     local none=associations[1]
     local alt=associations[2]
     local ctrl=associations[3]
     local shift=associations[4]
-
+    local altctrl=associations[5]
+    local shiftalt=associations[6]
+    local shiftctrl=associations[7]
     local macro=""
-
+-- {"ability name","Rift",ab.icon,"type","command","mousebutton","modifier"}
     local modifier=""
-    --print ("none->"..none)
-    if alt~=nil and alt ~="" then
+    if altctrl~=nil then
+        modifier="[alt] [ctrl]"
+        local temp=""
+        for k,val in pairs(altctrl) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+        macro= macro..temp
+    end
+    
+    if shiftalt~=nil then
+        modifier="[alt] [shift]"
+        local temp=""
+        for k,val in pairs(shiftalt) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+        macro= macro..temp
+    end
+    
+    if shiftctrl~=nil then
+        modifier="[ctrl] [shift]"
+        local temp=""
+        for k,val in pairs(shiftctrl) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+        macro= macro..temp
+    end
+    
+    if alt~=nil then
         modifier="[alt]"
-        alt=string.gsub(alt,"##"," "..tostring(modifier).." ##")
-        macro= macro..alt.."\13"
-
+        local temp=""
+        for k,val in pairs(alt) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+        macro= macro..temp
     end
-    if ctrl~=nil and ctrl ~="" then
+    if ctrl~=nil then
         modifier="[ctrl]"
-        ctrl=string.gsub(ctrl,"##"," "..tostring(modifier).." ##")
-        macro=macro..ctrl.."\13"
-
+       local temp=""
+        for k,val in pairs(ctrl) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+		macro= macro..temp
     end
-    if shift~=nil and shift ~="" then
+    if shift~=nil then
         modifier="[shift]"
-        shift=string.gsub(shift,"##"," "..tostring(modifier).." ##")
-        macro=macro..shift.."\13"
-
+        local temp=""
+        for k,val in pairs(shift) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+        macro= macro..temp
     end
-    if none~=nil and none ~="" then
-        macro=macro..none.."\13"
+    if none~=nil then
+    	modifier=""
+        local temp=""
+        for k,val in pairs(none) do
+        	if val[4]=="cast" then
+        		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
+        	elseif val[4]=="target" then
+        		temp=temp.."/target "..modifier.." @mouseover\13"
+        	end
+        	
+        end
+        macro= macro..temp
     end
-    macro=string.gsub(string.gsub(macro,"##","@"..tostring(name)),"\13","\n")
-    --print(macro)
+    macro=string.gsub(macro,"\13","\n")
+--    print("-----------------")
+--    dump (associations)
+--    print("-----------------")
+--    print (macro)
+--    print("-----------------")
     return macro
 end
 

@@ -28,17 +28,18 @@ local function CreateDragFrame(self,parent,mainframe)
 	self.dragFrame:SetLayer(60)
 	self.dragEnabled=true
 end
+local function SetDragFrameTexture(self,text1,text2)
+   if self.dragFrame==nil then return end
+   if not self.dragEnabled then return end
+	self.dragFrame:SetTexture(text1,text2)
+end
+
 local function SetDragFrameToMousePosition(self,x,y)
    if self.dragFrame==nil then return end
    if not self.dragEnabled then return end
 	self.dragFrame:SetPoint("TOPLEFT",self,"TOPLEFT",x-16-self:GetLeft(),y-16-self:GetTop())
 	self.dragFrame.lastPositionX=x
 	self.dragFrame.lastPositionY=y
-end
-local function SetDragFrameTexture(self,text1,text2)
-   if self.dragFrame==nil then return end
-   if not self.dragEnabled then return end
-	self.dragFrame:SetTexture(text1,text2)
 end
 
 local function SetDragFrameVisibility(self,value)
@@ -47,6 +48,7 @@ local function SetDragFrameVisibility(self,value)
 	self.dragFrame:SetVisible(value)
 	self.dragFrame:SetLayer(60)
 end
+
 local function checkDragFramePosition(self)
 	if self.dragFrame==nil then return false end
 	if not self.dragEnabled then return end
@@ -154,7 +156,7 @@ end
 
 
 local function LayoutItems(self)
-  local height = 0
+  local width = 0
   local prevItemFrame
   for i, item in ipairs(self.items) do
     local itemFrame = self.itemFrames[i]
@@ -164,17 +166,24 @@ local function LayoutItems(self)
       itemFrame = UI.CreateFrame("Text", self:GetName().."Item"..i, self)
       itemFrame:SetBackgroundColor(0, 0, 0, 0)
       if prevItemFrame then
-        itemFrame:SetPoint("TOP", prevItemFrame, "BOTTOM")
+      	itemFrame:SetPoint("TOPLEFT", prevItemFrame, "TOPRIGHT")
+        --itemFrame:SetPoint("RIGHT", prevItemFrame, "RIGHT")
+        itemFrame:SetWidth(40)
       else
-        itemFrame:SetPoint("TOP", self, "TOP")
+        itemFrame:SetPoint("TOPLEFT", self, "TOPLEFT")
+        --itemFrame:SetPoint("RIGHT", self, "RIGHT")
+        itemFrame:SetWidth(40)
       end
-      itemFrame:SetPoint("RIGHT", self, "RIGHT")
+      --itemFrame:SetPoint("RIGHT", self, "RIGHT")
+      
       bgFrame = UI.CreateFrame("Frame", self:GetName().."ItemBG"..i, self)
       bgFrame:SetLayer(itemFrame:GetLayer()-1)
       bgFrame:SetPoint("TOP", itemFrame, "TOP")
       bgFrame:SetPoint("BOTTOM", itemFrame, "BOTTOM")
-      bgFrame:SetPoint("LEFT", self, "LEFT")
-      bgFrame:SetPoint("RIGHT", self, "RIGHT")
+      bgFrame:SetPoint("LEFT", itemFrame, "LEFT")
+      bgFrame:SetPoint("RIGHT", itemFrame, "RIGHT")
+	  bgFrame:SetWidth(40)
+	  bgFrame:SetHeight(40)
       bgFrame.Event.LeftClick = function() ItemClick(itemFrame) end
       bgFrame.Event.LeftDown = function() ItemDown(itemFrame,i) end
       bgFrame.Event.LeftUpoutside = function() ItemUpoutside(itemFrame,i) end
@@ -205,30 +214,33 @@ local function LayoutItems(self)
       backgroundColor = self.levelBackgroundColors[level] or backgroundColor
     end
 	local iconFrame = self.iconsFrames[i]
-    itemFrame:SetPoint("LEFT", self, "LEFT", 35, nil)
+    --itemFrame:SetPoint("LEFT", self, "LEFT", 35, nil)
     itemFrame:SetFontSize(fontSize)
     itemFrame:SetFontColor(unpack(fontColor))
-    itemFrame:SetText(item[1])
+    --itemFrame:SetText(item[1])
     itemFrame:SetVisible(true)
     itemFrame:SetHeight(40)
+    itemFrame:SetWidth(40)
     itemFrame.bgFrame:SetBackgroundColor(unpack(backgroundColor))
     itemFrame.bgFrame:SetVisible(true)
 	if not iconFrame then
 	    self.iconsFrames[i]=UI.CreateFrame("Texture", self:GetName().."Itemt"..i, bgFrame)
 	end
 	self.iconsFrames[i]:SetTexture(item[2],item[3])
-	self.iconsFrames[i]:SetPoint("TOPLEFT", bgFrame, "TOPLEFT", 0, 0)
+	self.iconsFrames[i]:SetPoint("TOPLEFT", bgFrame, "TOPLEFT", 4, 4)
 	self.iconsFrames[i]:SetWidth(32)
 	self.iconsFrames[i]:SetHeight(32)
 	self.iconsFrames[i]:SetVisible(true)
 	
 	
-    height = height + itemFrame:GetHeight()
+    width = width + itemFrame:GetWidth()
     prevItemFrame = itemFrame
   
   end
 
-  self:SetHeight(height)
+  --self:SetHeight(height)
+  --print (width)
+  --self:SetWidth(width)
 end
 
 -- Public Functions
@@ -603,8 +615,8 @@ end
 
 -- Constructor Function
 
-function Library.LibSimpleWidgets.AbilitiesList(name, parent)
-	--dump(mainframe)
+function Library.LibSimpleWidgets.HorizontalIconsList(name, parent)
+
   local widget = UI.CreateFrame("Frame", name, parent)
   widget:SetBackgroundColor(0, 0, 0, 1)
 

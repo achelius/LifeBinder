@@ -114,7 +114,7 @@ function lb.slotsGui.buffAssociations.populateList()
 end
 
 function lb.slotsGui.buffAssociations.onSlotLeftUp(slotindex)
-print("leftup")
+--print("leftup")
 	if lastIndex~=-1 then
 		frame.buffSlots[lastIndex].Frame:SetBackgroundColor(0,1,0.2,1)
 	end
@@ -147,7 +147,7 @@ end
 function lb.slotsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
 	for i = 1 , #(lbBuffSlotOptions[lbValues.set]) do
 		if lb.slotsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
-			print ("into slot" ..tostring(i))
+			--print ("into slot" ..tostring(i))
 			local slotindex=i
 			local buffs =lbSelectedBuffsList[lbValues.set][slotindex][1]
 			if buffs[item[1]]==nil then
@@ -173,7 +173,7 @@ function lb.slotsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
 end
 
 function lb.slotsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
-	print("leftout")
+	--print("leftout")
 	if lastIndex==-1 then return end
 	for i = 1 , #(lbBuffSlotOptions[lbValues.set]) do
 		if lb.slotsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then

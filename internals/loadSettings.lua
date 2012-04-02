@@ -44,23 +44,17 @@ function loadVariables(addonidentifier)
 		lbDebuffCacheList={}
 	end
 
-    if lbMacroText == nil then
-        lbMacroText = {}
-        lbMacroText[1]={{"target ##", "", "", "", ""} }
-        lbMacroText[2]={{"target ##", "", "", "", ""} }
-        lbMacroText[3]={{"target ##", "", "", "", ""} }
-        lbMacroText[4]={{"target ##", "", "", "", ""} }
-        lbMacroText[5]={{"target ##", "", "", "", ""} }
-        lbMacroText[6]={{"target ##", "", "", "", ""} }
-    end
-    if lbMacroButton == nil then
-        lbMacroButton ={}
-        lbMacroButton[1]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
-        lbMacroButton[2]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
-        lbMacroButton[3]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
-        lbMacroButton[4]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
-        lbMacroButton[5]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
-        lbMacroButton[6]={{"target ##", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", ""}, {"", "", "", "" } }
+    if lbMouseBinds == nil then
+        lbMouseBinds ={}
+        for i = 1,6 do
+        	lbMouseBinds[i]={}
+        	for g= 1,5 do
+        		lbMouseBinds[i][g]={}
+        		for h= 1,7 do
+        			lbMouseBinds[i][g][h]={}	
+        		end
+        	end
+        end
     end
    
    if lbSelectedBuffsList == nil then
@@ -70,8 +64,7 @@ function loadVariables(addonidentifier)
         	{
         		--it's a subtable, because, who knows how i will change in the future, it can be The one table that controls them all, the one ring table
         		{ --buff names set for that slot
-        			["buff1"]={castByMeOnly=true,showCount=true,showDuration=true},
-        			["buff2"]={castByMeOnly=true,showCount=true,showDuration=true}
+
         		}
         	},
         	{{}},
@@ -91,20 +84,10 @@ function loadVariables(addonidentifier)
     end
     if lbDebuffWhitelist == nil then
         lbDebuffWhitelist ={}
-        lbDebuffWhitelist[1]={
-        		{	
-        			["debuff1"]={}
-        		},
-        		{	
-        			["debuff2"]={}
-        		}
-        	 }
+        lbDebuffWhitelist[1]={ }
         lbDebuffWhitelist[2]={ }
         lbDebuffWhitelist[3]={ }
-        lbDebuffWhitelist[4]={ 	
-        			["Gathering of the Ancestors"]={castByMe=true},
-        			["Crippling Shot"]={castByMe=false}
-        		}
+        lbDebuffWhitelist[4]={ }
         lbDebuffWhitelist[5]={ }
         lbDebuffWhitelist[6]={ }
     end
