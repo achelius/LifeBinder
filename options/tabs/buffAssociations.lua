@@ -93,7 +93,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetText("Add")
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetWidth(100)
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.slotsGui.buffAssociations.addCustomName
-	    --initialize add Button
+	    --initialize remove Button
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",10,320)
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetText("Remove")
@@ -125,7 +125,6 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SlotDetailsOptions.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKCastByMeChanged
 	 lb.slotsGui.buffAssociations.populateList()
 	 
-	 frame=optionsFrame
 	 return optionsFrame
 end
 
@@ -320,7 +319,7 @@ function lb.slotsGui.buffAssociations.addCustomName()
 		 lb.customNames.addCustomName(text)
 		 ClearKeyFocus()
 		 
-		 lb.slotsGui.debuffManager.populateList() -- populate lists
+		 lb.slotsGui.buffAssociations.populateList() -- populate lists
 	end
 end
 
@@ -329,6 +328,6 @@ function lb.slotsGui.buffAssociations.removeCustomName()
 	if item~=nil then
 		 lb.customNames.removeCustomName(item[1])
 		
-		 lb.slotsGui.debuffManager.populateList() -- populate lists
+		 lb.slotsGui.buffAssociations.populateList() -- populate lists
 	end
 end

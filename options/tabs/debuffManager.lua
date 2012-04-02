@@ -85,6 +85,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
      optionsFrame.BlackListView:SetBorder(1, 1, 1, 1, 1)
      optionsFrame.BlackListView:SetContent( optionsFrame.BlackList)
      lb.slotsGui.debuffManager.populateList()
+     
 	 return optionsFrame
 end
 
@@ -111,7 +112,7 @@ function lb.slotsGui.debuffManager.populateList()
 		if texture[1]=="LifeBinder" then
 			local dbval= getDebuffFromCache(name)
 			if dbval ~=nil then
-				texture[1]=dbval[2]
+				texture[1]="Rift"
 				texture[2]=dbval[3]
 			end
 		end
@@ -130,7 +131,7 @@ function lb.slotsGui.debuffManager.populateList()
 		if texture[1]=="LifeBinder" then
 			local dbval= getDebuffFromCache(name)
 			if dbval ~=nil then
-				texture[1]=dbval[2]
+				texture[1]="Rift"
 				texture[2]=dbval[3]
 			end
 		end
@@ -150,7 +151,7 @@ function lb.slotsGui.debuffManager.populateList()
 		if texture[1]=="LifeBinder" then
 			local dbval= getDebuffFromCache(name)
 			if dbval ~=nil then
-				texture[1]=dbval[2]
+				texture[1]=dbval[3]
 				texture[2]=dbval[3]
 			end
 		end
@@ -217,6 +218,7 @@ end
 function lb.slotsGui.debuffManager.removeCustomName()
 	local item= frame.CustomNamesList:GetSelectedItem()
 	if item~=nil then
+	print(item[1])
 		 lb.customNames.removeCustomName(item[1])
 		
 		 lb.slotsGui.debuffManager.populateList() -- populate lists

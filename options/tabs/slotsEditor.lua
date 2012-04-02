@@ -248,7 +248,8 @@ end
 
 --called when changing spec
 function lb.slotsGui.slotsEditor.updateData()
-	
+  lb.slotsGui.selectedIndex=-1
+ lb.slotsGui.selectedType=-1
 	
 	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
@@ -263,11 +264,11 @@ function lb.slotsGui.slotsEditor.updateData()
 	 	frame.buffSlots[i].Frame:SetHeight(iconl*lb.slotsGui.PreviewScale[2])
 	 	frame.buffSlots[i].Frame:SetBackgroundColor(0,1,0.1,1)
 	 	frame.buffSlots[i].Frame:SetLayer(3)
-	 	frame.buffSlots[i].Frame.Event.LeftDown=function () lb.slotsGui.onSlotLeftDown(0,i) end --0 means that's a buff
-	 	frame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.onSlotLeftUp(0,i) end
-	 	frame.buffSlots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.onSlotUpoutside(0,i) end
+	 	frame.buffSlots[i].Frame.Event.LeftDown=function () lb.slotsGui.slotsEditor.onSlotLeftDown(0,i) end --0 means that's a buff
+	 	frame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.slotsEditor.onSlotLeftUp(0,i) end
+	 	frame.buffSlots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.slotsEditor.onSlotUpoutside(0,i) end
 	 	frame.buffSlots[i].Frame.Event.MouseMove=function (n,x,y) lb.slotsGui.OnSlotMouseMove(0,i,x,y) end
-	 	frame.buffSlots[i].Text= UI.CreateFrame("Text", "UnitFrame", frame.buffSlots[i].Frame )
+	 	
 	 	frame.buffSlots[i].Text:SetPoint("CENTER", frame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	frame.buffSlots[i].Text:SetText(tostring(i))
 	 	
@@ -290,11 +291,11 @@ function lb.slotsGui.slotsEditor.updateData()
 	 	frame.debuffSlots[i].Frame:SetHeight(iconl*lb.slotsGui.PreviewScale[2])
 	 	frame.debuffSlots[i].Frame:SetBackgroundColor(1,0,0,1)
 	 	frame.buffSlots[i].Frame:SetLayer(2)
-	 	frame.debuffSlots[i].Frame.Event.LeftDown=function () lb.slotsGui.onSlotLeftDown(1,i) end
-	 	frame.debuffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.onSlotLeftUp(1,i) end
-	 	frame.debuffSlots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.onSlotUpoutside(1,i) end
+	 	frame.debuffSlots[i].Frame.Event.LeftDown=function () lb.slotsGui.slotsEditor.onSlotLeftDown(1,i) end
+	 	frame.debuffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.slotsEditor.onSlotLeftUp(1,i) end
+	 	frame.debuffSlots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.slotsEditor.onSlotUpoutside(1,i) end
 	 	frame.debuffSlots[i].Frame.Event.MouseMove=function (n,x,y) lb.slotsGui.OnSlotMouseMove(1,i,x,y) end
-	 	frame.debuffSlots[i].Text= UI.CreateFrame("Text", "UnitFrame", frame.debuffSlots[i].Frame )
+	 	
 	 	frame.debuffSlots[i].Text:SetPoint("CENTER", frame.debuffSlots[i].Frame ,"CENTER",0,0)
 	 	frame.debuffSlots[i].Text:SetText(tostring(i))
 	 	frame.debuffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]
