@@ -59,8 +59,9 @@ function lb.slotsGui.OnTabChanged(tab,index)
 		if lb.slotsGui.Tabs[2]:GetName()=="placeholder" then
 			lb.slotsGui.Tabs[2]=lb.slotsGui.slotsEditor.createTable(lb.slotsGui.TabControl)
 			lb.slotsGui.TabControl:SetTabContent(2,lb.slotsGui.Tabs[2])
-			showdummies=true
+			
 		end
+		showdummies=true
 	elseif index==3 then
 		if lb.slotsGui.Tabs[3]:GetName()=="placeholder" then
 			lb.slotsGui.Tabs[3]=lb.slotsGui.buffAssociations.createTable(lb.slotsGui.TabControl)
