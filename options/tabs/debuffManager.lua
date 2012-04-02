@@ -205,7 +205,7 @@ function lb.slotsGui.debuffManager.updateData()
 end
 
 function lb.slotsGui.debuffManager.addCustomName()
-	local text= optionsFrame.DebuffsTable.Tabs[2].txtNewCustomName:GetText()
+	local text= frame.DebuffsTable.Tabs[2].txtNewCustomName:GetText()
 	if text~=nil and text~="" then
 		 lb.customNames.addCustomName(text)
 		 ClearKeyFocus()

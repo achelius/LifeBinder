@@ -125,6 +125,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SlotDetailsOptions.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKCastByMeChanged
 	 lb.slotsGui.buffAssociations.populateList()
 	 
+	 frame=optionsFrame
 	 return optionsFrame
 end
 
@@ -309,5 +310,25 @@ function lb.slotsGui.buffAssociations.onCHKCastByMeChanged()
 		if key==buffname then
 			buffTable.castByMeOnly=frame.SlotDetailsOptions:GetChecked()
 		end
+	end
+end
+
+
+function lb.slotsGui.buffAssociations.addCustomName()
+	local text= frame.SideTable.Tabs[2].txtNewCustomName:GetText()
+	if text~=nil and text~="" then
+		 lb.customNames.addCustomName(text)
+		 ClearKeyFocus()
+		 
+		 lb.slotsGui.debuffManager.populateList() -- populate lists
+	end
+end
+
+function lb.slotsGui.buffAssociations.removeCustomName()
+	local item= frame.CustomNamesList:GetSelectedItem()
+	if item~=nil then
+		 lb.customNames.removeCustomName(item[1])
+		
+		 lb.slotsGui.debuffManager.populateList() -- populate lists
 	end
 end
