@@ -139,8 +139,8 @@ function lb.buffMonitor.relocateBuffMonitorSlots()
 		       local Point2=lbBuffSlotOptions[lbValues.set][g][2]
 		       
 		        
-		        local iconwidth=16*scalex
-		        local iconheight=16*scaley
+		        local iconwidth=lbBuffSlotOptions[lbValues.set][g][5]*scalex
+	            local iconheight=lbBuffSlotOptions[lbValues.set][g][6]*scaley
 		        local iconl=iconwidth
 		        if iconheight<iconwidth then
 		        	iconl=iconheight
@@ -169,8 +169,8 @@ function lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
 	       local Point2=lbBuffSlotOptions[lbValues.set][index][2]
 	       
 	        
-	        local iconwidth=16*scalex
-	        local iconheight=16*scaley
+	        local iconwidth=lbBuffSlotOptions[lbValues.set][index][5]*scalex
+	        local iconheight=lbBuffSlotOptions[lbValues.set][index][6]*scaley
 	        local iconl=iconwidth
 	        if iconheight<iconwidth then
 	        	iconl=iconheight

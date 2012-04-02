@@ -44,6 +44,8 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 	
 	 	optionsFrame.buffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]
 	 	optionsFrame.buffSlots[i].Y=slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2]
+	 	optionsFrame.buffSlots[i].sWidth=slotinfo[5]*scalex*lb.slotsGui.PreviewScale[1]
+	 	optionsFrame.buffSlots[i].sHeight=slotinfo[6]*scaley*lb.slotsGui.PreviewScale[2]
 	 end
 	 
 	  optionsFrame.debuffSlots={}
@@ -72,17 +74,103 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 	optionsFrame.debuffSlots[i].Text:SetText(tostring(i))
 	 	optionsFrame.debuffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]
 	 	optionsFrame.debuffSlots[i].Y=slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2]
+	 	optionsFrame.debuffSlots[i].sWidth=slotinfo[5]*scalex*lb.slotsGui.PreviewScale[1]
+	 	optionsFrame.debuffSlots[i].sHeight=slotinfo[6]*scaley*lb.slotsGui.PreviewScale[2]
 	 end
 	 --initialize Apply Button
-	 optionsFrame.ApplyButton=UI.CreateFrame("RiftButton", "UnitFrame", optionsFrame )
+	 optionsFrame.ApplyButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame )
 	 optionsFrame.ApplyButton:SetPoint("BOTTOMRIGHT", optionsFrame,"BOTTOMRIGHT",-5,-5)
 	 optionsFrame.ApplyButton:SetText("Apply")
 	 optionsFrame.ApplyButton.Event.LeftClick=function() lb.buffMonitor.relocateBuffMonitorSlots() lb.debuffMonitor.relocateDebuffMonitorSlots() end
+	 
+	 --initialize movement buttons
+	 --up
+	 optionsFrame.MoveUp=UI.CreateFrame("RiftButton", "SlotMoveUp", optionsFrame )
+	 optionsFrame.MoveUp:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",50,-100)
+	 optionsFrame.MoveUp:SetWidth(30)
+	 optionsFrame.MoveUp:SetHeight(40)
+	 optionsFrame.MoveUp:SetText("^\r\n |")
+	 optionsFrame.MoveUp.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(0,-1) end
+	 --down
+	 optionsFrame.MoveDown=UI.CreateFrame("RiftButton", "SlotMoveUp", optionsFrame )
+	 optionsFrame.MoveDown:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",50,-50)
+	 optionsFrame.MoveDown:SetWidth(30)
+	 optionsFrame.MoveDown:SetHeight(40)
+	 optionsFrame.MoveDown:SetText("^\r\n |")
+	 optionsFrame.MoveDown.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(0,1) end
+	 
+	 --left
+	 optionsFrame.MoveLeft=UI.CreateFrame("RiftButton", "SlotMoveLeft", optionsFrame )
+	 optionsFrame.MoveLeft:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",20,-80)
+	 optionsFrame.MoveLeft:SetWidth(40)
+	 optionsFrame.MoveLeft:SetHeight(30)
+	 optionsFrame.MoveLeft:SetText("<--")
+	 optionsFrame.MoveLeft.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(-1,0) end
+	 --right
+	 optionsFrame.MoveRight=UI.CreateFrame("RiftButton", "SlotMoveLeft", optionsFrame )
+	 optionsFrame.MoveRight:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",80,-80)
+	 optionsFrame.MoveRight:SetWidth(40)
+	 optionsFrame.MoveRight:SetHeight(30)
+	 optionsFrame.MoveRight:SetText("-->")
+	 optionsFrame.MoveRight.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(1,0) end
+	 
+	 --initialize size buttons
+	 --size up
+	 optionsFrame.SizeUp=UI.CreateFrame("RiftButton", "SlotSizeUp", optionsFrame )
+	 optionsFrame.SizeUp:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",150,-80)
+	 optionsFrame.SizeUp:SetWidth(80)
+	 optionsFrame.SizeUp:SetHeight(40)
+	 optionsFrame.SizeUp:SetText("Larger")
+	 optionsFrame.SizeUp.Event.LeftClick=function() lb.slotsGui.slotsEditor.ChangeSlotSize(1,1) end
+	 --size down
+	 optionsFrame.SizeDown=UI.CreateFrame("RiftButton", "SlotMoveLeft", optionsFrame )
+	 optionsFrame.SizeDown:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",240,-80)
+	 optionsFrame.SizeDown:SetWidth(80)
+	 optionsFrame.SizeDown:SetHeight(40)
+	 optionsFrame.SizeDown:SetText("Smaller")
+	 optionsFrame.SizeDown.Event.LeftClick=function() lb.slotsGui.slotsEditor.ChangeSlotSize(-1,-1) end
+	 
 	 frame=optionsFrame
 	 return optionsFrame
+	 
+	 
 end
-
-
+function lb.slotsGui.slotsEditor.ChangeSlotSize(dsx,dsy)
+	if  lb.slotsGui.selectedIndex==nil then return end
+	if  lb.slotsGui.selectedType==nil then return end
+    local slots=nil
+    local options=nil 
+    if lb.slotsGui.selectedType==0 then slots=lb.slotsGui.Tabs[2].buffSlots options=lbBuffSlotOptions end
+    if lb.slotsGui.selectedType==1 then slots=lb.slotsGui.Tabs[2].debuffSlots options=lbDebuffSlotOptions end 
+    slots[lb.slotsGui.selectedIndex].sWidth=slots[lb.slotsGui.selectedIndex].sWidth+ dsx
+    slots[lb.slotsGui.selectedIndex].sHeight=slots[lb.slotsGui.selectedIndex].sHeight+ dsy
+    ---Experimental
+ 	options[lbValues.set][lb.slotsGui.selectedIndex][5]=slots[lb.slotsGui.selectedIndex].sWidth/scalex/lb.slotsGui.PreviewScale[1]
+ 	options[lbValues.set][lb.slotsGui.selectedIndex][6]=slots[lb.slotsGui.selectedIndex].sHeight/scaley/lb.slotsGui.PreviewScale[2]
+ 	
+ 	slots[lb.slotsGui.selectedIndex].Frame:SetWidth(slots[lb.slotsGui.selectedIndex].sWidth)
+ 	slots[lb.slotsGui.selectedIndex].Frame:SetHeight(slots[lb.slotsGui.selectedIndex].sHeight)
+ 	if lb.slotsGui.selectedType==0 then lb.buffMonitor.relocateSingleBuffMonitorSlot(lb.slotsGui.selectedIndex) end
+	if lb.slotsGui.selectedType==1 then lb.debuffMonitor.relocateSingleDebuffMonitorSlot(lb.slotsGui.selectedIndex) end
+	
+end
+function lb.slotsGui.slotsEditor.MoveSlot(dx,dy)
+	if  lb.slotsGui.selectedIndex==nil then return end
+	if  lb.slotsGui.selectedType==nil then return end
+    local slots=nil
+    local options=nil 
+    if lb.slotsGui.selectedType==0 then slots=lb.slotsGui.Tabs[2].buffSlots options=lbBuffSlotOptions end
+    if lb.slotsGui.selectedType==1 then slots=lb.slotsGui.Tabs[2].debuffSlots options=lbDebuffSlotOptions end 
+    slots[lb.slotsGui.selectedIndex].X=slots[lb.slotsGui.selectedIndex].X+ dx
+    slots[lb.slotsGui.selectedIndex].Y=slots[lb.slotsGui.selectedIndex].Y+ dy
+    ---Experimental
+ 	options[lbValues.set][lb.slotsGui.selectedIndex][3]=slots[lb.slotsGui.selectedIndex].X/scalex/lb.slotsGui.PreviewScale[1]
+ 	options[lbValues.set][lb.slotsGui.selectedIndex][4]=slots[lb.slotsGui.selectedIndex].Y/scaley/lb.slotsGui.PreviewScale[2]
+ 	
+ 	slots[lb.slotsGui.selectedIndex].Frame:SetPoint("TOPLEFT", lb.slotsGui.Tabs[2].UnitFrame, "TOPLEFT", slots[lb.slotsGui.selectedIndex].X,  slots[lb.slotsGui.selectedIndex].Y)
+ 	if lb.slotsGui.selectedType==0 then lb.buffMonitor.relocateSingleBuffMonitorSlot(lb.slotsGui.selectedIndex) end
+	if lb.slotsGui.selectedType==1 then lb.debuffMonitor.relocateSingleDebuffMonitorSlot(lb.slotsGui.selectedIndex) end
+end
 
 
 function lb.slotsGui.slotsEditor.onSlotLeftDown(type,index)
@@ -164,8 +252,6 @@ function lb.slotsGui.slotsEditor.updateData()
 	
 	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
-	 	--frame.buffSlots[i]={}
-	 	--frame.buffSlots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  frame.UnitFrame )
 	 	frame.buffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -193,8 +279,6 @@ function lb.slotsGui.slotsEditor.updateData()
 	 
 	 for i =1 ,#(lbDebuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbDebuffSlotOptions[lbValues.set][i]
-	 	--frame.debuffSlots[i]={}
-	 	--frame.debuffSlots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  frame.UnitFrame )
 	 	frame.debuffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
