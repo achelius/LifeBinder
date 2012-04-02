@@ -56,7 +56,9 @@ function loadVariables(addonidentifier)
         	end
         end
     end
-   
+   if lbCustomNamesList==nil then
+       lbCustomNamesList={}
+   end
    if lbSelectedBuffsList == nil then
         lbSelectedBuffsList ={}
         lbSelectedBuffsList[1]=

@@ -72,7 +72,37 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 -- custom names
 	 optionsFrame.SideTable.Tabs[2] = UI.CreateFrame("Frame", "CustomNamesTab", optionsFrame.SideTable)
 	 optionsFrame.SideTable:AddTab("Custom Names",optionsFrame.SideTable.Tabs[2])
-	 
+	 	 optionsFrame.CustomNamesList=UI.CreateFrame("AbilitiesList", "CustomNamesList",optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.CustomNamesList:CreateDragFrame(optionsFrame.CustomNamesList,optionsFrame.SideTable.Tabs[2],parentFrame)
+	 optionsFrame.CustomNamesList.Event.DraggedOutItem=lb.slotsGui.buffAssociations.onAbilitiesItemDrag
+	 optionsFrame.CustomNamesListView=UI.CreateFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.CustomNamesListView:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2], "TOPLEFT",10, 20)
+     optionsFrame.CustomNamesListView:SetWidth(200)
+     optionsFrame.CustomNamesListView:SetHeight(300)
+     optionsFrame.CustomNamesListView:SetLayer(1)
+     optionsFrame.CustomNamesListView:SetBorder(1, 1, 1, 1, 1)
+     optionsFrame.CustomNamesListView:SetContent( optionsFrame.CustomNamesList)
+     optionsFrame.SideTable.Tabs[2].txtNewCustomName=UI.CreateFrame("RiftTextfield", "txtNewCustomName", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2], "TOPLEFT",10, 360)
+	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetWidth(100)
+	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetHeight(30)
+	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetBackgroundColor(0,0,0,1)
+	   --initialize add Button
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",120,360)
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetText("Add")
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetWidth(100)
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.slotsGui.buffAssociations.addCustomName
+	    --initialize add Button
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",10,320)
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetText("Remove")
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetWidth(200)
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton.Event.LeftClick=lb.slotsGui.buffAssociations.removeCustomName
+     
+     
+     
+     
 	 
 	 ----initializing slot details list
 	 optionsFrame.SlotDetailsList=UI.CreateFrame("AbilitiesList", "BuffsList", optionsFrame)
@@ -111,6 +141,26 @@ function lb.slotsGui.buffAssociations.populateList()
 	 end
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
 	 frame.AbilitiesList:SetItems(list)
+	  --custom names
+	 local CNList={}
+	 
+	 local CNcounter=1
+	 local cnl= lb.customNames.getCustomNames()
+	 for k,ab in pairs(cnl) do
+		local name=ab
+		local texture=lb.iconsCache.getTextureFromCache(name)
+		if texture[1]=="LifeBinder" then
+			local dbval= getDebuffFromCache(name)
+			if dbval ~=nil then
+				texture[1]=dbval[2]
+				texture[2]=dbval[3]
+			end
+		end
+	     CNList[CNcounter]={name,texture[1],texture[2]}
+	     CNcounter=CNcounter+1
+	 end
+	 table.sort(CNList, function(a,b) return a[1] < b[1] end) --sorts alphabetically
+	 frame.CustomNamesList:SetItems(CNList)
 end
 
 function lb.slotsGui.buffAssociations.onSlotLeftUp(slotindex)

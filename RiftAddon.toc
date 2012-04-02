@@ -42,6 +42,7 @@ RunOnStartup = {
 	
 	"view.lua",
 	"internals/debuffCache.lua",
+	"internals/customNames.lua",
 	
 	"internals/slashCmds.lua",
 	"modules/buffMonitor.lua",

@@ -208,7 +208,8 @@ local function LayoutItems(self)
     itemFrame:SetPoint("LEFT", self, "LEFT", 35, nil)
     itemFrame:SetFontSize(fontSize)
     itemFrame:SetFontColor(unpack(fontColor))
-    itemFrame:SetText(item[1])
+
+    if item[1]~=1 then  itemFrame:SetText(item[1]) end
     itemFrame:SetVisible(true)
     itemFrame:SetHeight(40)
     itemFrame.bgFrame:SetBackgroundColor(unpack(backgroundColor))
