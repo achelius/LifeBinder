@@ -14,12 +14,7 @@ function addDebuffToCache(debuff)
        if debuff==nil then return end
        if lbDebuffCacheList==nil then lbDebuffCacheList={} end
        local name = debuff.name
-       if lbDebuffCacheList[name]==nil then
-           lbDebuffCacheList[name]={}
-           lbDebuffCacheList[name][1]=debuff.id
-           lbDebuffCacheList[name][2]=debuff.description
-           lbDebuffCacheList[name][3]=debuff.icon
-       end
+       lbDebuffCacheList[name]={debuff.id,debuff.description,debuff.icon}
     end
     DebuffCaching=false
 end

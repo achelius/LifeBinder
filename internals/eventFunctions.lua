@@ -244,6 +244,8 @@ function lb.onSecureExit()
     if lb.ReloadWhileInCombat then
     	lbUnitUpdate()
     end
+   
+    
 end
 
 function lb.onBuffAdd(unit,buffs)

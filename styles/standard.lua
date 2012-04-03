@@ -8,10 +8,12 @@ local optionsTable=nil
 function stTable.InitializeOptionsTable()
 	--set values like this (optionsTable.xxxxxx) , they will be saved into the savedvariables of the character
 	optionsTable.Value="cippolippo"
+	if optionsTable.HpValueVisualizationFormat==nil then optionsTable.HpValueVisualizationFormat=0 end  -- 0 -> percent  1--> hp deficit 2 --> current hp/ maxhp
 	if optionsTable.frameWidth==nil then optionsTable.frameWidth=110 end
 	if optionsTable.frameHeight==nil then optionsTable.frameHeight=43 end
 	
 end
+
 function stTable.CreateFrame(index)
 	if index==nil then return end
 	local i =index
@@ -286,8 +288,11 @@ end
 function stTable.setHealthBarText(index,value,maxvalue)
 	if index==nil then return end
 	local resourcesRatio = value/maxvalue
-	local healthpercent = string.format("%s%%", (math.ceil(value/maxvalue * 100)))
-	lb.frames[index].groupStatus:SetText(healthpercent)
+	
+
+		local healthpercent = string.format("%s%%", (math.ceil(value/maxvalue * 100)))
+		lb.frames[index].groupStatus:SetText(healthpercent)
+
 end
 
 function stTable.setRoleIcon(index,calling,role)

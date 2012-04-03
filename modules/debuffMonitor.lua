@@ -370,7 +370,20 @@ function lb.debuffMonitor.updateDurationsOfIndex(index)
 		        				frames.Debuffs.groupSpots[g][4]:SetText("")
 	        					frames.Debuffs.groupSpots[g][5]:SetText("")
 		        		end
-	        			frames.Debuffs.groupSpotsIcons[g][12]=timeval
+		        		if timeval<0 then
+		        			frames.Debuffs.groupSpotsIcons[g][0]=false
+		        			
+			                frames.Debuffs.groupSpotsIcons[g][3]=nil
+			                frames.Debuffs.groupSpotsIcons[g][4]=true
+			                frames.Debuffs.groupSpotsIcons[g][5]=nil
+			                frames.Debuffs.groupSpotsIcons[g][9]=false
+			                frames.Debuffs.groupSpotsIcons[g][10]=1
+			                frames.Debuffs.groupSpotsIcons[g][11]=0
+		        			lb.debuffMonitor.updatedebuffMonitorTexturesIndex(index,g)
+		        		else
+		        			frames.Debuffs.groupSpotsIcons[g][12]=timeval
+		        		end
+	        			
 	        		end
 	        	else
 	        		
