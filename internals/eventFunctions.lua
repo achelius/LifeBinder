@@ -231,13 +231,13 @@ function lb.onAbilityAdded(abilities)
 end
 
 function lb.onSecureEnter()
-    lbValues.isincombat=true
+    lb.isincombat=true
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot2.png")
     --lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
    -- lb.specButtons.hideAll()
 end
 function lb.onSecureExit()
-    lbValues.isincombat=false
+    lb.isincombat=false
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
     --lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
     --lb.specButtons.showAll()

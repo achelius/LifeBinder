@@ -41,10 +41,10 @@ function lb.UpdateFramesVisibility()
             if k > 5 then lbraidfound = true lbgroupfound = false end
             lbsolofound = false
             lb.groupBF[k]:SetVisible(true)
-            if not lbValues.isincombat then lb.groupMask[k]:SetVisible(true) end
+            if not lb.isincombat then lb.groupMask[k]:SetVisible(true) end
         else
             lb.groupBF[k]:SetVisible(false)
-            if not lbValues.isincombat then lb.groupMask[k]:SetVisible(false) end
+            if not lb.isincombat then lb.groupMask[k]:SetVisible(false) end
         end
     end
 
@@ -53,7 +53,7 @@ function lb.UpdateFramesVisibility()
         if lastMode~=0 then
             viewModeChanged=true
             lastMode=0
-            --if not lbValues.isincombat then lb.groupMask[1].Event.LeftClick="/target @self" end
+            --if not lb.isincombat then lb.groupMask[1].Event.LeftClick="/target @self" end
             --lb.buffMonitor.resetBuffMonitorTextures()
             --print("soloreset")
             lb.mouseBinds.setMouseActions()
@@ -65,7 +65,7 @@ function lb.UpdateFramesVisibility()
             processMacroText(lb.UnitTable)
         end
         lb.groupBF[1]:SetVisible(true)
-        if not lbValues.isincombat then lb.groupMask[1]:SetVisible(true) end
+        if not lb.isincombat then lb.groupMask[1]:SetVisible(true) end
 
     end
     if lbgroupfound then
@@ -88,7 +88,7 @@ function lb.UpdateFramesVisibility()
             viewModeChanged=true
             lastMode=2
             if lastmode==0 then
---                if not lbValues.isincombat  then
+--                if not lb.isincombat  then
 --                    lb.groupMask[1].Event.LeftClick="/target @group01"
 --                end
             end
@@ -137,7 +137,7 @@ function lbUnitUpdate()
 	if not lb.playerFound then return end
 	--print("loadingjhjkjh")
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
-    if lbValues.isincombat==nil or not lbValues.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
+    if lb.isincombat==nil or not lb.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
 --    if (lb.MouseOverUnitLastCast~=nil) then
 --        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
 --        if unitIndex~=nil then lb.groupAggro[unitIndex]:SetVisible(false) end
@@ -192,7 +192,7 @@ function lbUnitUpdate()
 --                print("6:"..lb.UnitsTableStatus[unitident][5])
 --                print ("7:"..tostring(tostring(lb.UnitsTableStatus[unitident][5])==tostring(unitTable.id)))
             end
-            if not lbValues.isincombat then
+            if not lb.isincombat then
                 lb.groupMask[j]:SetMouseoverUnit(unitTable.id)
             end
             
@@ -437,13 +437,13 @@ function lb.onAbilityAdded(abilities)
 end
 
 function lb.onSecureEnter()
-    lbValues.isincombat=true
+    lb.isincombat=true
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot2.png")
     lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
     lb.specButtons.hideAll()
 end
 function lb.onSecureExit()
-    lbValues.isincombat=false
+    lb.isincombat=false
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
     lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
     lb.specButtons.showAll()

@@ -20,7 +20,7 @@ function slashCommands(cmdLine)
 	end
 	if(cmdLine.find(cmdLine, "config")) then
 		print ("debug: config")
-		if not lbValues.isincombat then lb.slotsGui.show() end
+		if not lb.isincombat then lb.slotsGui.show() end
 		--register event
 		commandDone=true
 	end

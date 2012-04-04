@@ -85,7 +85,7 @@ end
 -- spec buttons mouse events
 ----------------------------------1---------------------------                ~
 function lb.specButtons.SpecButton1.Event:MouseIn()
-    --if not lbValues.isincombat then
+    --if not lb.isincombat then
         
    -- end
 end
@@ -98,7 +98,7 @@ function lb.specButtons.SpecButton1.Event:MouseOut()
 end
 ----------------------------------2---------------------------
 function lb.specButtons.SpecButton2.Event:MouseIn()
-    --if not lbValues.isincombat then
+    --if not lb.isincombat then
         lb.specButtons.SpecButton2:SetTexture("LifeBinder", "Textures/petonin.png")
     --end
 end
@@ -111,7 +111,7 @@ function lb.specButtons.SpecButton2.Event:MouseOut()
 end
 ----------------------------------3---------------------------
 function lb.specButtons.SpecButton3.Event:MouseIn()
-   -- if not lbValues.isincombat then
+   -- if not lb.isincombat then
         lb.specButtons.SpecButton3:SetTexture("LifeBinder", "Textures/petonin.png")
     --end
 end
@@ -127,7 +127,7 @@ end
 
 ----------------------------------4---------------------------
 function lb.specButtons.SpecButton4.Event:MouseIn()
-    --if not lbValues.isincombat then
+    --if not lb.isincombat then
         lb.specButtons.SpecButton4:SetTexture("LifeBinder", "Textures/petonin.png")
     --end
 end
@@ -140,7 +140,7 @@ function lb.specButtons.SpecButton4.Event:MouseOut()
 end
 ----------------------------------5---------------------------
 function lb.specButtons.SpecButton5.Event:MouseIn()
-    --if not lbValues.isincombat then
+    --if not lb.isincombat then
         lb.specButtons.SpecButton5:SetTexture("LifeBinder", "Textures/petonin.png")
     --end
 end
@@ -153,7 +153,7 @@ function lb.specButtons.SpecButton5.Event:MouseOut()
 end
 ----------------------------------3---------------------------
 function lb.specButtons.SpecButton6.Event:MouseIn()
-    --if not lbValues.isincombat then
+    --if not lb.isincombat then
         lb.specButtons.SpecButton6:SetTexture("LifeBinder", "Textures/petonin.png")
     --end
 end

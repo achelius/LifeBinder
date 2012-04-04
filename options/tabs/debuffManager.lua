@@ -6,6 +6,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 
 	 
 	 --initializing debuffTable
+	 writeText("Drag debuffs from here:","text",optionsFrame,350,30)
 	 optionsFrame.DebuffsTable=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
 	 optionsFrame.DebuffsTable:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 350, 50)
      optionsFrame.DebuffsTable:SetPoint("BOTTOMRIGHT", optionsFrame, "BOTTOMRIGHT", -370, -15)
@@ -34,6 +35,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
         
 	 
 	  -- custom names
+	 
 	 optionsFrame.DebuffsTable.Tabs[2] = UI.CreateFrame("Frame", "CustomNamesTab", optionsFrame.DebuffsTable)
 	 optionsFrame.DebuffsTable:AddTab("Custom Names",optionsFrame.DebuffsTable.Tabs[2])
 	 optionsFrame.CustomNamesList=UI.CreateFrame("AbilitiesList", "CustomNamesList",optionsFrame.DebuffsTable.Tabs[2])
@@ -66,6 +68,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 
 	 --- initializing  whitelist
 	 --adds the whitelist
+	 writeText("Priority debuffs","text",optionsFrame,40,50)
 	 optionsFrame.WhiteList=UI.CreateFrame("AbilitiesList", "WhiteList",optionsFrame)
 	 optionsFrame.WhiteList:CreateDragFrame(optionsFrame.WhiteList,optionsFrame,parentFrame)
 	 optionsFrame.WhiteList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onWhiteListItemDrag
@@ -79,6 +82,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
      optionsFrame.WhiteListView:SetContent( optionsFrame.WhiteList)
 	 
 	  --adds the BlackList
+	 writeText("Blocked debuffs","text",optionsFrame,620,50)
 	 optionsFrame.BlackList=UI.CreateFrame("AbilitiesList", "BlackList",optionsFrame)
 	 optionsFrame.BlackList:CreateDragFrame(optionsFrame.BlackList,optionsFrame,parentFrame)
 	 optionsFrame.BlackList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onBlackListItemDrag
@@ -89,12 +93,62 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
      optionsFrame.BlackListView:SetLayer(1)
      optionsFrame.BlackListView:SetBorder(1, 1, 1, 1, 1)
      optionsFrame.BlackListView:SetContent( optionsFrame.BlackList)
+     
+     writeText("If it's not a priority and it's not blocked:","text",optionsFrame,620,380)
+     optionsFrame.ShowCurableOnlyCheckBox=UI.CreateFrame("SimpleCheckbox", "ShowCurableOnlyCheckBox",optionsFrame)
+     optionsFrame.ShowCurableOnlyCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",620, 400)
+     optionsFrame.ShowCurableOnlyCheckBox:SetText("Show only curable debuffs")
+     optionsFrame.ShowCurableOnlyCheckBox:SetChecked(lbDebuffOptions[lbValues.set].showCurableOnly)
+     optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions 
+     
+     optionsFrame.ShowPoisonCheckBox=UI.CreateFrame("SimpleCheckbox", "ShowPoisonCheckBox",optionsFrame)
+     optionsFrame.ShowPoisonCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 420)
+     optionsFrame.ShowPoisonCheckBox:SetText("Show poisons")
+     optionsFrame.ShowPoisonCheckBox:SetChecked(lbDebuffOptions[lbValues.set].poison)
+     optionsFrame.ShowPoisonCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions
+     
+     optionsFrame.ShowCurseCheckBox=UI.CreateFrame("SimpleCheckbox", "ShowCurseCheckBox",optionsFrame)
+     optionsFrame.ShowCurseCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 440)
+     optionsFrame.ShowCurseCheckBox:SetText("Show curses")
+     optionsFrame.ShowCurseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].curse)
+     optionsFrame.ShowCurseCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions
+     
+     optionsFrame.ShowDiseaseCheckBox=UI.CreateFrame("SimpleCheckbox", "ShowDiseaseCheckBox",optionsFrame)
+     optionsFrame.ShowDiseaseCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 460)
+     optionsFrame.ShowDiseaseCheckBox:SetText("Show diseases")
+     optionsFrame.ShowDiseaseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].disease)
+     optionsFrame.ShowDiseaseCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions
+     --optionsFrame.ShowCurableOnlyCheckBox:SetChecked(lbValues.CacheDebuffs)
+     --optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = function () lbValues.CacheDebuffs=optionsFrame.DebuffsRecordingCheckbox:GetChecked() end 
+     
+     
      lb.slotsGui.debuffManager.populateList()
      
 	 return optionsFrame
 end
 
+function lb.slotsGui.debuffManager.updateDebuffFilterOptions()
+	lbDebuffOptions[lbValues.set].showCurableOnly=optionsFrame.ShowCurableOnlyCheckBox:GetChecked()
+	lbDebuffOptions[lbValues.set].poison=optionsFrame.ShowPoisonCheckBox:GetChecked()
+	lbDebuffOptions[lbValues.set].curse=optionsFrame.ShowCurseCheckBox:GetChecked()
+	lbDebuffOptions[lbValues.set].disease=optionsFrame.ShowDiseaseCheckBox:GetChecked()
+	frame.ShowPoisonCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	frame.ShowCurseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	frame.ShowDiseaseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+end
+
 function lb.slotsGui.debuffManager.populateList()
+	
+	frame.ShowCurableOnlyCheckBox:SetChecked(lbDebuffOptions[lbValues.set].showCurableOnly)
+	frame.ShowPoisonCheckBox:SetChecked(lbDebuffOptions[lbValues.set].poison)
+	frame.ShowCurseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].curse)
+	frame.ShowDiseaseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].disease)
+	frame.ShowPoisonCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	frame.ShowCurseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	frame.ShowDiseaseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	
+	
+	
 	---tab 4 debuffs list
 	local dbList={}
 	 

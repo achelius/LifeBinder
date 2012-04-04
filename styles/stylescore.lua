@@ -40,6 +40,14 @@ function lb.styles.getConfiguration(styleName)
 	if lbStylesOptions[styleName]==nil then  lbStylesOptions[styleName]={} end
 	return lbStylesOptions[styleName]
 end 
+function lb.styles.getCurrentStyleName()
+	return lb.currentStyle	
+end
+
+function lb.styles.setCurrentStyleName(stylename)
+	lbValues.CurrentStyle=stylename	
+	lb.currentStyle	=stylename
+end
 
 function lb.styles.applyStyle(styleName)
 	lb.styles[styleName].fastInitialize()

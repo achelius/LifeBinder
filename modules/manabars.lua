@@ -10,7 +10,7 @@ lb.manaBars={}
 function lb.manaBars.updateResourceBar(units)
 	--now is set by the updateplayerframe cycle
 	local elapsed = now - lastUnitUpdate
-    if (elapsed < (.05)) and lbValues.isincombat then --half a second
+    if (elapsed < (.05)) and lb.isincombat then --half a second
         return 
     else
     	lastUnitUpdate = now

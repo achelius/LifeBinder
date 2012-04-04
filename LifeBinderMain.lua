@@ -142,7 +142,7 @@ function lb.createWindow()
     lb.CenterFrame:SetPoint("TOPLEFT", lb.WindowFrameTop, "BOTTOMLEFT", 0, 10)
     lb.CenterFrame:SetPoint("BOTTOMRIGHT", lb.Window, "BOTTOMRIGHT", 0, 0)
     lb.CenterFrame:SetLayer(1)
-    lb.CombatStatus.Event.LeftClick=function() if not lbValues.isincombat then lb.slotsGui.show() end end
+    lb.CombatStatus.Event.LeftClick=function() if not lb.isincombat then lb.slotsGui.show() end end
     --initializeSpecButtons()
 	
 	--toggleLockedWindow(lbValues.islocked)
@@ -150,7 +150,7 @@ function lb.createWindow()
 end
 
 function lb.WindowDragEventLeftDown()
-    if not lbValues.isincombat then
+    if not lb.isincombat then
         windowdragActive = true
         local mouseStatus = Inspect.Mouse()
         lb.clickOffset["x"] = mouseStatus.x - lbValues.locmainx
@@ -166,7 +166,7 @@ function lb.WindowDragEventLeftUpoutside()
 end
 function lb.WindowDragEventMouseMove(buttons,x,y)
     --print (tostring(x).."-"..tostring(y))
-    if lbValues.isincombat then
+    if lb.isincombat then
         windowdragActive = false
         return
     end
@@ -305,18 +305,18 @@ function lb.UpdateFramesVisibility()
 --   else
 --		lbraidfound=true   	
 --   end
-   print("gc---"..gCount)
+   --print("gc---"..gCount)
     for k, v in pairs(lb.UnitsTable) do
         if unitLookup(v) then
-        	print ("k-"..k)
+        	--print ("k-"..k)
             if k < 6 then lbraidfound = false lbgroupfound = true end
             if k > 5 then lbraidfound = true lbgroupfound = false end
             lbsolofound = false
             lb.frames[k].groupBF:SetVisible(true)
-            if not lbValues.isincombat and lb.UnitsTableStatus[k][12]  then lb.frames[k].groupMask:SetVisible(true) end
+            if not lb.isincombat and lb.UnitsTableStatus[k][12]  then lb.frames[k].groupMask:SetVisible(true) end
         else
             lb.frames[k].groupBF:SetVisible(false)
-            if not lbValues.isincombat and lb.UnitsTableStatus[k][12]  then lb.frames[k].groupMask:SetVisible(false) end
+            if not lb.isincombat and lb.UnitsTableStatus[k][12]  then lb.frames[k].groupMask:SetVisible(false) end
         end
     end
 
@@ -328,7 +328,7 @@ function lb.UpdateFramesVisibility()
         end
         lb.QueryTable = lb.SoloTable
         lb.frames[1].groupBF:SetVisible(true)
-        if not lbValues.isincombat and lb.UnitsTableStatus[1][12] then lb.frames[1].groupMask:SetVisible(true) end
+        if not lb.isincombat and lb.UnitsTableStatus[1][12] then lb.frames[1].groupMask:SetVisible(true) end
 
     end
     if lbgroupfound then
@@ -359,8 +359,8 @@ function lbUnitUpdateIndex(index)
 --		lb.UnitsTableStatus[index][13]=false --Frame Created
 --	end
 	lb.UpdateFramesVisibility()
-	if lbValues.isincombat then   print (lastMode) end
-	if lbValues.isincombat then  
+	--if lb.isincombat then   print (lastMode) end
+	if lb.isincombat then  
     	lb.ReloadWhileInCombat=true 
     else
     	lb.ReloadWhileInCombat=false 
@@ -423,7 +423,7 @@ function lbUnitUpdateIndex(index)
 			--------------------
 	        lb.UnitsTableStatus[j][8]=true
 	        
-	        if not lbValues.isincombat then
+	        if not lb.isincombat then
 	            lb.frames[j].groupMask:SetMouseoverUnit(unitTable.id)
 	            lb.mouseBinds.setMouseActionsForIndex(j)
 	        else
@@ -508,7 +508,7 @@ function lbUnitUpdate()
 	if not lb.playerFound then return end
 --	
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
---    --if lbValues.isincombat==nil or not lbValues.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
+--    --if lb.isincombat==nil or not lb.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
     lb.UpdateFramesVisibility()
     local count=20
     if lastMode==0 then

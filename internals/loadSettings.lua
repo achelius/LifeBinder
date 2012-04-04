@@ -157,7 +157,7 @@ function loadVariables(addonidentifier)
 	end
 	
     lbValues.islocked=false
-    lbValues.isincombat=false
+    lb.isincombat=false
     lbValues.set=nil
     lb.EnableStarterCycle() --start wait for player cycle
    

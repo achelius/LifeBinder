@@ -11,6 +11,7 @@ function lb.slotsGui.initialize()
 	 local scalex=1-- lb.styles[lb.currentStyle].getFrameWidth()*0.009009009
 	 local scaley=1--lb.styles[lb.currentStyle].getFrameHeight()*0.023255814
 	 lb.slotsGui.Window=UI.CreateFrame("SimpleWindow", "SlotsGui", lb.Context)
+	 lb.slotsGui.Window:SetSecureMode("restricted")
 	 lb.slotsGui.Window:SetPoint("CENTER", UIParent, "CENTER")
 	 lb.slotsGui.Window:SetWidth(1000)
 	 lb.slotsGui.Window:SetHeight(600)
@@ -20,9 +21,11 @@ function lb.slotsGui.initialize()
 	 lb.slotsGui.Window.Event.Close=function()lb.buffMonitor.hideDummyBuffMonitorSlots() lb.debuffMonitor.hideDummyDebuffMonitorSlots() ClearKeyFocus() end
 	 -----tab definitions
 	 lb.slotsGui.TabControl=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", lb.slotsGui.Window)
+	 lb.slotsGui.TabControl:SetSecureMode("restricted")
 	 lb.slotsGui.Tabs = {}
 	 lb.slotsGui.TabControl:SetPoint("TOPLEFT", lb.slotsGui.Window, "TOPLEFT", 15, 50)
      lb.slotsGui.TabControl:SetPoint("BOTTOMRIGHT", lb.slotsGui.Window, "BOTTOMRIGHT", -15, -15)
+     
      lb.slotsGui.TabControl.Event.TabSelect =lb.slotsGui.OnTabChanged
 -------------------------------------------------------------------------------initialize tab 1
 	 lb.slotsGui.Tabs[1]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
@@ -47,6 +50,10 @@ function lb.slotsGui.initialize()
 -------------------------------------------------------------------------initializing table 5
 	 lb.slotsGui.Tabs[5]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Mouse binds",lb.slotsGui.Tabs[5])
+	 
+------------------------------------------------------------------------initializing table 6
+	 lb.slotsGui.Tabs[6]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.TabControl:AddTab("Styles options",lb.slotsGui.Tabs[6])
 	 
 	 lb.slotsGui.initialized=true
 end
@@ -86,6 +93,14 @@ function lb.slotsGui.OnTabChanged(tab,index)
 			lb.slotsGui.TabControl:SetTabContent(5,lb.slotsGui.Tabs[5])
 		else
 			 lb.slotsGui.mouseBinds.updateData()
+		end
+	elseif index==6 then
+		if lb.slotsGui.Tabs[6]:GetName()=="placeholder" then
+			lb.slotsGui.Tabs[6]=lb.slotsGui.styleOptions.createTable(lb.slotsGui.TabControl)
+			
+			lb.slotsGui.TabControl:SetTabContent(6,lb.slotsGui.Tabs[6])
+		else
+			 lb.slotsGui.styleOptions.updateData()
 		end
 	end
 	if showdummies then

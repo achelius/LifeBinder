@@ -32,10 +32,12 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
 	 table.insert(list,1,{"Target","LifeBinder","Textures/targetmousebind.png","target","target","mousebutton","modifier"})
 	 optionsFrame.CommandsList:SetItems(list)
-	 
+	 writeText("Drag the ability from the list to the mouse button / modifier combination you want","text",optionsFrame,260,5)
+	 writeText("Double modifiers are called first, then single modifier and finally the no modifier one","text",optionsFrame,260,25)
+	 writeText("Remember to press apply when you finished editing","text",optionsFrame,260,45)
 	 --initializing mouse buttons table
 	 optionsFrame.ButtonsTable=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
-	 optionsFrame.ButtonsTable:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 260, 50)
+	 optionsFrame.ButtonsTable:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 260, 60)
      optionsFrame.ButtonsTable:SetPoint("BOTTOMRIGHT", optionsFrame, "BOTTOMRIGHT", -10, -15)
      optionsFrame.ButtonsTable:SetLayer(30)
      optionsFrame.ButtonsTable.Tabs={}

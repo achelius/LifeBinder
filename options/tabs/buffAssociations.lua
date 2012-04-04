@@ -12,7 +12,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 --initializing unitframe
 	 optionsFrame.UnitFrame = UI.CreateFrame("Texture", "UnitFrame",  optionsFrame  )
 	 optionsFrame.UnitFrame:SetPoint("TOPLEFT",optionsFrame , "TOPLEFT", 20, 50)
-	 
+	 writeText("Select the slot and drag the buff from the list into the slot square","text",optionsFrame,10,10)
 	 optionsFrame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
 	 optionsFrame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.slotsGui.PreviewScale[2])
 	 optionsFrame.UnitFrame:SetVisible(true)

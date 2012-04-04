@@ -7,6 +7,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 local optionsFrame
 	 optionsFrame = UI.CreateFrame("Frame", "OptionsWindowA", parentFrame)
 	
+     writeText("Move the slots where you want them on the unit frame","text",optionsFrame,20,10)
      
 	 optionsFrame.UnitFrame = UI.CreateFrame("Texture", "UnitFrame",  optionsFrame  )
 	 optionsFrame.UnitFrame:SetPoint("TOPLEFT",optionsFrame , "TOPLEFT", 20, 50)
@@ -84,6 +85,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 optionsFrame.ApplyButton.Event.LeftClick=function() lb.buffMonitor.relocateBuffMonitorSlots() lb.debuffMonitor.relocateDebuffMonitorSlots() end
 	 
 	 --initialize movement buttons
+	 writeText("Selected slot movement","text",optionsFrame,10,300)
 	 --up
 	 optionsFrame.MoveUp=UI.CreateFrame("RiftButton", "SlotMoveUp", optionsFrame )
 	 optionsFrame.MoveUp:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",50,-100)
@@ -174,7 +176,7 @@ end
 
 
 function lb.slotsGui.slotsEditor.onSlotLeftDown(type,index)
-    if not lbValues.isincombat then
+    if not lb.isincombat then
         slotdrag = true
         
         local mouseStatus = Inspect.Mouse()
@@ -216,7 +218,7 @@ function lb.slotsGui.OnSlotMouseMove(type,index,x,y)
 if  lb.slotsGui.selectedIndex~=index then return end
 if  lb.slotsGui.selectedType~=type then return end
     --print (tostring(x).."-"..tostring(y))
-    if lbValues.isincombat then
+    if lb.isincombat then
         slotdrag = false
         return
     end

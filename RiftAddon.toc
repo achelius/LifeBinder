@@ -39,6 +39,7 @@ RunOnStartup = {
 	"options/tabs/debuffManager.lua",
 	"options/tabs/mouseBinds.lua",
 	"options/tabs/slotsEditor.lua",
+	"options/tabs/styleOptions.lua",
 	
 	"view.lua",
 	"internals/debuffCache.lua",

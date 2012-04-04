@@ -1,7 +1,7 @@
 lb.mouseBinds={}
 function lb.mouseBinds.setMouseActions()
     if lbValues.set==nil then return end
-    if lbValues.isincombat then return end
+    if lb.isincombat then return end
     local associations =lbMouseBinds[lbValues.set]
     for i = 1,20 do
         local fname=""
@@ -48,7 +48,7 @@ end
 
 function lb.mouseBinds.setMouseActionsForIndex(index)
     if lbValues.set==nil then return end
-    if lbValues.isincombat then return end
+    if lb.isincombat then return end
     local i=index
     local associations =lbMouseBinds[lbValues.set]
     
@@ -112,6 +112,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
@@ -126,6 +128,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
@@ -140,6 +144,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
@@ -154,6 +160,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
@@ -167,6 +175,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
@@ -180,6 +190,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
@@ -193,6 +205,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
         		temp=temp.."/target "..modifier.." @mouseover\13"
+        	elseif val[4]=="macro" then
+        		temp=temp..val[5]
         	end
         	
         end
