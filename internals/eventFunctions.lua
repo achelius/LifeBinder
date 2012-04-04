@@ -233,13 +233,13 @@ end
 function lb.onSecureEnter()
     lbValues.isincombat=true
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot2.png")
-    lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
+    --lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
    -- lb.specButtons.hideAll()
 end
 function lb.onSecureExit()
     lbValues.isincombat=false
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
-    lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
+    --lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
     --lb.specButtons.showAll()
     if lb.ReloadWhileInCombat then
     	lbUnitUpdate()
@@ -247,7 +247,21 @@ function lb.onSecureExit()
    
     
 end
-
+function lb.onBuffChange(unit,buffs)
+--	print ("------------------------")
+--	dump(unit)
+--	dump(buffs)
+--	print("--------------------------")
+	 local frameindex=GetIndexFromID(unit)
+	 if frameindex==nil then return end
+	 local updatebuffs=false
+	 if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
+	  for buffID,ph in pairs(buffs) do
+			local isbuff=lb.buffMonitor.onBuffChangeTest(unit,buffID,frameindex)
+	    	if not isbuff then lb.debuffMonitor.onDebuffChange(unit,buffID,frameindex) end
+	  end
+	
+end
 function lb.onBuffAdd(unit,buffs)
 	 local frameindex=GetIndexFromID(unit)
      if frameindex==nil then return end
@@ -266,17 +280,11 @@ end
 
 function lb.onBuffRemove(unit,buffs)
 	 local frameindex=GetIndexFromID(unit)
-	 
      if frameindex==nil then return end
      local updatebuffs=false
      if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
  	  for buffID,ph in pairs(buffs) do
- 	  		
-        		
-        	local isbuff=lb.buffMonitor.onBuffRemoveTest(unit,buffID,frameindex)
-        	
-        		
-        		if not isbuff then lb.debuffMonitor.onDebuffRemove(unit,buffID,frameindex) end
-        	
+			local isbuff=lb.buffMonitor.onBuffRemoveTest(unit,buffID,frameindex)
+        	if not isbuff then lb.debuffMonitor.onDebuffRemove(unit,buffID,frameindex) end
  	  end
 end

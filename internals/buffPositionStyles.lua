@@ -34,8 +34,8 @@ lbPredefinedBuffSlotPos[1]={
 				{
 					"TOPLEFT",
 					"TOPLEFT",
-					93,
-					1,
+					54,
+					19,
 					16,
 					16,
 					false

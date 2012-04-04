@@ -204,11 +204,16 @@ function stTable.hideFrame(index)
 		lb.frames[index].groupBF:SetVisible(false)
 	end
 end
+function stTable.hideAllEmptyFrames()
+	for var= 1,20 do
+		if not lb.UnitsTableStatus[var][12] then 
+			lb.frames[var].groupBF:SetVisible(false)
+		end
+	end
+end
 function stTable.showAllFrames()
 	for var= 1,20 do
-		if lb.UnitsTableStatus[var][12] then 
-			lb.frames[var].groupBF:SetVisible(true)
-		end
+		lb.frames[var].groupBF:SetVisible(true)
 	end
 end
 function stTable.getHealthFrameTexture()

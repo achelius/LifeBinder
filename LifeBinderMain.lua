@@ -142,7 +142,7 @@ function lb.createWindow()
     lb.CenterFrame:SetPoint("TOPLEFT", lb.WindowFrameTop, "BOTTOMLEFT", 0, 10)
     lb.CenterFrame:SetPoint("BOTTOMRIGHT", lb.Window, "BOTTOMRIGHT", 0, 0)
     lb.CenterFrame:SetLayer(1)
-    lb.CombatStatus.Event.LeftClick=function() if not lbValues.isincombat then lb.WindowOptions:SetVisible(true)end end
+    lb.CombatStatus.Event.LeftClick=function() if not lbValues.isincombat then lb.slotsGui.show() end end
     --initializeSpecButtons()
 	
 	--toggleLockedWindow(lbValues.islocked)
@@ -263,8 +263,9 @@ function lb.UpdatePlayerFrame()
 				end
 				if detail.calling~=nil or detail.offline~=nil then
 					unitupd=true
-					lbUnitUpdateIndex(i)
-					ut[11]=false
+					if not lb.ReloadWhileInCombat then lbUnitUpdateIndex(i) end
+					if not lb.ReloadWhileInCombat then ut[11]=false end
+					
 				end
 			else
 				if ut[12] then
@@ -297,15 +298,17 @@ function lb.UpdateFramesVisibility()
    local lbraidfound = false
    local lbsolofound = true
    local gCount=LibSRM.GroupCount()
-   if gCount==0 then
-   		lbsolofound=true
-   elseif gCount<6 then
-   		lbgroupfound=true
-   else
-		lbraidfound=true   	
-   end
+--   if gCount==0 then
+--   		lbsolofound=true
+--   elseif gCount<6 then
+--   		lbgroupfound=true
+--   else
+--		lbraidfound=true   	
+--   end
+   print("gc---"..gCount)
     for k, v in pairs(lb.UnitsTable) do
         if unitLookup(v) then
+        	print ("k-"..k)
             if k < 6 then lbraidfound = false lbgroupfound = true end
             if k > 5 then lbraidfound = true lbgroupfound = false end
             lbsolofound = false
@@ -356,7 +359,7 @@ function lbUnitUpdateIndex(index)
 --		lb.UnitsTableStatus[index][13]=false --Frame Created
 --	end
 	lb.UpdateFramesVisibility()
-	
+	if lbValues.isincombat then   print (lastMode) end
 	if lbValues.isincombat then  
     	lb.ReloadWhileInCombat=true 
     else
@@ -381,6 +384,7 @@ function lbUnitUpdateIndex(index)
 				lb.createNewFrame(index)
 			end
     	end
+   
     	local name = unitTable.name
 		if string.len(name) > 5 then name = string.sub(name, 1, 5).."" end --restrict names to 8 letters
 		if  lb.UnitsTableStatus[j][11] then
@@ -389,6 +393,7 @@ function lbUnitUpdateIndex(index)
 				  if Event.Unit.Detail.Coord~=nil then lb.posData.resetUnitPositionofIndex(j,unitTable.coordX,unitTable.coordY,unitTable.coordZ) end
 				  lb.buffMonitor.resetBuffMonitorTexturesForIndex(j)
 				  lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(j)
+				  
 	              lb.UnitsTableStatus[j][5]=unitTable.id
 	        end
 			
@@ -420,6 +425,7 @@ function lbUnitUpdateIndex(index)
 	        
 	        if not lbValues.isincombat then
 	            lb.frames[j].groupMask:SetMouseoverUnit(unitTable.id)
+	            lb.mouseBinds.setMouseActionsForIndex(j)
 	        else
 	        	--reorganizeMasks()
 	        end
@@ -504,7 +510,13 @@ function lbUnitUpdate()
     if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
 --    --if lbValues.isincombat==nil or not lbValues.isincombat then  lb.UpdateFramesVisibility()end -- reads the group status and hide or show players frames
     lb.UpdateFramesVisibility()
-    for i = 1,20 do
+    local count=20
+    if lastMode==0 then
+    	count=1
+    elseif lastMode==1 then
+    	count=5
+    end
+    for i = 1,count do
     	lbUnitUpdateIndex(i)
     end
     

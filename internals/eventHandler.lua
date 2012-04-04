@@ -32,6 +32,7 @@ function lb.EnableHandlers()
 			table.insert(Event.Unit.Castbar, {onCastbarChanged, "LifeBinder", "OnCastBarChanged"})
 			table.insert(Event.Buff.Add, {lb.onBuffAdd, "LifeBinder", "lb.buffMonitor.onBuffAdd"})
 			table.insert(Event.Buff.Remove, {lb.onBuffRemove, "LifeBinder", "lb.buffMonitor.onBuffRemove"})
+			table.insert(Event.Buff.Change, {lb.onBuffChange, "LifeBinder", "lb.buffMonitor.onBuffChange"})
 			-- create a change target event
 			table.insert(Library.LibUnitChange.Register("player.target"), {lb.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
 			table.insert(Library.LibUnitChange.Register("mouseover"), {lb.onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})

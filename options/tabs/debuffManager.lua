@@ -20,12 +20,17 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.DebuffsList:CreateDragFrame(optionsFrame.DebuffsList,optionsFrame.DebuffsTable.Tabs[1],parentFrame)
 	 optionsFrame.DebuffsList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onDebuffItemDrag
 	 optionsFrame.DebuffsListView=UI.CreateFrame("SimpleScrollView", "List", optionsFrame.DebuffsTable.Tabs[1])
-	 optionsFrame.DebuffsListView:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[1], "TOPLEFT",10, 20)
+	 optionsFrame.DebuffsListView:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[1], "TOPLEFT",10, 30)
      optionsFrame.DebuffsListView:SetWidth(200)
-     optionsFrame.DebuffsListView:SetHeight(350)
+     optionsFrame.DebuffsListView:SetHeight(340)
      optionsFrame.DebuffsListView:SetLayer(1)
      optionsFrame.DebuffsListView:SetBorder(1, 1, 1, 1, 1)
      optionsFrame.DebuffsListView:SetContent( optionsFrame.DebuffsList)
+     optionsFrame.DebuffsRecordingCheckbox=UI.CreateFrame("SimpleCheckbox", "DebuffsRecordingCheckbox",optionsFrame.DebuffsTable.Tabs[1])
+     optionsFrame.DebuffsRecordingCheckbox:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[1], "TOPLEFT",10, 5)
+     optionsFrame.DebuffsRecordingCheckbox:SetText("Enable Debuff recording")
+     optionsFrame.DebuffsRecordingCheckbox:SetChecked(lbValues.CacheDebuffs)
+     optionsFrame.DebuffsRecordingCheckbox.Event.CheckboxChange = function () lbValues.CacheDebuffs=optionsFrame.DebuffsRecordingCheckbox:GetChecked() end 
         
 	 
 	  -- custom names
@@ -202,6 +207,7 @@ function lb.slotsGui.debuffManager.onBlackListItemDrag(item,x,y)
 end
 
 function lb.slotsGui.debuffManager.updateData()
+	frame.DebuffsRecordingCheckbox:SetChecked(lbValues.CacheDebuffs)
 	lb.slotsGui.debuffManager.populateList()
 end
 

@@ -95,12 +95,9 @@ function loadVariables(addonidentifier)
     end
     if lbDebuffBlackList == nil then
         lbDebuffBlackList ={}
-        lbDebuffBlackList[1]={ }
-        lbDebuffBlackList[2]={ }
-        lbDebuffBlackList[3]={ }
-        lbDebuffBlackList[4]={ }
-        lbDebuffBlackList[5]={ }
-        lbDebuffBlackList[6]={ }
+        for i = 1,6 do
+        	lbDebuffBlackList[i]={["Critter Killer"] = {castByMe = false},["Looking for Group Cooldown"] = {castByMe = false}}
+        end
     end
     if lbDebuffOptions == nil then
         lbDebuffOptions ={}

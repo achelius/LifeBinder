@@ -31,7 +31,10 @@ function lb.onPlayerJoin(units)
 end
 
 function lb.onPlayerLeave()
-	--print ("pl")
+--	print ("pl")
+--	print(Inspect.Unit.Lookup(lb.PlayerID))
+	  lastmode=0
+--	  lb.UnitsTable =lb.UnitTable
 	  lb.UnitsTableStatus[1][11]=true
 	  lbUnitUpdate()
 end

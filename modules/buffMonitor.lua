@@ -623,6 +623,34 @@ function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
 
 end
 
+function lb.buffMonitor.onBuffChangeTest(unit, buffID,frameindex)
+    --buffs=buffdetail(unit,buffs)
+    --print ("remove")
+    local updatebuffs=false
+       -- for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
+	local buffcount=lb.buffMonitor.slotscount
+	        for slotindex= 1, buffcount do
+	           
+	            if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][5]== buffID then
+	            	local newbuffsdetails=buffdetail(unit,buffID)
+	            	
+	            	if newbuffsdetails~=nil then
+	            		--dump(newbuffsdetails)
+		                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][3]=newbuffsdetails.stack
+		                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4]=true --flags that the buff needs an update
+		                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
+		                
+	                end
+	                updatebuffs=true
+	            end
+	        end
+		
+      
+	return updatebuffs
+
+end
+
+
 function lb.buffMonitor.copySettingsFromRole(Role)
 	--copies the settings from the selected role into the current role
 	--must copy lbDebuffWhitelist[role] ,lbDebuffBlackList[role] , lbDebuffSlotOptions[role] , lbDebuffOptions[role]

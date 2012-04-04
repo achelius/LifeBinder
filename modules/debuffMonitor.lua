@@ -641,6 +641,41 @@ function lb.debuffMonitor.onDebuffRemove(unit, debuffID,frameindex)
 
 end
 
+
+function lb.debuffMonitor.onDebuffChange(unit, debuffID,frameindex)
+    --Debuffs=Debuffdetail(unit,Debuffs)
+    --print ("remove")
+
+    local Debuffcount=lb.debuffMonitor.slotscount
+
+       -- for slotindex,c in pairs(lbSelectedDebuffsList[lbValues.set]) do
+       
+	        for slotindex= 1, Debuffcount do
+	           
+	            if lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][5]== debuffID then
+	                --print (frameindex)
+	                local newbuffsdetails=Debuffdetail(unit,debuffID)
+	            	if newbuffsdetails~=nil then
+	                	lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][3]=newbuffsdetails.stack
+	                	lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4]=true --flags that the debuff needs an update
+	             	end
+					--print ("removedDebuff"..tostring(frameindex).."--"..tostring(slotindex))
+	                lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
+	                --print ("rem"..lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
+	                updateDebuffs=true
+	            end
+	        end
+		
+       -- end
+      
+        if updateDebuffs then
+            --print(true)
+            --lb.debuffMonitor.updatedebuffMonitorTextures()
+        end
+        return updateDebuffs
+
+end
+
 function lb.debuffMonitor.copySettingsFromRole(Role)
 	--copies the settings from the selected role into the current role
 	--must copy lbDebuffWhitelist[role] ,lbDebuffBlackList[role] , lbDebuffSlotOptions[role] , lbDebuffOptions[role]
