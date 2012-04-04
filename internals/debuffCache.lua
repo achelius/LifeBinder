@@ -35,6 +35,6 @@ function getDebuffCacheNames()
 end
 function DebuffCacheClear()
     --print ("clear")
-    lbDebuffCacheList=nil
+    lbDebuffCacheList={}
 end
 

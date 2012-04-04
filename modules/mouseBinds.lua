@@ -111,7 +111,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -127,7 +131,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -143,7 +151,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -159,7 +171,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -174,7 +190,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -189,7 +209,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -204,7 +228,11 @@ function lb.mouseBinds.generateMacro(associations,name)
         	if val[4]=="cast" then
         		temp=temp.."/cast "..modifier.." @"..name.." "..val[5].."\13"
         	elseif val[4]=="target" then
-        		temp=temp.."/target "..modifier.." @mouseover\13"
+        		temp=temp.."/target "..modifier.." @"..name.."\13"
+        	elseif val[4]=="assist" then
+        		temp=temp.."/target "..modifier.." @"..name..".target\13"
+        	elseif val[4]=="focus" then
+        		temp=temp.."/focus "..modifier.." @"..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end

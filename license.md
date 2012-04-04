@@ -4,7 +4,7 @@
 License Information
 -------------------
 LifeBinder Addon for RIFT™ 
-Copyright (C) 2012 Andrea and Roddy Nunez
+Copyright (C) 2012 Andrea Rompani and Roddy Nunez
 
 This program is free software; you can redistribute it and/or modify it 
 under the terms of the GNU General Public License as published by the 

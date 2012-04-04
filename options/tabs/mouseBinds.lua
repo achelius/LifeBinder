@@ -30,7 +30,9 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	     counter=counter+1
 	 end
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
-	 table.insert(list,1,{"Target","LifeBinder","Textures/targetmousebind.png","target","target","mousebutton","modifier"})
+	 table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier"})
+	 table.insert(list,2,{"Assist","LifeBinder","Textures/card29a.png","assist","assist","mousebutton","modifier"})
+	 table.insert(list,3,{"Focus","LifeBinder","Textures/card29b.png","focus","focus","mousebutton","modifier"})
 	 optionsFrame.CommandsList:SetItems(list)
 	 writeText("Drag the ability from the list to the mouse button / modifier combination you want","text",optionsFrame,260,5)
 	 writeText("Double modifiers are called first, then single modifier and finally the no modifier one","text",optionsFrame,260,25)
@@ -123,7 +125,9 @@ function lb.slotsGui.mouseBinds.updateData()
 	     counter=counter+1
 	 end
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
-	 table.insert(list,1,{"Target","LifeBinder","Textures/targetmousebind.png","target","target","mousebutton","modifier"})
+	 table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier"})
+	 table.insert(list,2,{"Assist","LifeBinder","Textures/card29a.png","assist","assist","mousebutton","modifier"})
+	 table.insert(list,3,{"Focus","LifeBinder","Textures/card29b.png","focus","focus","mousebutton","modifier"})
 	 frame.CommandsList:SetItems(list)
 	 for buttonindex= 1,5 do
 		for modindex = 1,7 do
