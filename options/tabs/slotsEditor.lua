@@ -252,7 +252,8 @@ end
 function lb.slotsGui.slotsEditor.updateData()
   lb.slotsGui.selectedIndex=-1
  lb.slotsGui.selectedType=-1
-	
+	frame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
+	 frame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.slotsGui.PreviewScale[2])
 	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
 	 	frame.buffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])

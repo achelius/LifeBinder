@@ -54,8 +54,8 @@ function stTable.fastInitialize()
 	
 	stTable.InitializeOptionsTable() --initializes optionsTable
 	lb.WindowFrameTop:SetTexture("Rift","nil")
-	local totalwidth= optionsTable.frameWidth*4
-	local totalheight= optionsTable.frameHeight*5
+	local totalwidth= optionsTable.frameWidth*5
+	local totalheight= optionsTable.frameHeight*4
     for a = 1, 4 do
 		for i = 1, 5 do
 			var = i + ((a-1) * 5)
@@ -64,7 +64,7 @@ function stTable.fastInitialize()
 			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame) end
 			lb.frames[var].groupBF:SetLayer(1)
 			lb.frames[var].groupBF:SetBackgroundColor(0, 0, 0, 1)
-			lb.frames[var].groupBF:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a - 1))
+			lb.frames[var].groupBF:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a))
 			lb.frames[var].groupBF:SetHeight(optionsTable.frameHeight)
 			lb.frames[var].groupBF:SetWidth(optionsTable.frameWidth)
 			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF:SetVisible(false)end
@@ -72,7 +72,7 @@ function stTable.fastInitialize()
 			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateFrame("Frame", "group"..i, lb.Window) end
 			lb.frames[var].groupMask:SetLayer(99)
 			lb.frames[var].groupMask:SetBackgroundColor(0,0,0,0)
-			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a - 1))
+			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a))
 			lb.frames[var].groupMask:SetHeight(optionsTable.frameHeight)
 			lb.frames[var].groupMask:SetWidth(optionsTable.frameWidth)
 			lb.frames[var].groupMask:SetSecureMode("restricted")
