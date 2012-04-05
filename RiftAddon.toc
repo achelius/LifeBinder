@@ -1,17 +1,17 @@
 Identifier = "LifeBinder"
-Name = "LifeBinder"
+Name = "LifeBinder (Beta)"
 NameShort = "LB"
 Description = "Comprehensive click-to-cast raidui replacement that implements a fully customizable appearance."
 Author = "Achelius / Protonova"
-Version = "0.27"
+Version = "1.0.1.1"
 Website = "LifeBinder.ceroaim.us"
-Email = "prjaddon@gmail.com"
+Email = "LifeBinderAddon@gmail.com"
 Environment = "1.7"
 
 Embed = {
-	LibSimpleWidgets = true,
-	LibUnitChange = true,
-	SafesRaidManager = true
+	["libs/LibSimpleWidgets"] = true,
+	["libs/LibUnitChange"] = true,
+	["libs/SafesRaidManager"] = true
 }
 Dependencies = {
 	LibSimpleWidgets = {"required", "before"},
