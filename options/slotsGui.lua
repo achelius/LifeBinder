@@ -32,28 +32,27 @@ function lb.slotsGui.initialize()
 	 --dump(lb.slotsGui.Tabs[1])
 	 --lb.slotsGui.Tabs[1]=lb.slotsGui.addonInfo.createTable( lb.slotsGui.TabControl)
 	 --dump(lb.slotsGui.Tabs[1])
-	 lb.slotsGui.TabControl:AddTab("Addon info",lb.slotsGui.Tabs[1])
+	 lb.slotsGui.TabControl:AddTab("Welcome",lb.slotsGui.Tabs[1])
 	 
 -------------------------------------------------------------------------------initialize tab 2
 	 lb.slotsGui.Tabs[2]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 --lb.slotsGui.Tabs[2]=lb.slotsGui.slotsEditor.createTable(lb.slotsGui.TabControl)
-	 lb.slotsGui.TabControl:AddTab("Slots Editor",lb.slotsGui.Tabs[2])
-	 
-	
+	 lb.slotsGui.TabControl:AddTab("Condition Placement",lb.slotsGui.Tabs[2])
+
 -------------------------------------------------------------------------initializing table 3
 	 lb.slotsGui.Tabs[3]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Buffs",lb.slotsGui.Tabs[3])
 		 
 -------------------------------------------------------------------------initializing table 4
 	 lb.slotsGui.Tabs[4]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
-	 lb.slotsGui.TabControl:AddTab("Debuff management",lb.slotsGui.Tabs[4])
+	 lb.slotsGui.TabControl:AddTab("Debuffs",lb.slotsGui.Tabs[4])
 -------------------------------------------------------------------------initializing table 5
 	 lb.slotsGui.Tabs[5]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
-	 lb.slotsGui.TabControl:AddTab("Mouse binds",lb.slotsGui.Tabs[5])
+	 lb.slotsGui.TabControl:AddTab("Binds",lb.slotsGui.Tabs[5])
 	 
 ------------------------------------------------------------------------initializing table 6
 	 lb.slotsGui.Tabs[6]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
-	 lb.slotsGui.TabControl:AddTab("Styles options",lb.slotsGui.Tabs[6])
+	 lb.slotsGui.TabControl:AddTab("Skins",lb.slotsGui.Tabs[6])
 	 
 	 lb.slotsGui.initialized=true
 end

@@ -3,9 +3,9 @@ local frame=nil
 function lb.slotsGui.styleOptions.createTable(parentFrame)
  	 local optionsFrame
 	 optionsFrame = UI.CreateFrame("Frame", "OptionsWindowA", parentFrame)
-	 writeText("Current Selected Style","text",optionsFrame,10,30)
+	 writeText("Current Selected Style","text",optionsFrame,10,50)
 	 optionsFrame.styleSelectCombobox=UI.CreateFrame("SimpleSelect", "styleSelectCombobox",optionsFrame)
-	 optionsFrame.styleSelectCombobox:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,50)
+	 optionsFrame.styleSelectCombobox:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,70)
 	 optionsFrame.styleSelectCombobox:SetWidth(200)
 	 optionsFrame.styleSelectCombobox:SetHeight(30)
 	 local list={}
@@ -24,7 +24,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 if currentsel~=-1 then optionsFrame.styleSelectCombobox:SetSelectedIndex(currentsel,true) end
 	 
 	 optionsFrame.styleApplyButton=UI.CreateFrame("RiftButton", "styleApplyButton",optionsFrame)
-	 optionsFrame.styleApplyButton:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",250,50)
+	 optionsFrame.styleApplyButton:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",250,70)
 	 optionsFrame.styleApplyButton:SetWidth(100)
 	 optionsFrame.styleApplyButton:SetHeight(30)
 	 
@@ -44,7 +44,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 --	 optionsFrame.styleReloaduiButton:SetText("Reload UI")
 --	 
 --	 optionsFrame.styleReloaduiButton.Event.LeftClick="/reloadui"
-	 writeText("Styles only changes unit frames positions for now, it will be expanded later","text",optionsFrame,10,10)
+	 writeText("Note: Styles only changes unit frames positions for now, it will be expanded later.","text",optionsFrame,10,10)
 	 frame=optionsFrame
 	 return optionsFrame
 end

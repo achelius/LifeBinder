@@ -11,7 +11,12 @@ function stTable.InitializeOptionsTable()
 	if optionsTable.HpValueVisualizationFormat==nil then optionsTable.HpValueVisualizationFormat=0 end  -- 0 -> percent  1--> hp deficit 2 --> current hp/ maxhp
 	if optionsTable.frameWidth==nil then optionsTable.frameWidth=110 end
 	if optionsTable.frameHeight==nil then optionsTable.frameHeight=43 end
-	
+	if optionsTable.roleIconPackage==nil then optionsTable.roleIconPackage=0 end
+	if optionsTable.applyScale==nil then optionsTable.applyScale=true end
+	if optionsTable.roleIconPosition==nil then optionsTable.roleIconPosition={left=4,top=6,width=20,height=20} end
+	if optionsTable.nameText==nil then optionsTable.nameText={left=30,top=7,fontSize=12,numLetters=5} end
+	if optionsTable.hpText==nil then optionsTable.hpText={left=-10,top=-10,fontSize=12,style=0} end
+	if optionsTable.manaBar==nil then optionsTable.manaBar={height=5} end
 end
 
 function stTable.CreateFrame(index)
