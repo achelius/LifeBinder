@@ -4,14 +4,21 @@
 lb.styles["oldstyle"]={}
 local stTable=lb.styles["oldstyle"]
 local optionsTable=nil
-
+local frame=nil
 function stTable.InitializeOptionsTable()
 	--set values like this (optionsTable.xxxxxx) , they will be saved into the savedvariables of the character
 	optionsTable.Value="cippolippo"
 	if optionsTable.HpValueVisualizationFormat==nil then optionsTable.HpValueVisualizationFormat=0 end  -- 0 -> percent  1--> hp deficit 2 --> current hp/ maxhp
 	if optionsTable.frameWidth==nil then optionsTable.frameWidth=110 end
 	if optionsTable.frameHeight==nil then optionsTable.frameHeight=43 end
-	
+	if optionsTable.framehSpace==nil then optionsTable.framehSpace=0 end
+	if optionsTable.framevSpace==nil then optionsTable.framevSpace=0 end
+	if optionsTable.roleIconPackage==nil then optionsTable.roleIconPackage=0 end
+	if optionsTable.applyScale==nil then optionsTable.applyScale=true end
+	if optionsTable.roleIcon==nil then optionsTable.roleIcon={left=4,top=6,width=20,height=20} end
+	if optionsTable.nameText==nil then optionsTable.nameText={left=30,top=7,fontSize=12,numLetters=5} end
+	if optionsTable.hpText==nil then optionsTable.hpText={left=-10,top=-10,fontSize=12,style=0} end
+	if optionsTable.manaBar==nil then optionsTable.manaBar={height=5} end
 end
 
 function stTable.CreateFrame(index)
@@ -50,15 +57,15 @@ function stTable.fastInitialize()
 			var = i + ((a-1) * 5)
 			--lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
 			if lb.frames[var]==nil then lb.frames[var]={} end
-			lb.frames[var].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame)
+			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame) end
 			lb.frames[var].groupBF:SetLayer(1)
 			lb.frames[var].groupBF:SetBackgroundColor(0, 0, 0, 1)
 			lb.frames[var].groupBF:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (a -1) , optionsTable.frameHeight * (i - 1))
 			lb.frames[var].groupBF:SetHeight(optionsTable.frameHeight)
 			lb.frames[var].groupBF:SetWidth(optionsTable.frameWidth)
-			lb.frames[var].groupBF:SetVisible(false)
+			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF:SetVisible(false) end
 			
-			lb.frames[var].groupMask = UI.CreateFrame("Frame", "group"..i, lb.Window)
+			if lb.frames[var].groupMask ==nil then	lb.frames[var].groupMask = UI.CreateFrame("Frame", "group"..i, lb.Window) end
 			lb.frames[var].groupMask:SetLayer(99)
 			lb.frames[var].groupMask:SetBackgroundColor(0,0,0,0)
 			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (a -1) , optionsTable.frameHeight * (i - 1))
@@ -135,12 +142,12 @@ function stTable.initializeIndex(index)
 	lb.frames[var].groupHF:SetLayer(0)
 
 
-	lb.frames[var].groupName:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", 30*optionsTable.frameWidth*0.009009009, 7*optionsTable.frameHeight*0.023255814)
+	lb.frames[var].groupName:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", optionsTable.nameText.left*optionsTable.frameWidth*0.009009009, optionsTable.nameText.top*optionsTable.frameHeight*0.023255814)
 	lb.frames[var].groupName:SetLayer(2)
-    local percfsize=round((lbValues.font)*optionsTable.frameHeight*0.023255814*0.8)
+    local percfsize=round((optionsTable.nameText.fontSize)*optionsTable.frameHeight*0.023255814*0.8)
 
-    if percfsize>12 then
-        percfsize=12
+    if percfsize>20 then
+        percfsize=20
     elseif percfsize<10 then
         percfsize=10
     end
@@ -161,12 +168,12 @@ function stTable.initializeIndex(index)
     lb.frames[var].groupStatus:SetFontSize(percfsize)
 
 	--lb.frames[var].groupRole:SetTexture("LifeBinder", "Textures/blank.png")
-	lb.frames[var].groupRole:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", 4*optionsTable.frameWidth*0.009009009,  6*optionsTable.frameHeight*0.023255814 )
-	lb.frames[var].groupRole:SetHeight(20)
-	lb.frames[var].groupRole:SetWidth(20)
+	lb.frames[var].groupRole:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", optionsTable.roleIcon.left*optionsTable.frameWidth*0.009009009,  optionsTable.roleIcon.top*optionsTable.frameHeight*0.023255814 )
+	lb.frames[var].groupRole:SetHeight(optionsTable.roleIcon.height)
+	lb.frames[var].groupRole:SetWidth(optionsTable.roleIcon.width)
 	lb.frames[var].groupRole:SetLayer(3)
 
-    
+    lb.frames[var].groupMask:SetVisible(true)
 
 	
 
@@ -181,8 +188,9 @@ function stTable.initialize()
     for a = 1, 4 do
 		for i = 1, 5 do
 			var = i + ((a-1) * 5)
-			  stTable.initializeIndex(var)         
-
+			if lb.UnitsTableStatus[var][12] then
+			   stTable.initializeIndex(var)         
+			end
 		end
 	end
 	--processMacroText(lb.UnitsTable)
@@ -323,4 +331,30 @@ function stTable.setBlockedValue(index,losvalue,oorvalue)
     	--print("4")
           lb.frames[index].groupHF:SetTexture("LifeBinder", "Textures/bars/health.png")
     end
+end
+
+--------------------------------------------options----------------------------------------------------------------------- 
+function stTable.getOptionsWindow(optionsFrame)
+	frame=optionsFrame
+	lb.commonUtils.createText(optionsFrame,0,0,"Standard style options")
+	optionsFrame.frameWidth=lb.commonUtils.createNUD(optionsFrame,"frameWidth",0,20,"Frame Width",optionsTable.frameWidth)
+	optionsFrame.frameHeight=lb.commonUtils.createNUD(optionsFrame,"frameWidth",0,50,"Frame Height",optionsTable.frameHeight)
+	--optionsFrame.framehSpacing=lb.commonUtils.createNUD(optionsFrame,"horizspacing",0,80,"Horiz.Space",optionsTable.framehSpace)
+	--optionsFrame.framevSpacing=lb.commonUtils.createNUD(optionsFrame,"vertspacing",0,110,"Vert.Space",optionsTable.framevSpace)
+	optionsFrame.playerNameMover= lb.commonUtils.createMover(optionsFrame,"playerNameMover",0,80,optionsTable.nameText.left,optionsTable.nameText.top,"Name position")
+	optionsFrame.roleIconMover= lb.commonUtils.createMover(optionsFrame,"playerNameMover",230,80,optionsTable.roleIcon.left,optionsTable.roleIcon.top,"Role icon\n position")
+	optionsFrame.nameFontSize=lb.commonUtils.createNUD(optionsFrame,"nameFontSize",0,200,"Name font size",optionsTable.nameText.fontSize)
+	optionsFrame.applyButton=lb.commonUtils.createButton(optionsFrame,"applybutton",250,300,150,30,"Apply settings")
+	optionsFrame.applyButton.Event.LeftClick=stTable.setOptionsValues
+end
+function stTable.setOptionsValues()
+	optionsTable.frameWidth=tonumber(frame.frameWidth.textArea:GetText())
+	optionsTable.frameHeight=tonumber(frame.frameHeight.textArea:GetText())
+	optionsTable.roleIcon.left=frame.roleIconMover.left
+	optionsTable.roleIcon.top=frame.roleIconMover.top
+	optionsTable.nameText.fontSize=tonumber(frame.nameFontSize.textArea:GetText())
+	optionsTable.nameText.left=frame.playerNameMover.left
+	optionsTable.nameText.top=frame.playerNameMover.top
+	stTable.fastInitialize()
+	stTable.initialize()
 end

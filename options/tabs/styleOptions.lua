@@ -21,6 +21,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 	end
 	 end
 	 optionsFrame.styleSelectCombobox:SetItems(list)
+	 optionsFrame.styleSelectCombobox:SetLayer(7)
 	 if currentsel~=-1 then optionsFrame.styleSelectCombobox:SetSelectedIndex(currentsel,true) end
 	 
 	 optionsFrame.styleApplyButton=UI.CreateFrame("RiftButton", "styleApplyButton",optionsFrame)
@@ -32,11 +33,21 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 optionsFrame.styleApplyButton.Event.LeftClick=lb.slotsGui.styleOptions.SetCurrentStyle
 	 
 	 optionsFrame.styleStatusText=UI.CreateFrame("Text", "styleStatusText",optionsFrame)
-	 optionsFrame.styleStatusText:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,90)
+	 optionsFrame.styleStatusText:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,100)
 	 optionsFrame.styleStatusText:SetWidth(400)
 	 optionsFrame.styleStatusText:SetHeight(30)
 	 optionsFrame.styleStatusText:SetFontColor(1,0,0,1)
 	 optionsFrame.styleStatusText:SetText("")
+	 --initializing style options frame
+	 writeText("Style detailed options","text",optionsFrame,10,120)
+	 optionsFrame.styleDetalsOptions = UI.CreateFrame("Frame", "OptionsWindowA", optionsFrame)
+	 optionsFrame.styleDetalsOptions:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,150)
+	-- optionsFrame.styleDetalsOptions:SetBackgroundColor(0,0,0,1)
+	 optionsFrame.styleDetalsOptions:SetWidth(700)
+	 optionsFrame.styleDetalsOptions:SetHeight(300)
+	 
+	 lb.styles[lb.currentStyle].getOptionsWindow(optionsFrame.styleDetalsOptions)
+	 
 --	 optionsFrame.styleReloaduiButton=UI.CreateFrame("RiftButton", "styleReloaduiButton",optionsFrame)
 --	 optionsFrame.styleReloaduiButton:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",350,50)
 --	 optionsFrame.styleReloaduiButton:SetWidth(120)
