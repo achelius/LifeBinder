@@ -6,7 +6,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 
 	 
 	 --initializing debuffTable
-	 writeText("Drag debuffs from here:","text",optionsFrame,350,30)
+	 writeText("Drag Debuffs from here:","text",optionsFrame,350,30)
 	 optionsFrame.DebuffsTable=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
 	 optionsFrame.DebuffsTable:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 350, 50)
      optionsFrame.DebuffsTable:SetPoint("BOTTOMRIGHT", optionsFrame, "BOTTOMRIGHT", -370, -15)
@@ -68,7 +68,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 
 	 --- initializing  whitelist
 	 --adds the whitelist
-	 writeText("Priority debuffs","text",optionsFrame,40,50)
+	 writeText("Whitelisted Debuffs","text",optionsFrame,40,50)
 	 optionsFrame.WhiteList=UI.CreateFrame("AbilitiesList", "WhiteList",optionsFrame)
 	 optionsFrame.WhiteList:CreateDragFrame(optionsFrame.WhiteList,optionsFrame,parentFrame)
 	 optionsFrame.WhiteList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onWhiteListItemDrag
@@ -82,7 +82,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
      optionsFrame.WhiteListView:SetContent( optionsFrame.WhiteList)
 	 
 	  --adds the BlackList
-	 writeText("Blocked debuffs","text",optionsFrame,620,50)
+	 writeText("Blacklisted Debuffs","text",optionsFrame,620,50)
 	 optionsFrame.BlackList=UI.CreateFrame("AbilitiesList", "BlackList",optionsFrame)
 	 optionsFrame.BlackList:CreateDragFrame(optionsFrame.BlackList,optionsFrame,parentFrame)
 	 optionsFrame.BlackList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onBlackListItemDrag
@@ -94,7 +94,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
      optionsFrame.BlackListView:SetBorder(1, 1, 1, 1, 1)
      optionsFrame.BlackListView:SetContent( optionsFrame.BlackList)
      
-     writeText("If it's not a priority and it's not blocked:","text",optionsFrame,620,380)
+     writeText("If it's not whitelisted and it's not blacklisted:","text",optionsFrame,620,380)
      optionsFrame.ShowCurableOnlyCheckBox=UI.CreateFrame("SimpleCheckbox", "ShowCurableOnlyCheckBox",optionsFrame)
      optionsFrame.ShowCurableOnlyCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",620, 400)
      optionsFrame.ShowCurableOnlyCheckBox:SetText("Show only curable debuffs")

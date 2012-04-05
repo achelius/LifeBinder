@@ -45,14 +45,17 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
      optionsFrame.ButtonsTable.Tabs={}
      
      optionsFrame.tempBindsLists=lbMouseBinds[lbValues.set]
-     for i = 1, 5 do
-     	
+     
+	 local mouseBindButtonNames = { "Left", "Right", "Middle", "M4", "M5" }
+	 
+	 for i = 1, 5 do
      	optionsFrame.ButtonsTable.Tabs[i] = UI.CreateFrame("Frame", "BuffTab", optionsFrame.ButtonsTable)
-	 	optionsFrame.ButtonsTable:AddTab("Mouse"..tostring(i),optionsFrame.ButtonsTable.Tabs[i])
+	 	--optionsFrame.ButtonsTable:AddTab("Mouse"..tostring(i),optionsFrame.ButtonsTable.Tabs[i])
+		optionsFrame.ButtonsTable:AddTab(mouseBindButtonNames[i],optionsFrame.ButtonsTable.Tabs[i])
 	 	optionsFrame.ButtonsTable.Tabs[i].BindsLists={}
 	 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView={}
-	 	for g = 1 , 7 do
-	 		
+	 	
+		for g = 1 , 7 do
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]=UI.CreateFrame("HorizontalIconsList", "BindsLists"..tostring(g),optionsFrame.ButtonsTable.Tabs[i])
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]:CreateDragFrame(optionsFrame.ButtonsTable.Tabs[i].BindsLists[g],optionsFrame.ButtonsTable.Tabs[i],parentFrame)
 			optionsFrame.ButtonsTable.Tabs[i].BindsLists[g].Event.DraggedOutItem=function(item,x,y) lb.slotsGui.mouseBinds.BindsListItemDrag(i,g,item,x,y) end
@@ -125,7 +128,7 @@ function lb.slotsGui.mouseBinds.updateData()
 	     counter=counter+1
 	 end
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
-	 table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier"})
+	table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier"})
 	 table.insert(list,2,{"Assist","LifeBinder","Textures/card29a.png","assist","assist","mousebutton","modifier"})
 	 table.insert(list,3,{"Focus","LifeBinder","Textures/card29b.png","focus","focus","mousebutton","modifier"})
 	 frame.CommandsList:SetItems(list)
