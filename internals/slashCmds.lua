@@ -1,7 +1,9 @@
 LB_SC_HELP = { -- Temp array while locales being made
 	"---------------------------------------------------------------",
-	"LifeBinder	Help Menu",
+	"LifeBinder	Help Menu,",
 	"---------------------------------------------------------------",
+	"FOR THE MOMMENT ONLY USE CONFIG",
+	"OTHER COMMANDS DO NOT WORK",
 	"/lb config		-- Configure LifeBinder.",
 	"/lb show		-- Show LifeBinder.",
 	"/lb hide		-- Hide LifeBinder.",

@@ -86,12 +86,16 @@ function loadVariables(addonidentifier)
     end
     if lbDebuffWhitelist == nil then
         lbDebuffWhitelist ={}
-        lbDebuffWhitelist[1]={ }
-        lbDebuffWhitelist[2]={ }
-        lbDebuffWhitelist[3]={ }
-        lbDebuffWhitelist[4]={ }
-        lbDebuffWhitelist[5]={ }
-        lbDebuffWhitelist[6]={ }
+        for i = 1,6 do
+        	lbDebuffWhitelist[i]={
+				["Aura of Decay"] = {castByMe = false},
+				Cocooned = {castByMe = false},
+				["Heat Index"] = {castByMe = false},
+				["Hot Tar"] = {castByMe = false},
+				["Poisonous Spray"] = {castByMe = false},
+				["Timeless Void"] = {castByMe = false}	
+			}
+        end
     end
     if lbDebuffBlackList == nil then
         lbDebuffBlackList ={}
@@ -100,8 +104,7 @@ function loadVariables(addonidentifier)
         end
     end
     if lbDebuffOptions == nil then
-        lbDebuffOptions ={}
-        
+        lbDebuffOptions ={}        
     end
     --slot position info, separated from the slot options because i only load this once 
     --can be more or less slots, but default will be 8 and the style will be X style
