@@ -113,7 +113,7 @@ function stTable.initializeIndex(index)
     
 	--Set Resource Frame
 	lb.frames[var].groupRF:SetPoint("BOTTOMLEFT", lb.frames[var].groupBF, "BOTTOMLEFT", 1, -3)
-	lb.frames[var].groupRF:SetHeight(5)
+	lb.frames[var].groupRF:SetHeight(optionsTable.manaBar.height)
 	lb.frames[var].groupRF:SetWidth(optionsTable.frameWidth - 4)
 	lb.frames[var].groupRF:SetLayer(2)
 	lb.frames[var].groupRF:SetVisible(true)
@@ -224,6 +224,9 @@ function stTable.showAllFrames()
 		lb.frames[var].groupBF:SetVisible(true)
 	end
 end
+
+
+
 function stTable.getHealthFrameTexture()
 	return "Textures/bars/health.png"
 end
@@ -233,6 +236,12 @@ end
 function stTable.getFrameHeight()
 	return optionsTable.frameHeight
 end
+
+function stTable.setNameValue(index,name)
+	if string.len(name) > optionsTable.nameText.numLetters then name = string.sub(name, 1, optionsTable.nameText.numLetters) end --restrict names
+    lb.frames[index].groupName:SetText(name)
+end
+
 
 function stTable.setCastBarValue(index,value,max)
     if value==nil then value=0 end
@@ -310,8 +319,21 @@ end
 
 function stTable.setRoleIcon(index,calling,role)
 	if index==nil then return end
-	
-	lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
+	if optionsTable.roleIconPackage ==0 then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
+	elseif optionsTable.roleIconPackage ==1 then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons2/"..tostring(role)..".png")
+	end
+	lb.frames[index].groupRole:SetVisible(true)
+end
+
+function stTable.setReadyCheck(index,value)
+	if index==nil then return end
+	if value then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/ready/ready.png")
+	elseif not value then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/ready/notready.png")
+	end
 	lb.frames[index].groupRole:SetVisible(true)
 end
 
@@ -333,10 +355,25 @@ function stTable.setBlockedValue(index,losvalue,oorvalue)
     end
 end
 
+function stTable.setAggroStatus(index,value)
+	if value then
+        lb.frames[index].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
+    else
+        lb.frames[index].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
+    end
+end
+function stTable.setOfflineStatus(index,value)
+	 if value then
+        lb.frames[index].groupStatus:SetText("(D/C)")
+        lb.frames[index].groupHF:SetWidth(1)
+		lb.frames[index].groupRF:SetWidth(1)
+    end
+end
+
 --------------------------------------------options----------------------------------------------------------------------- 
 function stTable.getOptionsWindow(optionsFrame)
 	frame=optionsFrame
-	lb.commonUtils.createText(optionsFrame,0,0,"Standard style options")
+	lb.commonUtils.createText(optionsFrame,0,0,"Old style options")
 	optionsFrame.frameWidth=lb.commonUtils.createNUD(optionsFrame,"frameWidth",0,20,"Frame Width",optionsTable.frameWidth)
 	optionsFrame.frameHeight=lb.commonUtils.createNUD(optionsFrame,"frameWidth",0,50,"Frame Height",optionsTable.frameHeight)
 	--optionsFrame.framehSpacing=lb.commonUtils.createNUD(optionsFrame,"horizspacing",0,80,"Horiz.Space",optionsTable.framehSpace)
@@ -344,6 +381,8 @@ function stTable.getOptionsWindow(optionsFrame)
 	optionsFrame.playerNameMover= lb.commonUtils.createMover(optionsFrame,"playerNameMover",0,80,optionsTable.nameText.left,optionsTable.nameText.top,"Name position")
 	optionsFrame.roleIconMover= lb.commonUtils.createMover(optionsFrame,"playerNameMover",230,80,optionsTable.roleIcon.left,optionsTable.roleIcon.top,"Role icon\n position")
 	optionsFrame.nameFontSize=lb.commonUtils.createNUD(optionsFrame,"nameFontSize",0,200,"Name font size",optionsTable.nameText.fontSize)
+	optionsFrame.nameNumLetters=lb.commonUtils.createNUD(optionsFrame,"nameNumLetters",0,230,"Name chars count",optionsTable.nameText.numLetters)
+	optionsFrame.manaBarHeight=lb.commonUtils.createNUD(optionsFrame,"manaBarHeight",0,260,"ManaBar height",optionsTable.manaBar.height)
 	optionsFrame.applyButton=lb.commonUtils.createButton(optionsFrame,"applybutton",250,300,150,30,"Apply settings")
 	optionsFrame.applyButton.Event.LeftClick=stTable.setOptionsValues
 end
@@ -355,6 +394,8 @@ function stTable.setOptionsValues()
 	optionsTable.nameText.fontSize=tonumber(frame.nameFontSize.textArea:GetText())
 	optionsTable.nameText.left=frame.playerNameMover.left
 	optionsTable.nameText.top=frame.playerNameMover.top
+    optionsTable.manaBar.height=tonumber(frame.manaBarHeight.textArea:GetText())
+	optionsTable.nameText.numLetters=tonumber(frame.nameNumLetters.textArea:GetText())
 	stTable.fastInitialize()
 	stTable.initialize()
 end

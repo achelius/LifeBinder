@@ -6,12 +6,14 @@
 
 lb.styles["standard"]={}
 local stTable=lb.styles["standard"]
+
 local optionsTable=nil
 local frame=nil
 
+
 function stTable.InitializeOptionsTable()
 	--set values like this (optionsTable.xxxxxx) , they will be saved into the savedvariables of the character
-	optionsTable.Value="cippolippo"
+	optionsTable.Value="standard"
 	if optionsTable.HpValueVisualizationFormat==nil then optionsTable.HpValueVisualizationFormat=0 end  -- 0 -> percent  1--> hp deficit 2 --> current hp/ maxhp
 	if optionsTable.frameWidth==nil then optionsTable.frameWidth=110 end
 	if optionsTable.frameHeight==nil then optionsTable.frameHeight=43 end
@@ -23,6 +25,129 @@ function stTable.InitializeOptionsTable()
 	if optionsTable.nameText==nil then optionsTable.nameText={left=30,top=7,fontSize=12,numLetters=5} end
 	if optionsTable.hpText==nil then optionsTable.hpText={left=-10,top=-10,fontSize=12,style=0} end
 	if optionsTable.manaBar==nil then optionsTable.manaBar={height=5} end
+	if optionsTable.flowDirection==nil then optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"} end
+end
+
+function stTable.fastInitialize()
+	optionsTable=lb.styles.getConfiguration("standard") --gets configuration from savedvars and stores it into the local optionsTable
+	stTable.InitializeOptionsTable() --initializes optionsTable
+	
+	lb.WindowFrameTop:SetTexture("Rift","nil")
+	
+	local fupos=optionsTable.flowDirection.firstUnit
+	local unitgrowth=optionsTable.flowDirection.unitGrowth
+	local groupGrowth=optionsTable.flowDirection.groupGrowth
+    for a = 1, 4 do
+		for i = 1, 5 do
+			var = i + ((a-1) * 5)
+			local left=0
+			local top=0
+			--a=group
+			--i=unit
+			if fupos =="BOTTOMLEFT" then
+				if unitgrowth=="RIGHT" then
+					if groupGrowth=="UP" then
+						local totalwidth= optionsTable.frameWidth*5
+						local totalheight= optionsTable.frameHeight*4
+						left=optionsTable.frameWidth * (i -1) 
+						top=totalheight- optionsTable.frameHeight * (a)
+					end
+				elseif unitgrowth=="UP" then
+					if groupGrowth=="RIGHT" then
+						local totalwidth= optionsTable.frameWidth*4
+						local totalheight= optionsTable.frameHeight*5
+						left=optionsTable.frameWidth * (a -1) 
+						top=totalheight- optionsTable.frameHeight * (i)
+					end
+				end
+			elseif fupos =="BOTTOMRIGHT" then
+				if unitgrowth=="LEFT" then
+					if groupGrowth=="UP" then
+						local totalwidth= optionsTable.frameWidth*5
+						local totalheight= optionsTable.frameHeight*4
+						left=totalwidth-optionsTable.frameWidth * (i) 
+						top=totalheight-optionsTable.frameHeight * (a)
+					end
+				elseif unitgrowth=="UP" then
+					if groupGrowth=="LEFT" then
+						local totalwidth= optionsTable.frameWidth*4
+						local totalheight= optionsTable.frameHeight*5
+						left=totalwidth-optionsTable.frameWidth * (a) 
+						top=totalheight- optionsTable.frameHeight * (i)
+					end
+				end
+			elseif fupos =="TOPLEFT" then
+				if unitgrowth=="RIGHT" then
+					if groupGrowth=="DOWN" then
+						local totalwidth= optionsTable.frameWidth*5
+						local totalheight= optionsTable.frameHeight*4	
+						left=optionsTable.frameWidth * (i -1) 
+						top=optionsTable.frameHeight * (a-1)
+					end
+				elseif unitgrowth=="DOWN" then
+					if groupGrowth=="RIGHT" then
+						local totalwidth= optionsTable.frameWidth*4
+						local totalheight= optionsTable.frameHeight*5
+						left=optionsTable.frameWidth * (a -1)
+						top=optionsTable.frameHeight * (i - 1)
+
+					end
+				end
+			elseif fupos =="TOPRIGHT" then
+			--a=group
+			--i=unit
+				if unitgrowth=="LEFT" then
+					if groupGrowth=="DOWN" then
+						local totalwidth= optionsTable.frameWidth*5
+						local totalheight= optionsTable.frameHeight*4	
+						left=totalwidth-optionsTable.frameWidth * (i) 
+						top=optionsTable.frameHeight * (a-1)
+					end
+				elseif unitgrowth=="DOWN" then
+					if groupGrowth=="LEFT" then
+						local totalwidth= optionsTable.frameWidth*4
+						local totalheight= optionsTable.frameHeight*5
+						left=totalwidth-optionsTable.frameWidth * (a -1)
+						top=optionsTable.frameHeight * (i - 1)
+--					
+					end
+				end	
+			end
+			
+			--lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
+			if lb.frames[var]==nil then lb.frames[var]={} end
+			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame) end
+			lb.frames[var].groupBF:SetLayer(1)
+			lb.frames[var].groupBF:SetBackgroundColor(0, 0, 0, 1)
+			lb.frames[var].groupBF:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", left , top)
+			lb.frames[var].groupBF:SetHeight(optionsTable.frameHeight)
+			lb.frames[var].groupBF:SetWidth(optionsTable.frameWidth)
+			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF:SetVisible(false)end
+			
+			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateFrame("Frame", "group"..i, lb.CenterFrame) end
+			lb.frames[var].groupMask:SetLayer(99)
+			lb.frames[var].groupMask:SetBackgroundColor(0,0,0,0)
+			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", left , top)
+			lb.frames[var].groupMask:SetHeight(optionsTable.frameHeight)
+			lb.frames[var].groupMask:SetWidth(optionsTable.frameWidth)
+			lb.frames[var].groupMask:SetSecureMode("restricted")
+			if not lb.UnitsTableStatus[var][12] then lb.frames[var].groupMask:SetVisible(false) end
+			
+		end
+	end
+	--processMacroText(lb.UnitsTable)
+--	for var = 1,20 do
+--        name=string.format("group%.2d", var)
+--        lb.groupMask[var].Event.LeftClick="/target @".. name
+--
+--	end
+	if optionsTable.frameWidth <  95 then
+		size = optionsTable.frameWidth / 4
+		lbValues.font = math.ceil(optionsTable.frameWidth / 6)
+	else
+		size = 24
+		lbValues.font = 16
+	end
 end
 
 function stTable.CreateFrame(index)
@@ -49,51 +174,7 @@ function stTable.CreateFrame(index)
 	lb.UnitsTableStatus[i][12]=true --Frame Created
 	
 end
-function stTable.fastInitialize()
-	optionsTable=lb.styles.getConfiguration("standard") --gets configuration from savedvars and stores it into the local optionsTable
-	
-	stTable.InitializeOptionsTable() --initializes optionsTable
-	lb.WindowFrameTop:SetTexture("Rift","nil")
-	local totalwidth= optionsTable.frameWidth*5
-	local totalheight= optionsTable.frameHeight*4
-    for a = 1, 4 do
-		for i = 1, 5 do
-			var = i + ((a-1) * 5)
-			--lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
-			if lb.frames[var]==nil then lb.frames[var]={} end
-			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame) end
-			lb.frames[var].groupBF:SetLayer(1)
-			lb.frames[var].groupBF:SetBackgroundColor(0, 0, 0, 1)
-			lb.frames[var].groupBF:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a))
-			lb.frames[var].groupBF:SetHeight(optionsTable.frameHeight)
-			lb.frames[var].groupBF:SetWidth(optionsTable.frameWidth)
-			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF:SetVisible(false)end
-			
-			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateFrame("Frame", "group"..i, lb.Window) end
-			lb.frames[var].groupMask:SetLayer(99)
-			lb.frames[var].groupMask:SetBackgroundColor(0,0,0,0)
-			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", optionsTable.frameWidth * (i -1) , totalheight- optionsTable.frameHeight * (a))
-			lb.frames[var].groupMask:SetHeight(optionsTable.frameHeight)
-			lb.frames[var].groupMask:SetWidth(optionsTable.frameWidth)
-			lb.frames[var].groupMask:SetSecureMode("restricted")
-			lb.frames[var].groupMask:SetVisible(false)
-			
-		end
-	end
-	--processMacroText(lb.UnitsTable)
---	for var = 1,20 do
---        name=string.format("group%.2d", var)
---        lb.groupMask[var].Event.LeftClick="/target @".. name
---
---	end
-	if optionsTable.frameWidth <  95 then
-		size = optionsTable.frameWidth / 4
-		lbValues.font = math.ceil(optionsTable.frameWidth / 6)
-	else
-		size = 24
-		lbValues.font = 16
-	end
-end
+
 
 function stTable.initializeIndex(index)
 	if optionsTable==nil then
@@ -117,7 +198,7 @@ function stTable.initializeIndex(index)
     
 	--Set Resource Frame
 	lb.frames[var].groupRF:SetPoint("BOTTOMLEFT", lb.frames[var].groupBF, "BOTTOMLEFT", 3, -2)
-	lb.frames[var].groupRF:SetHeight(5)
+	lb.frames[var].groupRF:SetHeight(optionsTable.manaBar.height)
 	lb.frames[var].groupRF:SetWidth(optionsTable.frameWidth - 5)
 	lb.frames[var].groupRF:SetLayer(2)
 	lb.frames[var].groupRF:SetVisible(true)
@@ -141,7 +222,7 @@ function stTable.initializeIndex(index)
 
 	lb.frames[var].groupHF:SetTexture("LifeBinder",stTable.getHealthFrameTexture())
 	lb.frames[var].groupHF:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", 2,  2 )
-	lb.frames[var].groupHF:SetHeight(optionsTable.frameHeight - 9)
+	lb.frames[var].groupHF:SetHeight(optionsTable.frameHeight - 4-optionsTable.manaBar.height)
 	lb.frames[var].groupHF:SetWidth(optionsTable.frameWidth - 5)
 	lb.frames[var].groupHF:SetLayer(0)
 
@@ -156,8 +237,7 @@ function stTable.initializeIndex(index)
         percfsize=10
     end
     lb.frames[var].groupName:SetFontSize(percfsize)
-	--lb.frames[var].groupName:SetText(lb.frames[var].UnitsTable[var])
-
+    
 	lb.frames[var].groupStatus:SetText("100%")
 	lb.frames[var].groupStatus:SetFontColor(lbCallingColors[5].r, lbCallingColors[5].g, lbCallingColors[5].b, 1)
 	lb.frames[var].groupStatus:SetLayer(2)
@@ -232,6 +312,11 @@ function stTable.getFrameHeight()
 	return optionsTable.frameHeight
 end
 
+function stTable.setNameValue(index,name)
+	if string.len(name) > optionsTable.nameText.numLetters then name = string.sub(name, 1, optionsTable.nameText.numLetters) end --restrict names
+    lb.frames[index].groupName:SetText(name)
+end
+
 function stTable.setCastBarValue(index,value,max)
     if value==nil then value=0 end
     local cwidth=(value/max)*(optionsTable.frameWidth-3)
@@ -299,17 +384,27 @@ end
 function stTable.setHealthBarText(index,value,maxvalue)
 	if index==nil then return end
 	local resourcesRatio = value/maxvalue
-	
-
-		local healthpercent = string.format("%s%%", (math.ceil(value/maxvalue * 100)))
-		lb.frames[index].groupStatus:SetText(healthpercent)
-
+	local healthpercent = string.format("%s%%", (math.ceil(value/maxvalue * 100)))
+	lb.frames[index].groupStatus:SetText(healthpercent)
 end
 
 function stTable.setRoleIcon(index,calling,role)
 	if index==nil then return end
+	if optionsTable.roleIconPackage ==0 then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
+	elseif optionsTable.roleIconPackage ==1 then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons2/"..tostring(role)..".png")
+	end
+	lb.frames[index].groupRole:SetVisible(true)
+end
+function stTable.setReadyCheck(index,value)
+	if index==nil then return end
+	if value then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/ready/ready.png")
+	elseif not value then
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/ready/notready.png")
+	end
 	
-	lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
 	lb.frames[index].groupRole:SetVisible(true)
 end
 
@@ -331,6 +426,22 @@ function stTable.setBlockedValue(index,losvalue,oorvalue)
     end
 end
 
+function stTable.setAggroStatus(index,status)
+	if index==nil then return end
+	if status then
+        lb.frames[index].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
+    else
+        lb.frames[index].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
+    end
+end
+function stTable.setOfflineStatus(index,value)
+	if index==nil then return end
+	 if value then
+        lb.frames[index].groupStatus:SetText("(D/C)")
+        lb.frames[index].groupHF:SetWidth(1)
+		lb.frames[index].groupRF:SetWidth(1)
+    end
+end
 --------------------------------------------options----------------------------------------------------------------------- 
 function stTable.getOptionsWindow(optionsFrame)
 	frame=optionsFrame
@@ -342,9 +453,12 @@ function stTable.getOptionsWindow(optionsFrame)
 	optionsFrame.playerNameMover= lb.commonUtils.createMover(optionsFrame,"playerNameMover",0,80,optionsTable.nameText.left,optionsTable.nameText.top,"Name position")
 	optionsFrame.roleIconMover= lb.commonUtils.createMover(optionsFrame,"playerNameMover",230,80,optionsTable.roleIcon.left,optionsTable.roleIcon.top,"Role icon\n position")
 	optionsFrame.nameFontSize=lb.commonUtils.createNUD(optionsFrame,"nameFontSize",0,200,"Name font size",optionsTable.nameText.fontSize)
+	optionsFrame.nameNumLetters=lb.commonUtils.createNUD(optionsFrame,"nameNumLetters",0,230,"Name chars count",optionsTable.nameText.numLetters)
+	optionsFrame.manaBarHeight=lb.commonUtils.createNUD(optionsFrame,"manaBarHeight",0,260,"ManaBar height",optionsTable.manaBar.height)
 	optionsFrame.applyButton=lb.commonUtils.createButton(optionsFrame,"applybutton",250,300,150,30,"Apply settings")
 	optionsFrame.applyButton.Event.LeftClick=stTable.setOptionsValues
 end
+
 function stTable.setOptionsValues()
 	optionsTable.frameWidth=tonumber(frame.frameWidth.textArea:GetText())
 	optionsTable.frameHeight=tonumber(frame.frameHeight.textArea:GetText())
@@ -353,6 +467,41 @@ function stTable.setOptionsValues()
 	optionsTable.nameText.fontSize=tonumber(frame.nameFontSize.textArea:GetText())
 	optionsTable.nameText.left=frame.playerNameMover.left
 	optionsTable.nameText.top=frame.playerNameMover.top
+	optionsTable.manaBar.height=tonumber(frame.manaBarHeight.textArea:GetText())
+	optionsTable.nameText.numLetters=tonumber(frame.nameNumLetters.textArea:GetText())
 	stTable.fastInitialize()
 	stTable.initialize()
 end
+
+function stTable.slashCommHandler(cmd,params)
+	local cmdv= lb.slashCommands.parseCommandValues(params[1])
+	
+	if cmdv[1]=="setfd" then
+		local found=true
+		if cmdv[2]=="1" then
+			optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"}
+		elseif cmdv[2] =="2" then
+			optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="UP",groupGrowth="RIGHT"}
+		elseif cmdv[2] =="3" then
+			optionsTable.flowDirection={firstUnit="TOPLEFT",unitGrowth="RIGHT",groupGrowth="DOWN"}
+		elseif cmdv[2] =="4" then
+			optionsTable.flowDirection={firstUnit="TOPLEFT",unitGrowth="DOWN",groupGrowth="RIGHT"}
+		elseif cmdv[2] =="5" then
+			optionsTable.flowDirection={firstUnit="TOPRIGHT",unitGrowth="LEFT",groupGrowth="DOWN"}
+		elseif cmdv[2] =="6" then
+			optionsTable.flowDirection={firstUnit="TOPRIGHT",unitGrowth="DOWN",groupGrowth="LEFT"}
+		elseif cmdv[2] =="7" then
+			optionsTable.flowDirection={firstUnit="BOTTOMRIGHT",unitGrowth="LEFT",groupGrowth="UP"}
+		elseif cmdv[2] =="8" then
+			optionsTable.flowDirection={firstUnit="BOTTOMRIGHT",unitGrowth="UP",groupGrowth="LEFT"}
+		else
+			found=false
+		end
+		if found then
+			stTable.fastInitialize()
+		end
+	end
+end
+
+--add the /lb standard command handler
+lb.addCustomSlashCommand("standard",stTable.slashCommHandler)

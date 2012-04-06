@@ -128,6 +128,7 @@ function lb.createWindow()
     lb.CombatStatus:SetPoint("TOPLEFT", lb.WindowFrameTop, "TOPLEFT", 7, 7)
     lb.CombatStatus:SetLayer(4)
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
+    lb.CombatStatus:SetVisible(not lbValues.lockedState)
     lb.WindowDrag:SetPoint("TOPLEFT", lb.WindowFrameTop, "TOPLEFT")
     --lb.WindowDrag:SetPoint("TOPRIGHT", lb.WindowFrameTop, "TOPRIGHT")
     lb.WindowDrag:SetHeight(30)
@@ -150,7 +151,7 @@ function lb.createWindow()
 end
 
 function lb.WindowDragEventLeftDown()
-    if not lb.isincombat then
+    if not lb.isincombat and not lbValues.lockedState then
         windowdragActive = true
         local mouseStatus = Inspect.Mouse()
         lb.clickOffset["x"] = mouseStatus.x - lbValues.locmainx
@@ -386,7 +387,7 @@ function lbUnitUpdateIndex(index)
     	end
    
     	local name = unitTable.name
-		if string.len(name) > 5 then name = string.sub(name, 1, 5).."" end --restrict names to 8 letters
+		
 		if  lb.UnitsTableStatus[j][11] then
 			--the unit needs an update
 			if lb.UnitsTableStatus[j][5]~=unitTable.id then
@@ -397,7 +398,7 @@ function lbUnitUpdateIndex(index)
 	              lb.UnitsTableStatus[j][5]=unitTable.id
 	        end
 			
-			lb.frames[j].groupName:SetText(name)
+			lb.styles[lb.currentStyle].setNameValue(j,name)
 			--mana
 			lb.styles[lb.currentStyle].setManaBar(j,unitTable)
 			local resource=0
@@ -448,40 +449,29 @@ function lbUnitUpdateIndex(index)
 	    		lb.UnitsTableStatus[j][3] =  unitTable.blocked
 	            lb.styles[lb.currentStyle].setBlockedValue(j,lb.UnitsTableStatus[j][3],lb.UnitsTableStatus[j][10])
 	            
-	        --if lb.UnitsTableStatus[j][2] ~=  unitTable.offline or viewModeChanged then
+	        -- sets offline status
 	            lb.UnitsTableStatus[j][2] =  unitTable.offline
-	                if unitTable.offline then
-	                    lb.frames[j].groupStatus:SetText("(D/C)")
-	                    lb.frames[j].groupHF:SetWidth(1)
-						lb.frames[j].groupRF:SetWidth(1)
-	                end
-	        --end
+	            lb.styles[lb.currentStyle].setOfflineStatus(j,lb.UnitsTableStatus[j][2])
 	
-	        if targetunit~=nil then
-	            if unitident == targetunit.id  or viewModeChanged then
-	                lb.UnitsTableStatus[j][6] =  true
-	                if lb.UnitsTableStatus[j][6] then
-	                    lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
-	                else
-	                    lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
-	                end
-	            else
-	                lb.UnitsTableStatus[j][6] =  false
-	            end
-	        end
+--	        if targetunit~=nil then
+--	            if unitident == targetunit.id  or viewModeChanged then
+--	                lb.UnitsTableStatus[j][6] =  true
+--	                if lb.UnitsTableStatus[j][6] then
+--	                    lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
+--	                else
+--	                    lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
+--	                end
+--	            else
+--	                lb.UnitsTableStatus[j][6] =  false
+--	            end
+--	        end
 	
-	       -- if lb.UnitsTableStatus[j][1] ~=  unitTable.aggro or viewModeChanged then
+	       ---- sets aggro status
 	            lb.UnitsTableStatus[j][1] =  unitTable.aggro
-	            if unitTable.aggro then
-	                lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/aggroframe.png")
-	            else
-	                lb.frames[j].groupAggro:SetTexture("LifeBinder", "Textures/backframe.png")
-	            end
-	        --end
-	       
-	        
+	            lb.styles[lb.currentStyle].setAggroStatus(j,lb.UnitsTableStatus[j][1])
 	        
 	        if viewModeChanged then
+	        	-- only if lastMode changed on this call
 	          local  healthtick = unitTable.health
 	          local  healthmax = unitTable.healthMax
 	            if healthtick~=nil and healthmax ~= nil then

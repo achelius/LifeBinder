@@ -36,7 +36,8 @@ function lb.EnableHandlers()
 			-- create a change target event
 			table.insert(Library.LibUnitChange.Register("player.target"), {lb.onPlayerTargetChanged, "LifeBinder", "OnUnitChange"})
 			table.insert(Library.LibUnitChange.Register("mouseover"), {lb.onMouseOverTargetChanged, "LifeBinder", "OnUnitMouseoverChange"})
-			
+			-- ready check event
+			table.insert(Event.Unit.Detail.Ready, {lb.readyCheck.onReadyEvent, "LifeBinder", "onReadyChange"})
 			---coordinates changer
 			if (Event.Unit.Detail.Coord~=nil) then
 				table.insert(Event.Unit.Detail.Coord, {lb.posData.onPlayerMovement, "LifeBinder", "OnUnitCoodsChange"})

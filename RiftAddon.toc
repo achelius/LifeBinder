@@ -12,16 +12,19 @@ Embed = {
 	["libs/LibSimpleWidgets"] = true,
 	["libs/LibUnitChange"] = true,
 	["libs/SafesRaidManager"] = true
+
 }
 Dependencies = {
 	LibSimpleWidgets = {"required", "before"},
 	LibUnitChange = {"required", "before"},
-	SafesRaidManager = {"required", "before"},
+	SafesRaidManager = {"required", "before"}
+
 };
 
 RunOnStartup = {
 	"internals/loadSettings.lua",
 	"LifeBinderMain.lua",
+	"internals/slashCmds.lua",
 	"internals/eventFunctions.lua",
 	"styles/oldstyle.lua",
 	"styles/standard.lua",
@@ -32,6 +35,7 @@ RunOnStartup = {
 	"internals/buffPositionStyles.lua",
 	"internals/debuffPositionStyles.lua",
 	"internals/commonUtils.lua",
+	"internals/readyCheck.lua",
 	"options/slotsGui.lua",
 	"options/tabs/addonInfo.lua",
 	"options/tabs/bossDebuffs.lua",
@@ -44,7 +48,7 @@ RunOnStartup = {
 	"internals/debuffCache.lua",
 	"internals/customNames.lua",
 	
-	"internals/slashCmds.lua",
+	
 	"modules/buffMonitor.lua",
 	"modules/debuffMonitor.lua",
 	"modules/castbars.lua",
