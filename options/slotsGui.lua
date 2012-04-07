@@ -10,7 +10,7 @@ lb.slotsGui.PreviewScale={4,4} --scale of the preview unit frame
 function lb.slotsGui.initialize()
 	 local scalex=1-- lb.styles[lb.currentStyle].getFrameWidth()*0.009009009
 	 local scaley=1--lb.styles[lb.currentStyle].getFrameHeight()*0.023255814
-	 lb.slotsGui.Window=UI.CreateFrame("SimpleWindow", "SlotsGui", lb.Context)
+	 lb.slotsGui.Window=UI.CreateLbFrame("SimpleWindow", "SlotsGui", lb.Context)
 	 lb.slotsGui.Window:SetSecureMode("restricted")
 	 lb.slotsGui.Window:SetPoint("CENTER", UIParent, "CENTER")
 	 lb.slotsGui.Window:SetWidth(1000)
@@ -20,7 +20,7 @@ function lb.slotsGui.initialize()
 	 lb.slotsGui.Window:SetCloseButtonVisible(true)
 	 lb.slotsGui.Window.Event.Close=function()lb.buffMonitor.hideDummyBuffMonitorSlots() lb.debuffMonitor.hideDummyDebuffMonitorSlots() ClearKeyFocus() end
 	 -----tab definitions
-	 lb.slotsGui.TabControl=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", lb.slotsGui.Window)
+	 lb.slotsGui.TabControl=UI.CreateLbFrame("SimpleTabView", "OptionsWindowFrame", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:SetSecureMode("restricted")
 	 lb.slotsGui.Tabs = {}
 	 lb.slotsGui.TabControl:SetPoint("TOPLEFT", lb.slotsGui.Window, "TOPLEFT", 15, 50)
@@ -28,30 +28,30 @@ function lb.slotsGui.initialize()
      
      lb.slotsGui.TabControl.Event.TabSelect =lb.slotsGui.OnTabChanged
 -------------------------------------------------------------------------------initialize tab 1
-	 lb.slotsGui.Tabs[1]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.Tabs[1]=UI.CreateLbFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 --dump(lb.slotsGui.Tabs[1])
 	 --lb.slotsGui.Tabs[1]=lb.slotsGui.addonInfo.createTable( lb.slotsGui.TabControl)
 	 --dump(lb.slotsGui.Tabs[1])
 	 lb.slotsGui.TabControl:AddTab("Welcome",lb.slotsGui.Tabs[1])
 	 
 -------------------------------------------------------------------------------initialize tab 2
-	 lb.slotsGui.Tabs[2]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.Tabs[2]=UI.CreateLbFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 --lb.slotsGui.Tabs[2]=lb.slotsGui.slotsEditor.createTable(lb.slotsGui.TabControl)
 	 lb.slotsGui.TabControl:AddTab("Condition Placement",lb.slotsGui.Tabs[2])
 
 -------------------------------------------------------------------------initializing table 3
-	 lb.slotsGui.Tabs[3]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.Tabs[3]=UI.CreateLbFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Buffs",lb.slotsGui.Tabs[3])
 		 
 -------------------------------------------------------------------------initializing table 4
-	 lb.slotsGui.Tabs[4]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.Tabs[4]=UI.CreateLbFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Debuffs",lb.slotsGui.Tabs[4])
 -------------------------------------------------------------------------initializing table 5
-	 lb.slotsGui.Tabs[5]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.Tabs[5]=UI.CreateLbFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Binds",lb.slotsGui.Tabs[5])
 	 
 ------------------------------------------------------------------------initializing table 6
-	 lb.slotsGui.Tabs[6]=UI.CreateFrame("Frame", "placeholder", lb.slotsGui.Window)
+	 lb.slotsGui.Tabs[6]=UI.CreateLbFrame("Frame", "placeholder", lb.slotsGui.Window)
 	 lb.slotsGui.TabControl:AddTab("Skins",lb.slotsGui.Tabs[6])
 	 
 	 lb.slotsGui.initialized=true
@@ -154,7 +154,7 @@ end
 
 
 context = UI.CreateContext("Fluff Context")
-focushack = UI.CreateFrame("RiftTextfield", "focus hack", context)
+focushack = UI.CreateLbFrame("RiftTextfield", "focus hack", context)
 focushack:SetVisible(false)
 function ClearKeyFocus()
     focushack:SetKeyFocus(true)
@@ -162,7 +162,7 @@ function ClearKeyFocus()
 end
 
 function writeText(text,name,parent,left,top)
-    local tp=UI.CreateFrame("Text", name, parent)
+    local tp=UI.CreateLbFrame("Text", name, parent)
     tp:SetPoint("TOPLEFT", parent, "TOPLEFT", left, top)
     tp:SetText(text)
 end

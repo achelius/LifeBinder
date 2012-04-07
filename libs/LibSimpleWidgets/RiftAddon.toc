@@ -24,8 +24,6 @@ RunOnStartup = {
   "window.lua",
   "select.lua",
   "list.lua",
-  "abilitiesList.lua",
-  "HorizontalIconsList.lua",
   "textarea.lua",
   "checkbox.lua",
   "slider.lua",

@@ -22,7 +22,7 @@ lb.ReloadWhileInCombat=false --true if lbUnitUpdate is called during combat
  --had to set these here because of dependencies problems
 lb.styles={}
 lb.WindowDrag = {}
-
+lb.controls={}
 --
 local lastUpdatePlayerFrameCheck=0
 
@@ -47,13 +47,13 @@ function lb.initialize()
 	lb.initialized=true
 	lb.Context = UI.CreateContext("Context")
 	lb.Context:SetSecureMode("restricted")
-	lb.Window = UI.CreateFrame("Frame", "MainWindow", lb.Context)
+	lb.Window = UI.CreateLbFrame("Frame", "MainWindow", lb.Context)
 	lb.Window:SetSecureMode("restricted")
-	lb.WindowFrameTop = UI.CreateFrame("Texture", "Texture", lb.Window)
+	lb.WindowFrameTop = UI.CreateLbFrame("Texture", "Texture", lb.Window)
 	lb.WindowFrameTop:SetSecureMode("restricted")
-	lb.WindowDrag = UI.CreateFrame("Frame", "drag frame", lb.Window)
-	lb.CombatStatus= UI.CreateFrame("Texture", "Texture", lb.Window)
-	lb.CenterFrame = UI.CreateFrame("Frame", "Texture", lb.WindowFrameTop)
+	lb.WindowDrag = UI.CreateLbFrame("Frame", "drag frame", lb.Window)
+	lb.CombatStatus= UI.CreateLbFrame("Texture", "Texture", lb.Window)
+	lb.CenterFrame = UI.CreateLbFrame("Frame", "Texture", lb.WindowFrameTop)
 	lb.CenterFrame:SetSecureMode("restricted")
 	lb.QueryTable = {} --current table containing the current group identifiers
 	lb.RaidTable = {} --table that contains al 20 identifiers
@@ -77,7 +77,7 @@ function lb.initialize()
 		
 		local name=string.format("group%.2d", i)
 		
-		--lb.frames[i].groupTooltip = UI.CreateFrame("SimpleTooltip","groupT"..i, lb.CenterFrame)
+		--lb.frames[i].groupTooltip = UI.CreateLbFrame("SimpleTooltip","groupT"..i, lb.CenterFrame)
 		
 		table.insert(lb.UnitsTable,name);
 	    lb.UnitsTableStatus[i]={}
@@ -104,7 +104,7 @@ function lb.initialize()
 	--constants
 	lb.Calling = {"warrior", "cleric", "mage", "rogue", "percentage"}
 	lb.Role = {"tank", "heal", "dps", "support" }
-	lb.ResizeButton = UI.CreateFrame("Texture", "ResizeButton", lb.Window)
+	lb.ResizeButton = UI.CreateLbFrame("Texture", "ResizeButton", lb.Window)
 	lb.clickOffset = {x = 0, y = 0}
 	lb.resizeOffset = {x = 0, y = 0}	
 	

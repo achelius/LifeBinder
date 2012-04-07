@@ -4,7 +4,7 @@ local text = "VERSION 1.0.1.1 (PUBLIC BETA)\n\n\nLifeBinder - Healing one click 
 
 function lb.slotsGui.addonInfo.createTable(parentFrame)
  	 local optionsFrame
-	 optionsFrame = UI.CreateFrame("Frame", "OptionsWindowA", parentFrame)
+	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
 	 writeText(text,"text",optionsFrame,10,10)
 	 
 	 frame=optionsFrame

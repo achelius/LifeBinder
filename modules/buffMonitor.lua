@@ -45,11 +45,11 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 			   if lb.frames[var].buffs.groupSpotsIcons==nil then lb.frames[var].buffs.groupSpotsIcons= {} end
 		        lb.frames[var].buffs.groupSpots[g] = {}
 		        lb.frames[var].buffs.groupSpots[g][0]=true --icon
-		        if lb.frames[var].buffs.groupSpots[g][1]==nil then lb.frames[var].buffs.groupSpots[g][1]=UI.CreateFrame("Texture", "HoT" .. tostring(g), lb.frames[var].groupBF) end
-		        if lb.frames[var].buffs.groupSpots[g][2]==nil then lb.frames[var].buffs.groupSpots[g][2]=UI.CreateFrame("Text", "HoTText" .. tostring(g), lb.frames[var].groupBF) end
-		        if lb.frames[var].buffs.groupSpots[g][3]==nil then lb.frames[var].buffs.groupSpots[g][3]=UI.CreateFrame("Text", "HoTTextShadow" .. tostring(g), lb.frames[var].groupBF) end
-		        if lb.frames[var].buffs.groupSpots[g][4]==nil then lb.frames[var].buffs.groupSpots[g][4]=UI.CreateFrame("Text", "Duration" .. tostring(g), lb.frames[var].groupBF) end
-		        if lb.frames[var].buffs.groupSpots[g][5]==nil then lb.frames[var].buffs.groupSpots[g][5]=UI.CreateFrame("Text", "DurationShadow" .. tostring(g), lb.frames[var].groupBF) end
+		        if lb.frames[var].buffs.groupSpots[g][1]==nil then lb.frames[var].buffs.groupSpots[g][1]=UI.CreateLbFrame("Texture", "HoT" .. tostring(g), lb.frames[var].groupBF) end
+		        if lb.frames[var].buffs.groupSpots[g][2]==nil then lb.frames[var].buffs.groupSpots[g][2]=UI.CreateLbFrame("Text", "HoTText" .. tostring(g), lb.frames[var].groupBF) end
+		        if lb.frames[var].buffs.groupSpots[g][3]==nil then lb.frames[var].buffs.groupSpots[g][3]=UI.CreateLbFrame("Text", "HoTTextShadow" .. tostring(g), lb.frames[var].groupBF) end
+		        if lb.frames[var].buffs.groupSpots[g][4]==nil then lb.frames[var].buffs.groupSpots[g][4]=UI.CreateLbFrame("Text", "Duration" .. tostring(g), lb.frames[var].groupBF) end
+		        if lb.frames[var].buffs.groupSpots[g][5]==nil then lb.frames[var].buffs.groupSpots[g][5]=UI.CreateLbFrame("Text", "DurationShadow" .. tostring(g), lb.frames[var].groupBF) end
 		
 		        lb.frames[var].buffs.groupSpotsIcons[g]={}
 		        lb.frames[var].buffs.groupSpotsIcons[g][0]=false

@@ -2,12 +2,12 @@ lb.slotsGui.styleOptions={}
 local frame=nil
 function lb.slotsGui.styleOptions.createTable(parentFrame)
  	 local optionsFrame
-	 optionsFrame = UI.CreateFrame("Frame", "OptionsWindowA", parentFrame)
+	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
 	 writeText("Current Selected Style","text",optionsFrame,10,50)
-	 optionsFrame.styleSelectCombobox=UI.CreateFrame("SimpleSelect", "styleSelectCombobox",optionsFrame)
-	 optionsFrame.styleSelectCombobox:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,70)
-	 optionsFrame.styleSelectCombobox:SetWidth(200)
-	 optionsFrame.styleSelectCombobox:SetHeight(30)
+	 optionsFrame.comboBox=UI.CreateLbFrame("SimpleSelect", "styleSelectCombobox",optionsFrame)
+	 optionsFrame.comboBox:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,70)
+	 optionsFrame.comboBox:SetWidth(200)
+	 optionsFrame.comboBox:SetHeight(30)
 	 local list={}
 	 local counter=1
 	 local currentsel=-1
@@ -20,11 +20,11 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 		 	end
 	 	end
 	 end
-	 optionsFrame.styleSelectCombobox:SetItems(list)
-	 optionsFrame.styleSelectCombobox:SetLayer(7)
-	 if currentsel~=-1 then optionsFrame.styleSelectCombobox:SetSelectedIndex(currentsel,true) end
+	 optionsFrame.comboBox:SetItems(list)
+	 optionsFrame.comboBox:SetLayer(7)
+	 if currentsel~=-1 then optionsFrame.comboBox:SetSelectedIndex(currentsel,true) end
 	 
-	 optionsFrame.styleApplyButton=UI.CreateFrame("RiftButton", "styleApplyButton",optionsFrame)
+	 optionsFrame.styleApplyButton=UI.CreateLbFrame("RiftButton", "styleApplyButton",optionsFrame)
 	 optionsFrame.styleApplyButton:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",250,70)
 	 optionsFrame.styleApplyButton:SetWidth(100)
 	 optionsFrame.styleApplyButton:SetHeight(30)
@@ -32,7 +32,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 optionsFrame.styleApplyButton:SetText("Apply")
 	 optionsFrame.styleApplyButton.Event.LeftClick=lb.slotsGui.styleOptions.SetCurrentStyle
 	 
-	 optionsFrame.styleStatusText=UI.CreateFrame("Text", "styleStatusText",optionsFrame)
+	 optionsFrame.styleStatusText=UI.CreateLbFrame("Text", "styleStatusText",optionsFrame)
 	 optionsFrame.styleStatusText:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,100)
 	 optionsFrame.styleStatusText:SetWidth(400)
 	 optionsFrame.styleStatusText:SetHeight(30)
@@ -40,7 +40,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 optionsFrame.styleStatusText:SetText("")
 	 --initializing style options frame
 	 writeText("Style detailed options","text",optionsFrame,10,120)
-	 optionsFrame.styleDetalsOptions = UI.CreateFrame("Frame", "OptionsWindowA", optionsFrame)
+	 optionsFrame.styleDetalsOptions = UI.CreateLbFrame("Frame", "OptionsWindowA", optionsFrame)
 	 optionsFrame.styleDetalsOptions:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,150)
 	-- optionsFrame.styleDetalsOptions:SetBackgroundColor(0,0,0,1)
 	 optionsFrame.styleDetalsOptions:SetWidth(700)
@@ -48,7 +48,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 
 	 lb.styles[lb.currentStyle].getOptionsWindow(optionsFrame.styleDetalsOptions)
 	 
---	 optionsFrame.styleReloaduiButton=UI.CreateFrame("RiftButton", "styleReloaduiButton",optionsFrame)
+--	 optionsFrame.styleReloaduiButton=UI.CreateLbFrame("RiftButton", "styleReloaduiButton",optionsFrame)
 --	 optionsFrame.styleReloaduiButton:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",350,50)
 --	 optionsFrame.styleReloaduiButton:SetWidth(120)
 --	 optionsFrame.styleReloaduiButton:SetHeight(30)
@@ -60,8 +60,8 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 return optionsFrame
 end
 function lb.slotsGui.styleOptions.SetCurrentStyle()
-	dump(frame.styleSelectCombobox:GetSelectedItem())
-	lb.styles.setCurrentStyleName(frame.styleSelectCombobox:GetSelectedItem())
+	dump(frame.comboBox:GetSelectedItem())
+	lb.styles.setCurrentStyleName(frame.comboBox:GetSelectedItem())
 	lb.slotsGui.styleOptions.populateList()
 	frame.styleStatusText:SetText("Please write /reloadui to apply")
 --	frame.styleApplyButton:SetWidth(300)
@@ -81,8 +81,8 @@ function lb.slotsGui.styleOptions.populateList()
 		 	end
 	 	end
 	 end
-	 frame.styleSelectCombobox:SetItems(list)
-	 if currentsel~=-1 then frame.styleSelectCombobox:SetSelectedIndex(currentsel,true) end
+	 frame.comboBox:SetItems(list)
+	 if currentsel~=-1 then frame.comboBox:SetSelectedIndex(currentsel,true) end
 end
 
 function lb.slotsGui.styleOptions.updateData()

@@ -22,8 +22,13 @@ Dependencies = {
 };
 
 RunOnStartup = {
+
 	"internals/loadSettings.lua",
 	"LifeBinderMain.lua",
+	"controls/abilitiesList.lua",
+	"controls/HorizontalIconsList.lua",
+	"controls/uicreateframe.lua",
+
 	"internals/slashCmds.lua",
 	"internals/eventFunctions.lua",
 	"styles/oldstyle.lua",

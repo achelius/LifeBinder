@@ -116,7 +116,7 @@ function stTable.fastInitialize()
 			
 			--lb.groupBF[var]:SetTexture("LifeBinder", "Textures/backframe.png")
 			if lb.frames[var]==nil then lb.frames[var]={} end
-			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame) end
+			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF = UI.CreateLbFrame("Texture", "Border", lb.CenterFrame) end
 			lb.frames[var].groupBF:SetLayer(1)
 			lb.frames[var].groupBF:SetBackgroundColor(0, 0, 0, 1)
 			lb.frames[var].groupBF:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", left , top)
@@ -124,7 +124,7 @@ function stTable.fastInitialize()
 			lb.frames[var].groupBF:SetWidth(optionsTable.frameWidth)
 			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF:SetVisible(false)end
 			
-			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateFrame("Frame", "group"..i, lb.CenterFrame) end
+			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateLbFrame("Frame", "group"..i, lb.CenterFrame) end
 			lb.frames[var].groupMask:SetLayer(99)
 			lb.frames[var].groupMask:SetBackgroundColor(0,0,0,0)
 			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", left , top)
@@ -158,16 +158,16 @@ function stTable.CreateFrame(index)
 	if lb.frames[i]==nil then lb.frames[i]={} end
 	
  	
-	--lb.frames[i].groupBF = UI.CreateFrame("Texture", "Border", lb.CenterFrame)
-	lb.frames[i].groupHF = UI.CreateFrame("Texture", "Health", lb.frames[i].groupBF)
-	lb.frames[i].groupRF = UI.CreateFrame("Texture", "Resource", lb.frames[i].groupBF)
-    lb.frames[i].groupTarget = UI.CreateFrame("Texture", "Target", lb.frames[i].groupBF)
-    lb.frames[i].groupAggro = UI.CreateFrame("Texture", "ReceivingSpell", lb.frames[i].groupBF)
-    lb.frames[i].groupCastBar = UI.CreateFrame("Texture", "ReceivingSpell", lb.frames[i].groupBF)
-	lb.frames[i].groupName = UI.CreateFrame("Text", "Name", lb.frames[i].groupBF)
-	lb.frames[i].groupStatus = UI.CreateFrame("Text", "Status", lb.frames[i].groupBF)
-	lb.frames[i].groupRole = UI.CreateFrame("Texture", "Role", lb.frames[i].groupBF)
-	--lb.frames[i].groupMask = UI.CreateFrame("Frame", "group"..i, lb.frames[i].Window)
+	--lb.frames[i].groupBF = UI.CreateLbFrame("Texture", "Border", lb.CenterFrame)
+	lb.frames[i].groupHF = UI.CreateLbFrame("Texture", "Health", lb.frames[i].groupBF)
+	lb.frames[i].groupRF = UI.CreateLbFrame("Texture", "Resource", lb.frames[i].groupBF)
+    lb.frames[i].groupTarget = UI.CreateLbFrame("Texture", "Target", lb.frames[i].groupBF)
+    lb.frames[i].groupAggro = UI.CreateLbFrame("Texture", "ReceivingSpell", lb.frames[i].groupBF)
+    lb.frames[i].groupCastBar = UI.CreateLbFrame("Texture", "ReceivingSpell", lb.frames[i].groupBF)
+	lb.frames[i].groupName = UI.CreateLbFrame("Text", "Name", lb.frames[i].groupBF)
+	lb.frames[i].groupStatus = UI.CreateLbFrame("Text", "Status", lb.frames[i].groupBF)
+	lb.frames[i].groupRole = UI.CreateLbFrame("Texture", "Role", lb.frames[i].groupBF)
+	--lb.frames[i].groupMask = UI.CreateLbFrame("Frame", "group"..i, lb.frames[i].Window)
 	--lb.frames[i].groupMask:SetSecureMode("restricted")
 	
 	stTable.initializeIndex(i)
@@ -412,10 +412,10 @@ function stTable.setBlockedValue(index,losvalue,oorvalue)
 	if index==nil then return end
 	if losvalue or oorvalue then
 			--print("1")
-          lb.frames[index].groupHF:SetTexture("LifeBinder", "Textures/healthlos.png")
+          lb.frames[index].groupHF:SetTexture("LifeBinder", "Textures/bars/healthlos.png")
     elseif losvalue==nil and oorvalue then
     --print("2")
-    	  lb.frames[index].groupHF:SetTexture("LifeBinder", "Textures/healthlos.png")
+    	  lb.frames[index].groupHF:SetTexture("LifeBinder", "Textures/bars/healthlos.png")
     elseif losvalue==nil and (oorvalue==nil or oorvalue==false)  then
 --print("3")
           	lb.frames[index].groupHF:SetTexture("LifeBinder","Textures/bars/health.png")
@@ -460,7 +460,7 @@ function stTable.getOptionsWindow(optionsFrame)
 		list[i]=tostring(i)
 	end
 	optionsFrame.FlowDirection=lb.commonUtils.createComboBox(optionsFrame,"FlowDirection",450,20,list,optionsTable.currentFlowDirection,"Unit positioning")
-	optionsFrame.FlowDirectionImage= UI.CreateFrame("Texture", "FlowDirectionImage", optionsFrame)
+	optionsFrame.FlowDirectionImage= UI.CreateLbFrame("Texture", "FlowDirectionImage", optionsFrame)
 	optionsFrame.FlowDirectionImage:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",450,60)
 	optionsFrame.FlowDirectionImage:SetWidth(397)
 	optionsFrame.FlowDirectionImage:SetHeight(227)
@@ -480,8 +480,8 @@ function stTable.setOptionsValues()
 	optionsTable.nameText.top=frame.playerNameMover.top
 	optionsTable.manaBar.height=tonumber(frame.manaBarHeight.textArea:GetText())
 	optionsTable.nameText.numLetters=tonumber(frame.nameNumLetters.textArea:GetText())
-	print(frame.FlowDirection.styleSelectCombobox:GetSelectedIndex())
-	stTable.setFlowDirection(frame.FlowDirection.styleSelectCombobox:GetSelectedIndex())
+	print(frame.FlowDirection.comboBox:GetSelectedIndex())
+	stTable.setFlowDirection(frame.FlowDirection.comboBox:GetSelectedIndex())
 	stTable.fastInitialize()
 	stTable.initialize()
 end

@@ -7,10 +7,10 @@ local lastIndex=-1
 function lb.slotsGui.buffAssociations.createTable(parentFrame)
 
 	 local optionsFrame
-	 optionsFrame = UI.CreateFrame("Frame", "BuffAssociationsTab", parentFrame)
+	 optionsFrame = UI.CreateLbFrame("Frame", "BuffAssociationsTab", parentFrame)
 	 frame=optionsFrame
 	 --initializing unitframe
-	 optionsFrame.UnitFrame = UI.CreateFrame("Texture", "UnitFrame",  optionsFrame  )
+	 optionsFrame.UnitFrame = UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame  )
 	 optionsFrame.UnitFrame:SetPoint("TOPLEFT",optionsFrame , "TOPLEFT", 20, 50)
 	 writeText("Select the slot and drag the buff from the list into the slot square","text",optionsFrame,10,10)
 	 optionsFrame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
@@ -24,7 +24,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
 	 	optionsFrame.buffSlots[i]={}
-	 	optionsFrame.buffSlots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
+	 	optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
 	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -37,7 +37,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 	optionsFrame.buffSlots[i].Frame:SetBackgroundColor(0,1,0.2,1)
 	 	optionsFrame.buffSlots[i].Frame:SetLayer(3)
 		optionsFrame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.buffAssociations.onSlotLeftUp(i) end
-	 	optionsFrame.buffSlots[i].Text= UI.CreateFrame("Text", "UnitFrame", optionsFrame.buffSlots[i].Frame )
+	 	optionsFrame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", optionsFrame.buffSlots[i].Frame )
 	 	optionsFrame.buffSlots[i].Text:SetPoint("CENTER", optionsFrame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	optionsFrame.buffSlots[i].Text:SetText(tostring(i))
 	 	
@@ -46,7 +46,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 end
 	 
 	 --initializing sidetable
-	 optionsFrame.SideTable=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
+	 optionsFrame.SideTable=UI.CreateLbFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
 	 optionsFrame.SideTable:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 600, 50)
      optionsFrame.SideTable:SetPoint("BOTTOMRIGHT", optionsFrame, "BOTTOMRIGHT", -15, -15)
      optionsFrame.SideTable:SetLayer(35)
@@ -54,12 +54,12 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
      
 	 
 	 --initialize abilities list
-	 optionsFrame.SideTable.Tabs[1] = UI.CreateFrame("Frame", "BuffTab", optionsFrame.SideTable)
+	 optionsFrame.SideTable.Tabs[1] = UI.CreateLbFrame("Frame", "BuffTab", optionsFrame.SideTable)
 	 optionsFrame.SideTable:AddTab("Abilities",optionsFrame.SideTable.Tabs[1])
-	 optionsFrame.AbilitiesList=UI.CreateFrame("AbilitiesList", "BuffsList", optionsFrame.SideTable.Tabs[1])
+	 optionsFrame.AbilitiesList=UI.CreateLbFrame("AbilitiesList", "BuffsList", optionsFrame.SideTable.Tabs[1])
 	 optionsFrame.AbilitiesList:CreateDragFrame(optionsFrame.AbilitiesList,optionsFrame.SideTable.Tabs[1],parentFrame)
 	 optionsFrame.AbilitiesList.Event.DraggedOutItem= lb.slotsGui.buffAssociations.onAbilitiesItemDrag
-	 optionsFrame.AbilitiesListView=UI.CreateFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[1])
+	 optionsFrame.AbilitiesListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[1])
 	 optionsFrame.AbilitiesListView:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[1], "TOPLEFT",10, 20)
      optionsFrame.AbilitiesListView:SetWidth(200)
      optionsFrame.AbilitiesListView:SetHeight(350)
@@ -70,31 +70,31 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
      
 	   
 	 -- custom names
-	 optionsFrame.SideTable.Tabs[2] = UI.CreateFrame("Frame", "CustomNamesTab", optionsFrame.SideTable)
+	 optionsFrame.SideTable.Tabs[2] = UI.CreateLbFrame("Frame", "CustomNamesTab", optionsFrame.SideTable)
 	 optionsFrame.SideTable:AddTab("Custom Names",optionsFrame.SideTable.Tabs[2])
-	 	 optionsFrame.CustomNamesList=UI.CreateFrame("AbilitiesList", "CustomNamesList",optionsFrame.SideTable.Tabs[2])
+	 	 optionsFrame.CustomNamesList=UI.CreateLbFrame("AbilitiesList", "CustomNamesList",optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.CustomNamesList:CreateDragFrame(optionsFrame.CustomNamesList,optionsFrame.SideTable.Tabs[2],parentFrame)
 	 optionsFrame.CustomNamesList.Event.DraggedOutItem=lb.slotsGui.buffAssociations.onAbilitiesItemDrag
-	 optionsFrame.CustomNamesListView=UI.CreateFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.CustomNamesListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.CustomNamesListView:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2], "TOPLEFT",10, 20)
      optionsFrame.CustomNamesListView:SetWidth(200)
      optionsFrame.CustomNamesListView:SetHeight(300)
      optionsFrame.CustomNamesListView:SetLayer(1)
      optionsFrame.CustomNamesListView:SetBorder(1, 1, 1, 1, 1)
      optionsFrame.CustomNamesListView:SetContent( optionsFrame.CustomNamesList)
-     optionsFrame.SideTable.Tabs[2].txtNewCustomName=UI.CreateFrame("RiftTextfield", "txtNewCustomName", optionsFrame.SideTable.Tabs[2])
+     optionsFrame.SideTable.Tabs[2].txtNewCustomName=UI.CreateLbFrame("RiftTextfield", "txtNewCustomName", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2], "TOPLEFT",10, 360)
 	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetWidth(100)
 	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetHeight(30)
 	 optionsFrame.SideTable.Tabs[2].txtNewCustomName:SetBackgroundColor(0,0,0,1)
 	   --initialize add Button
-	 optionsFrame.SideTable.Tabs[2].addCustomNameButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",120,360)
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetText("Add")
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetWidth(100)
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.slotsGui.buffAssociations.addCustomName
 	    --initialize remove Button
-	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",10,320)
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetText("Remove")
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetWidth(200)
@@ -105,10 +105,10 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
      
 	 
 	 ----initializing slot details list
-	 optionsFrame.SlotDetailsList=UI.CreateFrame("AbilitiesList", "BuffsList", optionsFrame)
+	 optionsFrame.SlotDetailsList=UI.CreateLbFrame("AbilitiesList", "BuffsList", optionsFrame)
 	 optionsFrame.SlotDetailsList:CreateDragFrame(optionsFrame.SlotDetailsList,optionsFrame,parentFrame)
 	 optionsFrame.SlotDetailsList.Event.DraggedOutItem= lb.slotsGui.buffAssociations.onSlotDetailItemDrag
-	 optionsFrame.SlotDetailsListView=UI.CreateFrame("SimpleScrollView", "List", optionsFrame)
+	 optionsFrame.SlotDetailsListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame)
 	 optionsFrame.SlotDetailsListView:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",10, 270)
      optionsFrame.SlotDetailsListView:SetWidth(250)
      optionsFrame.SlotDetailsListView:SetHeight(220)
@@ -118,7 +118,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SlotDetailsListView:SetVisible(false)
 	 ----initializing  slot details options
 	 optionsFrame.SlotDetailsList.Event.ItemSelect=lb.slotsGui.buffAssociations.onSlotAssociationSelected
-	 optionsFrame.SlotDetailsOptions=UI.CreateFrame("SimpleCheckbox", "SlotDetailsOptionsCastByme", optionsFrame)
+	 optionsFrame.SlotDetailsOptions=UI.CreateLbFrame("SimpleCheckbox", "SlotDetailsOptionsCastByme", optionsFrame)
 	 optionsFrame.SlotDetailsOptions:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",270, 270)
 	 optionsFrame.SlotDetailsOptions:SetText("Cast By Me only")
 	 optionsFrame.SlotDetailsOptions:SetVisible(false)
@@ -268,7 +268,7 @@ function lb.slotsGui.buffAssociations.updateData()
 	 	frame.buffSlots[i].Frame:SetBackgroundColor(0,1,0.2,1)
 	 	frame.buffSlots[i].Frame:SetLayer(3)
 		frame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.buffAssociations.onSlotLeftUp(i) end
-	 	frame.buffSlots[i].Text= UI.CreateFrame("Text", "UnitFrame", frame.buffSlots[i].Frame )
+	 	frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame )
 	 	frame.buffSlots[i].Text:SetPoint("CENTER", frame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	frame.buffSlots[i].Text:SetText(tostring(i))
 	 	frame.buffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]

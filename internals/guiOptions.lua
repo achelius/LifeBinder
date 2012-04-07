@@ -6,7 +6,7 @@ function createOptionsWindow()
     lb.WindowOptions:SetVisible(false)
     lb.WindowOptions:SetCloseButtonVisible(true)
     lb.WindowOptions.Event.Close=function() ClearKeyFocus() end
-    lb.OptionsLabel1=UI.CreateFrame("Text", "Name", lb.WindowOptions)
+    lb.OptionsLabel1=UI.CreateLbFrame("Text", "Name", lb.WindowOptions)
     lb.OptionsLabel1:SetPoint("TOPLEFT", lb.WindowOptions, "TOPLEFT", 30, 60)
 
     lb.OptionsLabel1:SetFontSize(lbValues.font)
@@ -400,7 +400,7 @@ end
 
 
 function writeText(text,name,parent,left,top)
-    local tp=UI.CreateFrame("Text", name, parent)
+    local tp=UI.CreateLbFrame("Text", name, parent)
     tp:SetPoint("TOPLEFT", parent, "TOPLEFT", left, top)
     tp:SetText(text)
 

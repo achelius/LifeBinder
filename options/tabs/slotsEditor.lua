@@ -5,11 +5,11 @@ local scaley=1--lb.styles[lb.currentStyle].getFrameHeight()*0.023255814
 function lb.slotsGui.slotsEditor.createTable(parentFrame)
 
 	 local optionsFrame
-	 optionsFrame = UI.CreateFrame("Frame", "OptionsWindowA", parentFrame)
+	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
 	
      writeText("Move the slots where you want them on the unit frame","text",optionsFrame,20,10)
      
-	 optionsFrame.UnitFrame = UI.CreateFrame("Texture", "UnitFrame",  optionsFrame  )
+	 optionsFrame.UnitFrame = UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame  )
 	 optionsFrame.UnitFrame:SetPoint("TOPLEFT",optionsFrame , "TOPLEFT", 20, 50)
 	 
 	 optionsFrame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
@@ -23,7 +23,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
 	 	optionsFrame.buffSlots[i]={}
-	 	optionsFrame.buffSlots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
+	 	optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
 	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -39,7 +39,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 	optionsFrame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.slotsEditor.onSlotLeftUp(0,i) end
 	 	optionsFrame.buffSlots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.slotsEditor.onSlotUpoutside(0,i) end
 	 	optionsFrame.buffSlots[i].Frame.Event.MouseMove=function (n,x,y) lb.slotsGui.OnSlotMouseMove(0,i,x,y) end
-	 	optionsFrame.buffSlots[i].Text= UI.CreateFrame("Text", "UnitFrame", optionsFrame.buffSlots[i].Frame )
+	 	optionsFrame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", optionsFrame.buffSlots[i].Frame )
 	 	optionsFrame.buffSlots[i].Text:SetPoint("CENTER", optionsFrame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	optionsFrame.buffSlots[i].Text:SetText(tostring(i))
 	 	
@@ -54,7 +54,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 for i =1 ,#(lbDebuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbDebuffSlotOptions[lbValues.set][i]
 	 	optionsFrame.debuffSlots[i]={}
-	 	optionsFrame.debuffSlots[i].Frame= UI.CreateFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
+	 	optionsFrame.debuffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
 	 	optionsFrame.debuffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -70,7 +70,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 	optionsFrame.debuffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.slotsEditor.onSlotLeftUp(1,i) end
 	 	optionsFrame.debuffSlots[i].Frame.Event.LeftUpoutside=function () lb.slotsGui.slotsEditor.onSlotUpoutside(1,i) end
 	 	optionsFrame.debuffSlots[i].Frame.Event.MouseMove=function (n,x,y) lb.slotsGui.OnSlotMouseMove(1,i,x,y) end
-	 	optionsFrame.debuffSlots[i].Text= UI.CreateFrame("Text", "UnitFrame", optionsFrame.debuffSlots[i].Frame )
+	 	optionsFrame.debuffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", optionsFrame.debuffSlots[i].Frame )
 	 	optionsFrame.debuffSlots[i].Text:SetPoint("CENTER", optionsFrame.debuffSlots[i].Frame ,"CENTER",0,0)
 	 	optionsFrame.debuffSlots[i].Text:SetText(tostring(i))
 	 	optionsFrame.debuffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]
@@ -79,7 +79,7 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 	optionsFrame.debuffSlots[i].sHeight=slotinfo[6]*scaley*lb.slotsGui.PreviewScale[2]
 	 end
 	 --initialize Apply Button
-	 optionsFrame.ApplyButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame )
+	 optionsFrame.ApplyButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame )
 	 optionsFrame.ApplyButton:SetPoint("BOTTOMRIGHT", optionsFrame,"BOTTOMRIGHT",-5,-5)
 	 optionsFrame.ApplyButton:SetText("Apply")
 	 optionsFrame.ApplyButton.Event.LeftClick=function() lb.buffMonitor.relocateBuffMonitorSlots() lb.debuffMonitor.relocateDebuffMonitorSlots() end
@@ -87,14 +87,14 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 --initialize movement buttons
 	 writeText("Selected slot movement","text",optionsFrame,10,300)
 	 --up
-	 optionsFrame.MoveUp=UI.CreateFrame("RiftButton", "SlotMoveUp", optionsFrame )
+	 optionsFrame.MoveUp=UI.CreateLbFrame("RiftButton", "SlotMoveUp", optionsFrame )
 	 optionsFrame.MoveUp:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",50,-100)
 	 optionsFrame.MoveUp:SetWidth(30)
 	 optionsFrame.MoveUp:SetHeight(40)
 	 optionsFrame.MoveUp:SetText("^\r\n |")
 	 optionsFrame.MoveUp.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(0,-1) end
 	 --down
-	 optionsFrame.MoveDown=UI.CreateFrame("RiftButton", "SlotMoveUp", optionsFrame )
+	 optionsFrame.MoveDown=UI.CreateLbFrame("RiftButton", "SlotMoveUp", optionsFrame )
 	 optionsFrame.MoveDown:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",50,-50)
 	 optionsFrame.MoveDown:SetWidth(30)
 	 optionsFrame.MoveDown:SetHeight(40)
@@ -102,14 +102,14 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 optionsFrame.MoveDown.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(0,1) end
 	 
 	 --left
-	 optionsFrame.MoveLeft=UI.CreateFrame("RiftButton", "SlotMoveLeft", optionsFrame )
+	 optionsFrame.MoveLeft=UI.CreateLbFrame("RiftButton", "SlotMoveLeft", optionsFrame )
 	 optionsFrame.MoveLeft:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",20,-80)
 	 optionsFrame.MoveLeft:SetWidth(40)
 	 optionsFrame.MoveLeft:SetHeight(30)
 	 optionsFrame.MoveLeft:SetText("<--")
 	 optionsFrame.MoveLeft.Event.LeftClick=function() lb.slotsGui.slotsEditor.MoveSlot(-1,0) end
 	 --right
-	 optionsFrame.MoveRight=UI.CreateFrame("RiftButton", "SlotMoveLeft", optionsFrame )
+	 optionsFrame.MoveRight=UI.CreateLbFrame("RiftButton", "SlotMoveLeft", optionsFrame )
 	 optionsFrame.MoveRight:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",80,-80)
 	 optionsFrame.MoveRight:SetWidth(40)
 	 optionsFrame.MoveRight:SetHeight(30)
@@ -118,14 +118,14 @@ function lb.slotsGui.slotsEditor.createTable(parentFrame)
 	 
 	 --initialize size buttons
 	 --size up
-	 optionsFrame.SizeUp=UI.CreateFrame("RiftButton", "SlotSizeUp", optionsFrame )
+	 optionsFrame.SizeUp=UI.CreateLbFrame("RiftButton", "SlotSizeUp", optionsFrame )
 	 optionsFrame.SizeUp:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",150,-80)
 	 optionsFrame.SizeUp:SetWidth(80)
 	 optionsFrame.SizeUp:SetHeight(40)
 	 optionsFrame.SizeUp:SetText("Larger")
 	 optionsFrame.SizeUp.Event.LeftClick=function() lb.slotsGui.slotsEditor.ChangeSlotSize(1,1) end
 	 --size down
-	 optionsFrame.SizeDown=UI.CreateFrame("RiftButton", "SlotMoveLeft", optionsFrame )
+	 optionsFrame.SizeDown=UI.CreateLbFrame("RiftButton", "SlotMoveLeft", optionsFrame )
 	 optionsFrame.SizeDown:SetPoint("BOTTOMLEFT", optionsFrame,"BOTTOMLEFT",240,-80)
 	 optionsFrame.SizeDown:SetWidth(80)
 	 optionsFrame.SizeDown:SetHeight(40)

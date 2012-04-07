@@ -1,8 +1,6 @@
 local frameConstructors = {
   SimpleCheckbox    = Library.LibSimpleWidgets.Checkbox,
   SimpleList        = Library.LibSimpleWidgets.List,
-  AbilitiesList     = Library.LibSimpleWidgets.AbilitiesList,
-  HorizontalIconsList    = Library.LibSimpleWidgets.HorizontalIconsList,
   SimpleRadioButton = Library.LibSimpleWidgets.RadioButton,
   SimpleScrollView  = Library.LibSimpleWidgets.ScrollView,
   SimpleSelect      = Library.LibSimpleWidgets.Select,

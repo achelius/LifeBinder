@@ -2,12 +2,12 @@ lb.slotsGui.mouseBinds={}
 local frame=nil
 function lb.slotsGui.mouseBinds.createTable(parentFrame)
  	 local optionsFrame
-	 optionsFrame = UI.CreateFrame("Frame", "OptionsWindowA", parentFrame)
+	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
 	 
-	 optionsFrame.CommandsList=UI.CreateFrame("AbilitiesList", "CommandsList",optionsFrame)
+	 optionsFrame.CommandsList=UI.CreateLbFrame("AbilitiesList", "CommandsList",optionsFrame)
 	 optionsFrame.CommandsList:CreateDragFrame(optionsFrame.CommandsList,optionsFrame,parentFrame)
 	 optionsFrame.CommandsList.Event.DraggedOutItem= lb.slotsGui.mouseBinds.onCommandsListItemDrag
-	 optionsFrame.CommandsListView=UI.CreateFrame("SimpleScrollView", "List", optionsFrame)
+	 optionsFrame.CommandsListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame)
 	 
 	 optionsFrame.CommandsListView:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",5, 20)
      optionsFrame.CommandsListView:SetWidth(250)
@@ -38,7 +38,7 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	 writeText("Double modifiers are called first, then single modifier and finally the no modifier one","text",optionsFrame,260,25)
 	 writeText("Remember to press apply when you finished editing","text",optionsFrame,260,45)
 	 --initializing mouse buttons table
-	 optionsFrame.ButtonsTable=UI.CreateFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
+	 optionsFrame.ButtonsTable=UI.CreateLbFrame("SimpleTabView", "OptionsWindowFrame", optionsFrame)
 	 optionsFrame.ButtonsTable:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 260, 60)
      optionsFrame.ButtonsTable:SetPoint("BOTTOMRIGHT", optionsFrame, "BOTTOMRIGHT", -10, -15)
      optionsFrame.ButtonsTable:SetLayer(30)
@@ -49,17 +49,17 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	 local mouseBindButtonNames = { "Left", "Right", "Middle", "M4", "M5" }
 	 
 	 for i = 1, 5 do
-     	optionsFrame.ButtonsTable.Tabs[i] = UI.CreateFrame("Frame", "BuffTab", optionsFrame.ButtonsTable)
+     	optionsFrame.ButtonsTable.Tabs[i] = UI.CreateLbFrame("Frame", "BuffTab", optionsFrame.ButtonsTable)
 	 	--optionsFrame.ButtonsTable:AddTab("Mouse"..tostring(i),optionsFrame.ButtonsTable.Tabs[i])
 		optionsFrame.ButtonsTable:AddTab(mouseBindButtonNames[i],optionsFrame.ButtonsTable.Tabs[i])
 	 	optionsFrame.ButtonsTable.Tabs[i].BindsLists={}
 	 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView={}
 	 	
 		for g = 1 , 7 do
-		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]=UI.CreateFrame("HorizontalIconsList", "BindsLists"..tostring(g),optionsFrame.ButtonsTable.Tabs[i])
+		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]=UI.CreateLbFrame("HorizontalIconsList", "BindsLists"..tostring(g),optionsFrame.ButtonsTable.Tabs[i])
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]:CreateDragFrame(optionsFrame.ButtonsTable.Tabs[i].BindsLists[g],optionsFrame.ButtonsTable.Tabs[i],parentFrame)
 			optionsFrame.ButtonsTable.Tabs[i].BindsLists[g].Event.DraggedOutItem=function(item,x,y) lb.slotsGui.mouseBinds.BindsListItemDrag(i,g,item,x,y) end
-		 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]=UI.CreateFrame("SimpleScrollView", "List", optionsFrame.ButtonsTable.Tabs[i])
+		 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.ButtonsTable.Tabs[i])
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetPoint("TOPLEFT", optionsFrame.ButtonsTable.Tabs[i], "TOPLEFT",80, 40*(g-1)+10*g)
 		     optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetWidth(450)
 		     optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetHeight(40)
@@ -72,7 +72,7 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	 	
      end
 	  --initialize Apply Button
-	 optionsFrame.ApplyButton=UI.CreateFrame("RiftButton", "ApplyButton", optionsFrame )
+	 optionsFrame.ApplyButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame )
 	 optionsFrame.ApplyButton:SetPoint("BOTTOMRIGHT", optionsFrame,"BOTTOMRIGHT",-5,-5)
 	 optionsFrame.ApplyButton:SetText("Apply")
 	 optionsFrame.ApplyButton.Event.LeftClick=function() lb.mouseBinds.setMouseActions()  end
