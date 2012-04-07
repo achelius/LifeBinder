@@ -59,7 +59,7 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		        lb.frames[var].buffs.groupSpotsIcons[g][4]=false    --updated  (true if icon has just updated)
 		        lb.frames[var].buffs.groupSpotsIcons[g][5]=nil    --buff spell ID     (used for remove buff )
 		        lb.frames[var].buffs.groupSpotsIcons[g][6]=false    --is debuff    true if the debuff applied is a debuff
-		        lb.frames[var].buffs.groupSpotsIcons[g][7]=false    --is from whitelist
+		        lb.frames[var].buffs.groupSpotsIcons[g][7]=false    --is a priority buff
 		        lb.frames[var].buffs.groupSpotsIcons[g][8]=acceptdebuffs    --accepts Debuffs (true is this slot accepts debuffs
 		        lb.frames[var].buffs.groupSpotsIcons[g][9]=false    --has duration
 		        lb.frames[var].buffs.groupSpotsIcons[g][10]=1    --buff duration
@@ -486,13 +486,29 @@ function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
 	                            --a=options
 	                            if s==name and s~=nil then
 	                            	local enable=false
-	                            	if a["castByMeOnly"]==true then --look if this buff is set as cast by me only or cast by everyone
-		                            	if buffTable.caster== lb.PlayerID then
-		                            		enable=true
+	                            	if a["priority"] then
+	                            		if a["castByMeOnly"] then --look if this buff is set as cast by me only or cast by everyone
+			                            	if buffTable.caster== lb.PlayerID then
+			                            		enable=true
+			                            	end
+			                           	else
+			                           		enable=true
 		                            	end
-		                           	else
-		                           		enable=true
+	                            	else
+	                            		if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][7] then
+	                            			enable=false
+	                            		else
+		                            		if a["castByMeOnly"]==true then --look if this buff is set as cast by me only or cast by everyone
+				                            	if buffTable.caster== lb.PlayerID then
+				                            		enable=true
+				                            	end
+				                           	else
+				                           		enable=true
+			                            	end
+	                            		end
+	                            		
 	                            	end
+	                            	
 	                            	
 	                                --print (frameindex)
 	                                if enable then
@@ -503,11 +519,17 @@ function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
 		                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4]=true
 		                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][5]=buffTable.id
 		                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][6]=false
-		                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][7]=false
+		                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][7]=(a["priority"]==true) --if nil => false
+		                                
 		                                if buffTable.duration~=nil then
 		                                	lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][9]=true
 			                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][10]=round(buffTable.duration)
-			                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][11]=timeFrame()
+			                                if buffTable.duration~=nil and buffTable.remaining~=nil then
+			                                	lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][11]=timeFrame()-(buffTable.duration-buffTable.remaining)
+			                                else
+			                                	lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][11]=timeFrame()
+			                                end
+			                                
 		                                else
 		                                	lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][9]=false
 			                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][10]=1
@@ -552,6 +574,7 @@ function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][3]=nil
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4]=true
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][5]=nil
+	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][7]=false
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][9]=false
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][10]=1
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][11]=0

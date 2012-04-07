@@ -28,6 +28,25 @@ local function CreateDragFrame(self,parent,mainframe)
 	self.dragFrame:SetLayer(60)
 	self.dragEnabled=true
 end
+local function CreateTooltipFrame(self,parent,mainframe)
+	
+	self.tooltipFrame = UI.CreateLbFrame("Frame", "DragTexture", mainframe)
+	self.tooltipFrame:SetPoint("TOPLEFT",mainframe,"TOPLEFT",0,0)
+	self.tooltipFrame:SetWidth(200)
+	self.tooltipFrame:SetHeight(32)
+	self.tooltipFrame.mainFrame=mainframe
+	self.tooltipFrame:SetBackgroundColor(0,0,0,1)
+	self.tooltipFrame:SetVisible(false)
+	self.tooltipFrame:SetLayer(60)
+	self.tooltipFrame.Text = UI.CreateLbFrame("Text", "DragTexture", self.tooltipFrame)
+	self.tooltipFrame.Text:SetPoint("TOPLEFT",self.tooltipFrame,"TOPLEFT",0,0)
+	self.tooltipFrame.Text:SetPoint("BOTTOMRIGHT",self.tooltipFrame,"BOTTOMRIGHT",0,0)
+	self.tooltipFrame.Text:SetFontColor(1,1,1,1)
+	self.tooltipFrame.Text:SetText("")
+	self.tooltipFrame.Text:SetVisible(true)
+	self.tooltipFrame.Text:SetLayer(1)
+	self.dragEnabled=true
+end
 local function SetDragFrameTexture(self,text1,text2)
    if self.dragFrame==nil then return end
    if not self.dragEnabled then return end
@@ -41,6 +60,7 @@ local function SetDragFrameToMousePosition(self,x,y)
 	self.dragFrame.lastPositionX=x
 	self.dragFrame.lastPositionY=y
 end
+
 
 local function SetDragFrameVisibility(self,value)
 	if self.dragFrame==nil then return end
@@ -64,6 +84,22 @@ local function checkDragFramePosition(self)
 		end
 	end
 	return true
+end
+
+local function SetTooltipVisibility(self,value)
+	if self.tooltipFrame==nil then return end
+	self.tooltipFrame:SetVisible(value)
+	self.tooltipFrame:SetLayer(60)
+end
+local function SetTooltipText(self,value)
+	if self.tooltipFrame==nil then return end
+	self.tooltipFrame.Text:SetText(value)
+	self.tooltipFrame:SetLayer(60)
+end
+
+local function SetTooltipToMousePosition(self,x,y)
+   if self.tooltipFrame==nil then return end
+	self.tooltipFrame:SetPoint("TOPLEFT",self,"TOPLEFT",x+20-self:GetLeft(),y-self:GetTop())
 end
 
 -- Item Frame Events
@@ -128,6 +164,11 @@ local function ItemMouseMove(self,x,y)
   if not widget.dragEnabled then return end
   if widget.enableDrag then 
    	SetDragFrameToMousePosition(widget,x,y)
+   	SetTooltipVisibility(widget,false)
+  else
+  	SetTooltipText(widget,self.text) 
+  	SetTooltipToMousePosition(widget,x,y)
+ 	SetTooltipVisibility(widget,true)
   end
 end
 
@@ -138,6 +179,10 @@ local function ItemMouseIn(self)
   if not self.selected then
     self.bgFrame:SetBackgroundColor(0.3, 0.3, 0.3, 1)
   end
+  local pos= Inspect.Mouse()
+  SetTooltipText(widget,self.text) 
+  SetTooltipToMousePosition(widget,pos.x,pos.y)
+  SetTooltipVisibility(widget,true)
 end
 
 local function ItemMouseOut(self)
@@ -152,6 +197,8 @@ local function ItemMouseOut(self)
     end
     self.bgFrame:SetBackgroundColor(unpack(backgroundColor))
   end
+  
+  SetTooltipVisibility(widget,false)
 end
 
 
@@ -218,6 +265,7 @@ local function LayoutItems(self)
     itemFrame:SetFontSize(fontSize)
     itemFrame:SetFontColor(unpack(fontColor))
     --itemFrame:SetText(item[1])
+    itemFrame.text=item[1]
     itemFrame:SetVisible(true)
     itemFrame:SetHeight(40)
     itemFrame:SetWidth(40)
@@ -670,6 +718,7 @@ function lb.controls.HorizontalIconsList(name, parent)
   widget.GetSelectedValues = GetSelectedValues
   widget.SetSelectedValues = SetSelectedValues
   widget.CreateDragFrame = CreateDragFrame
+  widget.CreateTooltipFrame = CreateTooltipFrame
   Library.LibSimpleWidgets.EventProxy(widget, {"ItemSelect", "SelectionChange","DraggedOutItem"})
   
  

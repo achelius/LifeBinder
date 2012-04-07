@@ -95,7 +95,7 @@ local function ItemDown(self,index)
   local pos= Inspect.Mouse()
   SetDragFrameTexture(widget,widget.items[index][2],widget.items[index][3])
   SetDragFrameToMousePosition(widget,pos.x,pos.y)
-  SetDragFrameVisibility(widget,true)
+  --SetDragFrameVisibility(widget,true)
   
 end
 local function ItemUp(self)
@@ -126,6 +126,7 @@ local function ItemMouseMove(self,x,y)
   if not widget.dragEnabled then return end
   if widget.enableDrag then 
    	SetDragFrameToMousePosition(widget,x,y)
+   	SetDragFrameVisibility(widget,true)
   end
 end
 
@@ -208,8 +209,16 @@ local function LayoutItems(self)
     itemFrame:SetPoint("LEFT", self, "LEFT", 35, nil)
     itemFrame:SetFontSize(fontSize)
     itemFrame:SetFontColor(unpack(fontColor))
-
-    if item[1]~=1 then  itemFrame:SetText(item[1]) end
+	local desc=item[8]
+	local text=item[1]
+	if desc~=nil then
+		text=text.."\n"..desc
+	end
+    if text~=1 then
+      
+      itemFrame:SetText(text)
+      
+    end
     itemFrame:SetVisible(true)
     itemFrame:SetHeight(40)
     itemFrame.bgFrame:SetBackgroundColor(unpack(backgroundColor))

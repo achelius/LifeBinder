@@ -61,7 +61,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.AbilitiesList.Event.DraggedOutItem= lb.slotsGui.buffAssociations.onAbilitiesItemDrag
 	 optionsFrame.AbilitiesListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[1])
 	 optionsFrame.AbilitiesListView:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[1], "TOPLEFT",10, 20)
-     optionsFrame.AbilitiesListView:SetWidth(200)
+     optionsFrame.AbilitiesListView:SetWidth(300)
      optionsFrame.AbilitiesListView:SetHeight(350)
      optionsFrame.AbilitiesListView:SetLayer(1)
      optionsFrame.AbilitiesListView:SetBorder(1, 1, 1, 1, 1)
@@ -118,11 +118,20 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SlotDetailsListView:SetVisible(false)
 	 ----initializing  slot details options
 	 optionsFrame.SlotDetailsList.Event.ItemSelect=lb.slotsGui.buffAssociations.onSlotAssociationSelected
-	 optionsFrame.SlotDetailsOptions=UI.CreateLbFrame("SimpleCheckbox", "SlotDetailsOptionsCastByme", optionsFrame)
-	 optionsFrame.SlotDetailsOptions:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",270, 270)
-	 optionsFrame.SlotDetailsOptions:SetText("Cast By Me only")
-	 optionsFrame.SlotDetailsOptions:SetVisible(false)
-	 optionsFrame.SlotDetailsOptions.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKCastByMeChanged
+	 optionsFrame.SlotDetailsOptions={}
+	 --cast by me only
+	 optionsFrame.SlotDetailsOptions.CastByMeOnly=UI.CreateLbFrame("SimpleCheckbox", "SlotDetailsOptions.CastByMeOnlyCastByme", optionsFrame)
+	 optionsFrame.SlotDetailsOptions.CastByMeOnly:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",270, 270)
+	 optionsFrame.SlotDetailsOptions.CastByMeOnly:SetText("Cast By Me only")
+	 optionsFrame.SlotDetailsOptions.CastByMeOnly:SetVisible(false)
+	 optionsFrame.SlotDetailsOptions.CastByMeOnly.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKCastByMeChanged
+	 --priority buff
+	 optionsFrame.SlotDetailsOptions.PriorityBuff=UI.CreateLbFrame("SimpleCheckbox", "SlotDetailsOptions.PriorityBuffPriority", optionsFrame)
+	 optionsFrame.SlotDetailsOptions.PriorityBuff:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",270, 300)
+	 optionsFrame.SlotDetailsOptions.PriorityBuff:SetText("Has priority")
+	 optionsFrame.SlotDetailsOptions.PriorityBuff:SetVisible(false)
+	 optionsFrame.SlotDetailsOptions.PriorityBuff.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKPriorityChanged
+	 
 	 lb.slotsGui.buffAssociations.populateList()
 	 
 	 return optionsFrame
@@ -137,6 +146,7 @@ function lb.slotsGui.buffAssociations.populateList()
 		local name=ab.name
 		
 	     list[counter]={name,"Rift",ab.icon}
+	     list[counter][8]=ab.description
 	     counter=counter+1
 	 end
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
@@ -191,7 +201,8 @@ function lb.slotsGui.buffAssociations.ReadSlotData(slotindex)
 	table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
 	frame.SlotDetailsList:SetItems(list)
 	frame.SlotDetailsListView:SetVisible(true)
-	frame.SlotDetailsOptions:SetVisible(false)
+	frame.SlotDetailsOptions.CastByMeOnly:SetVisible(false)
+	frame.SlotDetailsOptions.PriorityBuff:SetVisible(false)
 end
 
 function lb.slotsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
@@ -275,7 +286,8 @@ function lb.slotsGui.buffAssociations.updateData()
 	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2]
 	 end
 	 lastIndex=-1
-	 frame.SlotDetailsOptions:SetVisible(false)
+	 frame.SlotDetailsOptions.CastByMeOnly:SetVisible(false)
+	 frame.SlotDetailsOptions.PriorityBuff:SetVisible(false)
 	  frame.SlotDetailsListView:SetVisible(false)
 	lb.slotsGui.buffAssociations.populateList()
 end
@@ -290,9 +302,11 @@ function lb.slotsGui.buffAssociations.onSlotAssociationSelected(item,value,index
 		
 		if key==buffname then
 			checkedinit=true
-		 	frame.SlotDetailsOptions:SetChecked(buffTable.castByMeOnly)
+		 	frame.SlotDetailsOptions.CastByMeOnly:SetChecked(buffTable.castByMeOnly)
+		 	frame.SlotDetailsOptions.PriorityBuff:SetChecked(buffTable.priority==true)
 			checkedinit=false
-			frame.SlotDetailsOptions:SetVisible(true)
+			frame.SlotDetailsOptions.CastByMeOnly:SetVisible(true)
+			frame.SlotDetailsOptions.PriorityBuff:SetVisible(true)
 		end
 	end
 end
@@ -307,11 +321,25 @@ function lb.slotsGui.buffAssociations.onCHKCastByMeChanged()
 	for key,buffTable in pairs(buffs) do
 		local name=key
 		if key==buffname then
-			buffTable.castByMeOnly=frame.SlotDetailsOptions:GetChecked()
+			buffTable.castByMeOnly=frame.SlotDetailsOptions.CastByMeOnly:GetChecked()
 		end
 	end
 end
 
+function lb.slotsGui.buffAssociations.onCHKPriorityChanged()
+	if checkedinit then return end
+	
+	local buffname=frame.SlotDetailsList:GetSelectedItem()[1]
+	
+	local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+	
+	for key,buffTable in pairs(buffs) do
+		local name=key
+		if key==buffname then
+			buffTable.priority=frame.SlotDetailsOptions.PriorityBuff:GetChecked()
+		end
+	end
+end
 
 function lb.slotsGui.buffAssociations.addCustomName()
 	local text= frame.SideTable.Tabs[2].txtNewCustomName:GetText()

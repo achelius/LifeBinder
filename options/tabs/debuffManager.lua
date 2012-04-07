@@ -172,6 +172,7 @@ function lb.slotsGui.debuffManager.populateList()
 	 for k,ab in pairs(lbDebuffCacheList) do
 		local name=k
 		 dbList[dbcounter]={name,"Rift",ab[3]}
+		 dbList[dbcounter][8]=ab[2]
 	     dbcounter=dbcounter+1
 	 end
 	 table.sort(dbList, function(a,b) return a[1] < b[1] end) --sorts alphabetically
