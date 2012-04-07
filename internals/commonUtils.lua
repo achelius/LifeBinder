@@ -37,6 +37,21 @@ function lb.commonUtils.createButton(parentFrame,name,left,top,width,height,text
 	
 	return cmd
 end
+function lb.commonUtils.createComboBox(parentFrame,ctrlname,left,top,elements,defaultValue,text)
+	local nud={}
+	nud.textFrame=UI.CreateFrame("Text",ctrlname.."Text",parentFrame)
+	nud.textFrame:SetPoint("TOPLEFT",parentFrame,"TOPLEFT",left,top)
+	nud.textFrame:SetText(text)
+	nud.textFrame:SetWidth(100)
+     nud.styleSelectCombobox=UI.CreateFrame("SimpleSelect",ctrlname.."SelectCombobox",parentFrame)
+	 nud.styleSelectCombobox:SetPoint("TOPLEFT",parentFrame,"TOPLEFT",left+120,top)
+	 nud.styleSelectCombobox:SetWidth(200)
+	 nud.styleSelectCombobox:SetHeight(30)
+	 nud.styleSelectCombobox:SetLayer(40)
+	 nud.styleSelectCombobox:SetItems(elements)
+	if defaultValue~=nil then nud.styleSelectCombobox:SetSelectedIndex(defaultValue,true)end
+	return nud
+end
 
 function lb.commonUtils.createMover(parentFrame,name,left,top,leftValue,topValue,text)
 	local mover={}

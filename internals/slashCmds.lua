@@ -108,8 +108,12 @@ function lb.slashCommands.parse(cmdLine)
 			else
 				--- searching for custom command
 				if lb.customSlashCommands[par]~=nil then
-					lb.customSlashCommands[par](par,subcommands)
-					commandDone=true
+					local ret=lb.customSlashCommands[par](par,subcommands)
+					if ret~=nil then
+						if ret then 
+							commandDone=true
+						end
+					end
 				end
 			end
 			if not commandDone then

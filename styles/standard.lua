@@ -6,7 +6,6 @@
 
 lb.styles["standard"]={}
 local stTable=lb.styles["standard"]
-
 local optionsTable=nil
 local frame=nil
 
@@ -26,6 +25,7 @@ function stTable.InitializeOptionsTable()
 	if optionsTable.hpText==nil then optionsTable.hpText={left=-10,top=-10,fontSize=12,style=0} end
 	if optionsTable.manaBar==nil then optionsTable.manaBar={height=5} end
 	if optionsTable.flowDirection==nil then optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"} end
+	if optionsTable.currentFlowDirection==nil then optionsTable.currentFlowDirection=1 end
 end
 
 function stTable.fastInitialize()
@@ -107,7 +107,7 @@ function stTable.fastInitialize()
 					if groupGrowth=="LEFT" then
 						local totalwidth= optionsTable.frameWidth*4
 						local totalheight= optionsTable.frameHeight*5
-						left=totalwidth-optionsTable.frameWidth * (a -1)
+						left=totalwidth-optionsTable.frameWidth * (a)
 						top=optionsTable.frameHeight * (i - 1)
 --					
 					end
@@ -455,7 +455,18 @@ function stTable.getOptionsWindow(optionsFrame)
 	optionsFrame.nameFontSize=lb.commonUtils.createNUD(optionsFrame,"nameFontSize",0,200,"Name font size",optionsTable.nameText.fontSize)
 	optionsFrame.nameNumLetters=lb.commonUtils.createNUD(optionsFrame,"nameNumLetters",0,230,"Name chars count",optionsTable.nameText.numLetters)
 	optionsFrame.manaBarHeight=lb.commonUtils.createNUD(optionsFrame,"manaBarHeight",0,260,"ManaBar height",optionsTable.manaBar.height)
-	optionsFrame.applyButton=lb.commonUtils.createButton(optionsFrame,"applybutton",250,300,150,30,"Apply settings")
+	local list={}
+	for i= 1,8 do
+		list[i]=tostring(i)
+	end
+	optionsFrame.FlowDirection=lb.commonUtils.createComboBox(optionsFrame,"FlowDirection",450,20,list,optionsTable.currentFlowDirection,"Unit positioning")
+	optionsFrame.FlowDirectionImage= UI.CreateFrame("Texture", "FlowDirectionImage", optionsFrame)
+	optionsFrame.FlowDirectionImage:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",450,60)
+	optionsFrame.FlowDirectionImage:SetWidth(397)
+	optionsFrame.FlowDirectionImage:SetHeight(227)
+	optionsFrame.FlowDirectionImage:SetTexture("LifeBinder","textures/unitpositioning.png")
+	
+	optionsFrame.applyButton=lb.commonUtils.createButton(optionsFrame,"applybutton",250,320,150,30,"Apply settings")
 	optionsFrame.applyButton.Event.LeftClick=stTable.setOptionsValues
 end
 
@@ -469,38 +480,46 @@ function stTable.setOptionsValues()
 	optionsTable.nameText.top=frame.playerNameMover.top
 	optionsTable.manaBar.height=tonumber(frame.manaBarHeight.textArea:GetText())
 	optionsTable.nameText.numLetters=tonumber(frame.nameNumLetters.textArea:GetText())
+	print(frame.FlowDirection.styleSelectCombobox:GetSelectedIndex())
+	stTable.setFlowDirection(frame.FlowDirection.styleSelectCombobox:GetSelectedIndex())
 	stTable.fastInitialize()
 	stTable.initialize()
 end
-
+function stTable.setFlowDirection(flowIndex)
+	local found=true
+	local sflowIndex=tostring(flowIndex)
+	if sflowIndex=="1" then
+		optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"}
+	elseif sflowIndex =="2" then
+		optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="UP",groupGrowth="RIGHT"}
+	elseif sflowIndex =="3" then
+		optionsTable.flowDirection={firstUnit="TOPLEFT",unitGrowth="RIGHT",groupGrowth="DOWN"}
+	elseif sflowIndex =="4" then
+		optionsTable.flowDirection={firstUnit="TOPLEFT",unitGrowth="DOWN",groupGrowth="RIGHT"}
+	elseif sflowIndex =="5" then
+		optionsTable.flowDirection={firstUnit="TOPRIGHT",unitGrowth="LEFT",groupGrowth="DOWN"}
+	elseif sflowIndex =="6" then
+		optionsTable.flowDirection={firstUnit="TOPRIGHT",unitGrowth="DOWN",groupGrowth="LEFT"}
+	elseif sflowIndex =="7" then
+		optionsTable.flowDirection={firstUnit="BOTTOMRIGHT",unitGrowth="LEFT",groupGrowth="UP"}
+	elseif sflowIndex =="8" then
+		optionsTable.flowDirection={firstUnit="BOTTOMRIGHT",unitGrowth="UP",groupGrowth="LEFT"}
+	else
+		found=false
+	end
+	if found then
+		optionsTable.currentFlowDirection=flowIndex
+		stTable.fastInitialize()
+	end
+end
 function stTable.slashCommHandler(cmd,params)
 	local cmdv= lb.slashCommands.parseCommandValues(params[1])
 	
 	if cmdv[1]=="setfd" then
-		local found=true
-		if cmdv[2]=="1" then
-			optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"}
-		elseif cmdv[2] =="2" then
-			optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="UP",groupGrowth="RIGHT"}
-		elseif cmdv[2] =="3" then
-			optionsTable.flowDirection={firstUnit="TOPLEFT",unitGrowth="RIGHT",groupGrowth="DOWN"}
-		elseif cmdv[2] =="4" then
-			optionsTable.flowDirection={firstUnit="TOPLEFT",unitGrowth="DOWN",groupGrowth="RIGHT"}
-		elseif cmdv[2] =="5" then
-			optionsTable.flowDirection={firstUnit="TOPRIGHT",unitGrowth="LEFT",groupGrowth="DOWN"}
-		elseif cmdv[2] =="6" then
-			optionsTable.flowDirection={firstUnit="TOPRIGHT",unitGrowth="DOWN",groupGrowth="LEFT"}
-		elseif cmdv[2] =="7" then
-			optionsTable.flowDirection={firstUnit="BOTTOMRIGHT",unitGrowth="LEFT",groupGrowth="UP"}
-		elseif cmdv[2] =="8" then
-			optionsTable.flowDirection={firstUnit="BOTTOMRIGHT",unitGrowth="UP",groupGrowth="LEFT"}
-		else
-			found=false
-		end
-		if found then
-			stTable.fastInitialize()
-		end
+		stTable.setFlowDirection(cmdv[2])
+		return true
 	end
+	return false
 end
 
 --add the /lb standard command handler
