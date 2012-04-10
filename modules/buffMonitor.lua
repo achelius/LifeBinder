@@ -43,14 +43,13 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		       if lb.frames[var].buffs==nil then lb.frames[var].buffs={} end
 			   if lb.frames[var].buffs.groupSpots==nil then lb.frames[var].buffs.groupSpots= {} end
 			   if lb.frames[var].buffs.groupSpotsIcons==nil then lb.frames[var].buffs.groupSpotsIcons= {} end
-		        lb.frames[var].buffs.groupSpots[g] = {}
+		        if lb.frames[var].buffs.groupSpots[g]==nil then lb.frames[var].buffs.groupSpots[g] = {} end
 		        lb.frames[var].buffs.groupSpots[g][0]=true --icon
 		        if lb.frames[var].buffs.groupSpots[g][1]==nil then lb.frames[var].buffs.groupSpots[g][1]=UI.CreateLbFrame("Texture", "HoT" .. tostring(g), lb.frames[var].groupBF) end
 		        if lb.frames[var].buffs.groupSpots[g][2]==nil then lb.frames[var].buffs.groupSpots[g][2]=UI.CreateLbFrame("Text", "HoTText" .. tostring(g), lb.frames[var].groupBF) end
 		        if lb.frames[var].buffs.groupSpots[g][3]==nil then lb.frames[var].buffs.groupSpots[g][3]=UI.CreateLbFrame("Text", "HoTTextShadow" .. tostring(g), lb.frames[var].groupBF) end
 		        if lb.frames[var].buffs.groupSpots[g][4]==nil then lb.frames[var].buffs.groupSpots[g][4]=UI.CreateLbFrame("Text", "Duration" .. tostring(g), lb.frames[var].groupBF) end
 		        if lb.frames[var].buffs.groupSpots[g][5]==nil then lb.frames[var].buffs.groupSpots[g][5]=UI.CreateLbFrame("Text", "DurationShadow" .. tostring(g), lb.frames[var].groupBF) end
-		
 		        lb.frames[var].buffs.groupSpotsIcons[g]={}
 		        lb.frames[var].buffs.groupSpotsIcons[g][0]=false
 		        lb.frames[var].buffs.groupSpotsIcons[g][1]="LifeBinder"
@@ -65,8 +64,6 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		        lb.frames[var].buffs.groupSpotsIcons[g][10]=1    --buff duration
 		        lb.frames[var].buffs.groupSpotsIcons[g][11]=0   --timeframe of the moment this buff was set
 		        lb.frames[var].buffs.groupSpotsIcons[g][12]=0   --current duration displayed
-		        
-		        
 		        local iconl=iconWidth
 		        if iconHeight<iconWidth then
 		        	iconl=iconHeight
@@ -90,7 +87,6 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		
 		        lb.frames[var].buffs.groupSpots[g][3]:SetPoint("CENTER", lb.frames[var].buffs.groupSpots[g][2], "CENTER",2, 2 )
 		        lb.frames[var].buffs.groupSpots[g][3]:SetFont("LifeBinder",fontfile)
-		       --lb.frames[var].buffs.groupSpots[g][3]:SetBackgroundColor(1,0,0,1)
 		        lb.frames[var].buffs.groupSpots[g][3]:SetFontColor(0,0,0,1)
 		        lb.frames[var].buffs.groupSpots[g][3]:SetFontSize(fontsize)
 		        lb.frames[var].buffs.groupSpots[g][3]:SetText(tostring(lb.frames[var].buffs.groupSpotsIcons[g][3]))
@@ -117,6 +113,13 @@ function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
 		        
 		        lb.frames[var].buffs.groupSpots[g][4]:SetVisible(lb.frames[var].buffs.groupSpotsIcons[g][9])
 			end
+			if #(lbBuffSlotOptions[lbValues.set])<#(lb.frames[var].buffs.groupSpots) then
+			 	for i = #(lbBuffSlotOptions[lbValues.set])+1,#(lb.frames[var].buffs.groupSpots) do
+		 			if lb.frames[var].buffs.groupSpots[i]~=nil then
+			 			lb.frames[var].buffs.groupSpots[i][1]:SetVisible(false)
+			 		end
+			 	end
+			 end
 		end
     
 end
@@ -190,7 +193,7 @@ function lb.buffMonitor.showDummyBuffMonitorSlots()
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-	 		for g= 1,  lb.buffMonitor.slotscount do
+	 		for g= 1, lb.buffMonitor.slotscount  do
 		        lb.frames[var].buffs.groupSpots[g][1]:SetBackgroundColor(0,0,0,1)
 		        lb.frames[var].buffs.groupSpots[g][1]:SetVisible(true)
 		    end  	   
@@ -203,10 +206,11 @@ function lb.buffMonitor.hideDummyBuffMonitorSlots()
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-	 		for g= 1,  lb.buffMonitor.slotscount do
+	 		for g= 1,  #(lb.frames[var].buffs.groupSpots) do
 		        lb.frames[var].buffs.groupSpots[g][1]:SetBackgroundColor(0,0,0,0)
 		        lb.frames[var].buffs.groupSpots[g][1]:SetVisible(lb.frames[var].buffs.groupSpotsIcons[g][0])
-		    end  	   
+		    end  
+		       
 	    end
     end
 end
@@ -672,6 +676,37 @@ function lb.buffMonitor.onBuffChangeTest(unit, buffID,frameindex)
 	return updatebuffs
 
 end
+
+function lb.buffMonitor.addBuffSlot(addForAll)
+	local newcount=lb.buffMonitor.slotscount+1
+	if addForAll then
+		for i = 1, 6 do
+			lbBuffSlotOptions[i][newcount]={}
+			for h=1,#(lbPredefinedBuffSlotPos[1][1]) do 
+				lbBuffSlotOptions[i][newcount][h]=lbPredefinedBuffSlotPos[1][1][h] --set the slot to the x style definition for that slot
+			end
+		end
+	else
+		lbBuffSlotOptions[lbValues.set][newcount]={}
+		for h=1,#(lbPredefinedBuffSlotPos[1][1]) do 
+			lbBuffSlotOptions[lbValues.set][newcount][h]=lbPredefinedBuffSlotPos[1][1][h] --set the slot to the x style definition for that slot
+		end
+	end
+	
+	lb.buffMonitor.initializeBuffMonitorFrameIndex(newcount)
+	--update the buffs count
+	lb.buffMonitor.slotscount=lb.buffMonitor.slotscount+1
+	
+end
+
+function lb.buffMonitor.removeBuffSlot(index)
+	lbBuffSlotOptions[lbValues.set][index]=nil
+	
+	--update the buffs count
+	lb.buffMonitor.slotscount=lb.buffMonitor.slotscount-1
+	
+end
+
 
 
 function lb.buffMonitor.copySettingsFromRole(Role)

@@ -104,7 +104,7 @@ function lb.optionsGui.OnTabChanged(tab,index)
 	end
 	if showdummies then
 		lb.buffMonitor.showDummyBuffMonitorSlots()
-	 		lb.debuffMonitor.showDummyDebuffMonitorSlots() 
+	 	lb.debuffMonitor.showDummyDebuffMonitorSlots() 
 	else
 		lb.buffMonitor.hideDummyBuffMonitorSlots()
     	lb.debuffMonitor.hideDummyDebuffMonitorSlots()

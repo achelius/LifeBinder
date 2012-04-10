@@ -267,6 +267,9 @@ end
 function lb.optionsGui.buffAssociations.updateData()
 	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
+	 	if frame.buffSlots[i]==nil then frame.buffSlots[i]={} end
+	 	if frame.buffSlots[i].Frame==nil then  frame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  frame.UnitFrame ) end
+	 	if frame.buffSlots[i].Text ==nil then  frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame ) end
 	 	frame.buffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -279,11 +282,21 @@ function lb.optionsGui.buffAssociations.updateData()
 	 	frame.buffSlots[i].Frame:SetBackgroundColor(0,1,0.2,1)
 	 	frame.buffSlots[i].Frame:SetLayer(3)
 		frame.buffSlots[i].Frame.Event.LeftUp=function () lb.optionsGui.buffAssociations.onSlotLeftUp(i) end
+		frame.buffSlots[i].Frame:SetVisible(true)
 	 	frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame )
 	 	frame.buffSlots[i].Text:SetPoint("CENTER", frame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	frame.buffSlots[i].Text:SetText(tostring(i))
 	 	frame.buffSlots[i].X=slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1]
 	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
+	 end
+	 if #(lbBuffSlotOptions[lbValues.set])<#(frame.buffSlots) then
+	 	for i = #(lbBuffSlotOptions[lbValues.set])+1,#(frame.buffSlots) do
+	 		if frame.buffSlots[i]~=nil then
+	 			if frame.buffSlots[i].Frame~=nil then
+		 			frame.buffSlots[i].Frame:SetVisible(false)
+		 		end
+	 		end
+	 	end
 	 end
 	 lastIndex=-1
 	 frame.SlotDetailsOptions.CastByMeOnly:SetVisible(false)

@@ -23,6 +23,7 @@ lb.ReloadWhileInCombat=false --true if lb.UnitUpdate is called during combat
 lb.styles={}
 lb.WindowDrag = {}
 lb.controls={}
+lb.version="1.0.1.4" -- lifebinder version
 --
 local lastUpdatePlayerFrameCheck=0
 

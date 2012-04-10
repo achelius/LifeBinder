@@ -199,25 +199,20 @@ end
 
 function lb.onRoleChanged(role)
     lbValues.set=role;
-    --call abilities
+
     lb.autosetDebuffOptions(Inspect.TEMPORARY.Role())
     lb.buffMonitor.resetBuffMonitorTextures() --hide every buff slot
     lb.buffMonitor.initializeBuffMonitor()--initializes buff monitor
-    --initializeSpecButtons()
-   
+
     lb.buffMonitor.updateSpellTextures() --update textures cache and populate the lb.NoIconsBuffList table
     
     lb.mouseBinds.setMouseActions()
     if lb.optionsGui.initialized then
-    	lb.optionsGui.updateOptions()
+    	lb.optionsGui.TabControl:SetActiveTab(1)
+    	lb.optionsGui.Window:SetVisible(false)
+--    	lb.optionsGui.updateOptions()
     end
-    --lbUpdateRequiredSpellsList()
 
-    --createTableBuffs()--gui
-    --createTableDebuffs() --gui
-    --UpdateMouseAssociationsTextFieldsValues() --gui
-    --lb.optionsGui.initialize()
-   -- hideAll()
 end
 
 function lb.onAbilityAdded(abilities)

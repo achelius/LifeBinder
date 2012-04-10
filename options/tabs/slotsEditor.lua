@@ -23,7 +23,7 @@ function lb.optionsGui.slotsEditor.createTable(parentFrame)
 	 for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
 	 	optionsFrame.buffSlots[i]={}
-	 	optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
+	 	if optionsFrame.buffSlots[i].Frame==nil then  optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame ) end
 	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -252,10 +252,15 @@ end
 function lb.optionsGui.slotsEditor.updateData()
   lb.optionsGui.selectedIndex=-1
  lb.optionsGui.selectedType=-1
+ 	lb.buffMonitor.hideDummyBuffMonitorSlots()
+    lb.debuffMonitor.hideDummyDebuffMonitorSlots()
 	frame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.optionsGui.PreviewScale[1])
 	 frame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.optionsGui.PreviewScale[2])
 	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
+	 	if frame.buffSlots[i]==nil then frame.buffSlots[i]={} end
+	 	if frame.buffSlots[i].Frame==nil then  frame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  frame.UnitFrame ) end
+	 	if frame.buffSlots[i].Text ==nil then  frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame ) end
 	 	frame.buffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -271,14 +276,23 @@ function lb.optionsGui.slotsEditor.updateData()
 	 	frame.buffSlots[i].Frame.Event.LeftUp=function () lb.optionsGui.slotsEditor.onSlotLeftUp(0,i) end
 	 	frame.buffSlots[i].Frame.Event.LeftUpoutside=function () lb.optionsGui.slotsEditor.onSlotUpoutside(0,i) end
 	 	frame.buffSlots[i].Frame.Event.MouseMove=function (n,x,y) lb.optionsGui.OnSlotMouseMove(0,i,x,y) end
-	 	
+	 	frame.buffSlots[i].Frame:SetVisible(true)
 	 	frame.buffSlots[i].Text:SetPoint("CENTER", frame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	frame.buffSlots[i].Text:SetText(tostring(i))
 	 	
 	 	frame.buffSlots[i].X=slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1]
 	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
+	 	
 	 end
-	 
+	 if #(lbBuffSlotOptions[lbValues.set])<#(frame.buffSlots) then
+	 	for i = #(lbBuffSlotOptions[lbValues.set])+1,#(frame.buffSlots) do
+	 		if frame.buffSlots[i]~=nil then
+	 			if frame.buffSlots[i].Frame~=nil then
+		 			frame.buffSlots[i].Frame:SetVisible(false)
+		 		end
+	 		end
+	 	end
+	 end
 	
 	 
 	 for i =1 ,#(lbDebuffSlotOptions[lbValues.set]) do
@@ -304,4 +318,6 @@ function lb.optionsGui.slotsEditor.updateData()
 	 	frame.debuffSlots[i].X=slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1]
 	 	frame.debuffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
 	 end
+--	 lb.buffMonitor.showDummyBuffMonitorSlots()
+--	 lb.debuffMonitor.showDummyDebuffMonitorSlots() 
 end
