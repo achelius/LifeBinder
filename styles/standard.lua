@@ -341,7 +341,9 @@ function stTable.onCombatEnter()
 	--print("combatEnter")
  	if not optionsTable.menuBar.showInCombat then
  		for var= 1,20 do
-			lb.frames[var].groupMenu:SetVisible(false)
+ 			if lb.frames[var].groupMenu ~=nil then
+				lb.frames[var].groupMenu:SetVisible(false)
+			end
 		end
 	end
 end	
@@ -349,7 +351,9 @@ end
 function stTable.onCombatExit()
 	--print("combatExit")
 	for var= 1,20 do
-		if lb.UnitsTableStatus[var][12] then lb.frames[var].groupMenu:SetVisible(true) end
+		if lb.frames[var].groupMenu ~=nil then
+			if lb.UnitsTableStatus[var][12] then lb.frames[var].groupMenu:SetVisible(true) end
+		end
 	end
 end
 
