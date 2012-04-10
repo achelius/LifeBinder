@@ -199,9 +199,18 @@ function lb.waitPlayerAvailable()
 	
 	lb.PlayerID=Inspect.Unit.Lookup("player")
 	local unitdet=Inspect.Unit.Detail(lb.PlayerID)
-
-	if lb.PlayerID ~=nil and unitdet~=nil then
+	if unitdet.combat==true then
+		lb.isincombat=true
+		if not(lb.combatlocked==true) then
+			print("Reloading in combat, the addon will automatically load after combat ends")
+			lb.combatlocked=true
+		end
+	end
+	if lb.PlayerID ~=nil and unitdet~=nil and not(unitdet.combat==true) then
 		lb.playerFound=true
+		lb.combatlocked=false
+		lb.isincombat=unitdet.combat==true
+		
 		lbValues.set=Inspect.TEMPORARY.Role();
 		lb.remWaitPlayerHook()
 		--print ("preinit"..tostring(timeFrame()))
@@ -224,6 +233,7 @@ function lb.waitPlayerAvailable()
 		
          
 		lb.EnableHandlers()--add event handlers
+		print("LifeBinder loaded, write /lb help for console commands")
 		--print ("afterinit"..tostring(timeFrame()))
 	end
 	

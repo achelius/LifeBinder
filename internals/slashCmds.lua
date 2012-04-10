@@ -2,8 +2,6 @@ lb.LB_SC_HELP = { -- Temp array while locales being made
 	"---------------------------------------------------------------",
 	"LifeBinder	Help Menu,",
 	"---------------------------------------------------------------",
-	"FOR THE MOMMENT ONLY USE CONFIG",
-	"OTHER COMMANDS DO NOT WORK",
 	"/lb config		-- Configure LifeBinder.",
 	"/lb lock		-- Lock the raidui",
 	"/lb unlock		-- Unlock the raid ui",
@@ -43,7 +41,7 @@ function lb.slashCommands.parse(cmdLine)
 			--inserts commands from here
 			if (par == "help" or par == "?") then
 				for i = 1, #(lb.LB_SC_HELP) do print(lb.LB_SC_HELP[i]) end
-				
+				commandDone=true
 			elseif (par=="config") then
 				--print ("debug: config")
 				if not lb.isincombat then lb.slotsGui.show() end
