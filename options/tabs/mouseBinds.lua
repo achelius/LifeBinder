@@ -1,12 +1,12 @@
-lb.slotsGui.mouseBinds={}
+lb.optionsGui.mouseBinds={}
 local frame=nil
-function lb.slotsGui.mouseBinds.createTable(parentFrame)
+function lb.optionsGui.mouseBinds.createTable(parentFrame)
  	 local optionsFrame
 	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
 	 
 	 optionsFrame.CommandsList=UI.CreateLbFrame("AbilitiesList", "CommandsList",optionsFrame)
 	 optionsFrame.CommandsList:CreateDragFrame(optionsFrame.CommandsList,optionsFrame,parentFrame)
-	 optionsFrame.CommandsList.Event.DraggedOutItem= lb.slotsGui.mouseBinds.onCommandsListItemDrag
+	 optionsFrame.CommandsList.Event.DraggedOutItem= lb.optionsGui.mouseBinds.onCommandsListItemDrag
 	 optionsFrame.CommandsListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame)
 	 
 	 optionsFrame.CommandsListView:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",5, 20)
@@ -30,9 +30,10 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	     counter=counter+1
 	 end
 	 table.sort(list, function(a,b) return a[1] < b[1] end) --sorts alphabetically
-	 table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier"})
-	 table.insert(list,2,{"Assist","LifeBinder","Textures/card29a.png","assist","assist","mousebutton","modifier"})
-	 table.insert(list,3,{"Focus","LifeBinder","Textures/card29b.png","focus","focus","mousebutton","modifier"})
+	 table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier","Targets the unit"})
+	 table.insert(list,2,{"Assist","LifeBinder","Textures/card29a.png","assist","assist","mousebutton","modifier","Assists the unit"})
+	 table.insert(list,3,{"Focus","LifeBinder","Textures/card29b.png","focus","focus","mousebutton","modifier","Focus the unit"})
+	 if Command.Unit~=nil then table.insert(list,4,{"Menu [beta]","LifeBinder","Textures/card29c.png","menu","menu","mousebutton","modifier","Shows the unit menu while out of combat"}) end
 	 optionsFrame.CommandsList:SetItems(list)
 	 writeText("Drag the ability from the list to the mouse button / modifier combination you want","text",optionsFrame,260,5)
 	 writeText("Double modifiers are called first, then single modifier and finally the no modifier one","text",optionsFrame,260,25)
@@ -59,7 +60,7 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]=UI.CreateLbFrame("HorizontalIconsList", "BindsLists"..tostring(g),optionsFrame.ButtonsTable.Tabs[i])
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]:CreateDragFrame(optionsFrame.ButtonsTable.Tabs[i].BindsLists[g],optionsFrame.ButtonsTable.Tabs[i],parentFrame)
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]:CreateTooltipFrame(optionsFrame.ButtonsTable.Tabs[i].BindsLists[g],optionsFrame.ButtonsTable.Tabs[i],parentFrame)
-			optionsFrame.ButtonsTable.Tabs[i].BindsLists[g].Event.DraggedOutItem=function(item,x,y) lb.slotsGui.mouseBinds.BindsListItemDrag(i,g,item,x,y) end
+			optionsFrame.ButtonsTable.Tabs[i].BindsLists[g].Event.DraggedOutItem=function(item,x,y) lb.optionsGui.mouseBinds.BindsListItemDrag(i,g,item,x,y) end
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.ButtonsTable.Tabs[i])
 		 	optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetPoint("TOPLEFT", optionsFrame.ButtonsTable.Tabs[i], "TOPLEFT",80, 40*(g-1)+10*g)
 		     optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetWidth(450)
@@ -68,7 +69,7 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 		     optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetBorder(1, 1, 1, 1, 1)
 		     optionsFrame.ButtonsTable.Tabs[i].BindsListsView[g]:SetContent( optionsFrame.ButtonsTable.Tabs[i].BindsLists[g])
 		     optionsFrame.ButtonsTable.Tabs[i].BindsLists[g]:SetItems(optionsFrame.tempBindsLists[i][g])
-		     writeText(lb.slotsGui.mouseBinds.getModifierNameFromIndex(g),"text",optionsFrame.ButtonsTable.Tabs[i],10,40*(g-1)+10*g+10)
+		     writeText(lb.optionsGui.mouseBinds.getModifierNameFromIndex(g),"text",optionsFrame.ButtonsTable.Tabs[i],10,40*(g-1)+10*g+10)
 	 	end
 	 	
      end
@@ -76,7 +77,7 @@ function lb.slotsGui.mouseBinds.createTable(parentFrame)
 	 optionsFrame.ApplyButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame )
 	 optionsFrame.ApplyButton:SetPoint("BOTTOMRIGHT", optionsFrame,"BOTTOMRIGHT",-5,-5)
 	 optionsFrame.ApplyButton:SetText("Apply")
-	 optionsFrame.ApplyButton.Event.LeftClick=function() lb.mouseBinds.setMouseActions()  end
+	 optionsFrame.ApplyButton.Event.LeftClick=function() if not lb.isincombat then lb.mouseBinds.setMouseActions() else print("you must be out of combat to change mouse binds!") end end
 	 frame=optionsFrame
 	 return optionsFrame
 end
@@ -84,16 +85,16 @@ end
 
 
 
-function lb.slotsGui.mouseBinds.onCommandsListItemDrag(item,x,y)
+function lb.optionsGui.mouseBinds.onCommandsListItemDrag(item,x,y)
 	local tabindex=frame.ButtonsTable:GetActiveTab()
 	for i = 1,7 do
-		if lb.slotsGui.isPointInFrame(frame.ButtonsTable.Tabs[tabindex].BindsListsView[i],x,y) then
+		if lb.optionsGui.isPointInFrame(frame.ButtonsTable.Tabs[tabindex].BindsListsView[i],x,y) then
 			local newitem={}
 			for g = 1,#item do
 				newitem[g]=item[g]
 			end
 			newitem[6]=tabindex 
-			newitem[7]=lb.slotsGui.mouseBinds.getModifierNameFromIndex(i)
+			newitem[7]=lb.optionsGui.mouseBinds.getModifierNameFromIndex(i)
 			table.insert(frame.tempBindsLists[tabindex][i],newitem)
 			frame.ButtonsTable.Tabs[tabindex].BindsLists[i]:SetItems(frame.tempBindsLists[tabindex][i])
 		end
@@ -102,7 +103,7 @@ function lb.slotsGui.mouseBinds.onCommandsListItemDrag(item,x,y)
 end
 
 
-function lb.slotsGui.mouseBinds.BindsListItemDrag(buttonindex,modindex,item,x,y)
+function lb.optionsGui.mouseBinds.BindsListItemDrag(buttonindex,modindex,item,x,y)
 	local index=0
 	for i = 1,#(frame.tempBindsLists[buttonindex][modindex]) do
 		if frame.tempBindsLists[buttonindex][modindex][i][1]==item[1] then
@@ -112,7 +113,7 @@ function lb.slotsGui.mouseBinds.BindsListItemDrag(buttonindex,modindex,item,x,y)
 		end
 	end
 end
-function lb.slotsGui.mouseBinds.updateData()
+function lb.optionsGui.mouseBinds.updateData()
 	frame.tempBindsLists=lbMouseBinds[lbValues.set]
 	local tabindex=frame.ButtonsTable:GetActiveTab()
 	local list={}
@@ -132,6 +133,7 @@ function lb.slotsGui.mouseBinds.updateData()
 	table.insert(list,1,{"Target","LifeBinder","Textures/card29.png","target","target","mousebutton","modifier","Targets the unit"})
 	 table.insert(list,2,{"Assist","LifeBinder","Textures/card29a.png","assist","assist","mousebutton","modifier","Assists the unit"})
 	 table.insert(list,3,{"Focus","LifeBinder","Textures/card29b.png","focus","focus","mousebutton","modifier","Focus the unit"})
+	 if Command.Unit~=nil then table.insert(list,4,{"Menu [beta]","LifeBinder","Textures/card29c.png","menu","menu","mousebutton","modifier","Shows the unit menu while out of combat"}) end
 	 frame.CommandsList:SetItems(list)
 	 for buttonindex= 1,5 do
 		for modindex = 1,7 do
@@ -139,7 +141,7 @@ function lb.slotsGui.mouseBinds.updateData()
 		end
 	 end
 end
-function lb.slotsGui.mouseBinds.getModifierNameFromIndex(index)
+function lb.optionsGui.mouseBinds.getModifierNameFromIndex(index)
 	if index==1 then
 		return "None"
 	elseif index==2 then
@@ -157,7 +159,7 @@ function lb.slotsGui.mouseBinds.getModifierNameFromIndex(index)
 	end
 end
 
-function lb.slotsGui.mouseBinds.getModifierIndexFromName(name)
+function lb.optionsGui.mouseBinds.getModifierIndexFromName(name)
 	if name=="None" then
 		return 1
 	elseif name=="alt" then

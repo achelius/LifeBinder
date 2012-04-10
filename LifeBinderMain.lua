@@ -143,7 +143,7 @@ function lb.createWindow()
     lb.CenterFrame:SetPoint("TOPLEFT", lb.WindowFrameTop, "BOTTOMLEFT", 0, 10)
     lb.CenterFrame:SetPoint("BOTTOMRIGHT", lb.Window, "BOTTOMRIGHT", 0, 0)
     lb.CenterFrame:SetLayer(1)
-    lb.CombatStatus.Event.LeftClick=function() if not lb.isincombat then lb.slotsGui.show() end end
+    lb.CombatStatus.Event.LeftClick=function() if not lb.isincombat then lb.optionsGui.show() end end
     --initializeSpecButtons()
 	
 	--toggleLockedWindow(lbValues.islocked)
@@ -324,10 +324,14 @@ function lb.UpdateFramesVisibility()
             if k > 5 then lbraidfound = true lbgroupfound = false end
             lbsolofound = false
             lb.frames[k].groupBF:SetVisible(true)
-            if not lb.isincombat and lb.UnitsTableStatus[k][12]  then lb.frames[k].groupMask:SetVisible(true) end
+            if not lb.isincombat and lb.UnitsTableStatus[k][12]  then
+             if lb.styles[lb.currentStyle].showMasks~=nil then lb.styles[lb.currentStyle].showMasks(k) else lb.styles["standard"].showMasks(k) end 
+            end
         else
             lb.frames[k].groupBF:SetVisible(false)
-            if not lb.isincombat and lb.UnitsTableStatus[k][12]  then lb.frames[k].groupMask:SetVisible(false) end
+             if not lb.isincombat and lb.UnitsTableStatus[k][12]  then
+             if lb.styles[lb.currentStyle].hideMasks~=nil then lb.styles[lb.currentStyle].hideMasks(k) else lb.styles["standard"].hideMasks(k) end 
+            end
         end
     end
 
@@ -339,8 +343,9 @@ function lb.UpdateFramesVisibility()
         end
         lb.QueryTable = lb.SoloTable
         lb.frames[1].groupBF:SetVisible(true)
-        if not lb.isincombat and lb.UnitsTableStatus[1][12] then lb.frames[1].groupMask:SetVisible(true) end
-
+         if not lb.isincombat and lb.UnitsTableStatus[1][12] then 
+	         if lb.styles[lb.currentStyle].showMasks~=nil then lb.styles[lb.currentStyle].showMasks(1) else lb.styles["standard"].showMasks(1) end 
+        end
     end
     if lbgroupfound then
         if lastMode~=1 then

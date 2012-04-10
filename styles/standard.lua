@@ -26,6 +26,7 @@ function stTable.InitializeOptionsTable()
 	if optionsTable.manaBar==nil then optionsTable.manaBar={height=5} end
 	if optionsTable.flowDirection==nil then optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"} end
 	if optionsTable.currentFlowDirection==nil then optionsTable.currentFlowDirection=1 end
+	if optionsTable.menuBar==nil then optionsTable.menuBar={create=true,show=true,showInCombat=false} end
 end
 
 function stTable.fastInitialize()
@@ -39,7 +40,7 @@ function stTable.fastInitialize()
 	local groupGrowth=optionsTable.flowDirection.groupGrowth
     for a = 1, 4 do
 		for i = 1, 5 do
-			var = i + ((a-1) * 5)
+			local var = i + ((a-1) * 5)
 			local left=0
 			local top=0
 			--a=group
@@ -124,15 +125,25 @@ function stTable.fastInitialize()
 			lb.frames[var].groupBF:SetWidth(optionsTable.frameWidth)
 			if lb.frames[var].groupBF==nil then lb.frames[var].groupBF:SetVisible(false)end
 			
-			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateLbFrame("Frame", "group"..i, lb.CenterFrame) end
-			lb.frames[var].groupMask:SetLayer(99)
+			if lb.frames[var].groupMask ==nil then lb.frames[var].groupMask = UI.CreateLbFrame("Frame", "groupMask"..i, lb.CenterFrame) end
+			lb.frames[var].groupMask:SetLayer(97)
 			lb.frames[var].groupMask:SetBackgroundColor(0,0,0,0)
 			lb.frames[var].groupMask:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", left , top)
 			lb.frames[var].groupMask:SetHeight(optionsTable.frameHeight)
 			lb.frames[var].groupMask:SetWidth(optionsTable.frameWidth)
 			lb.frames[var].groupMask:SetSecureMode("restricted")
 			if not lb.UnitsTableStatus[var][12] then lb.frames[var].groupMask:SetVisible(false) end
-			
+			if optionsTable.menuBar.create and Command.Unit~=nil then
+				if lb.frames[var].groupMenu ==nil then lb.frames[var].groupMenu = UI.CreateLbFrame("Frame", "groupMenu"..i, lb.CenterFrame) end
+				lb.frames[var].groupMenu:SetLayer(99)
+				lb.frames[var].groupMenu:SetBackgroundColor(0,0,0,0)
+				lb.frames[var].groupMenu:SetPoint("TOPLEFT", lb.CenterFrame, "TOPLEFT", left , top)
+				lb.frames[var].groupMenu:SetHeight(optionsTable.frameHeight)
+				lb.frames[var].groupMenu:SetWidth(10)
+				lb.frames[var].groupMenu:SetSecureMode("restricted")
+				lb.frames[var].groupMenu.Event.RightClick=function () stTable.CreateMenu(var) end
+				if not lb.UnitsTableStatus[var][12] and optionsTable.menuBar.show then lb.frames[var].groupMenu:SetVisible(false) end
+			end
 		end
 	end
 	--processMacroText(lb.UnitsTable)
@@ -149,6 +160,8 @@ function stTable.fastInitialize()
 		lbValues.font = 16
 	end
 end
+
+
 
 function stTable.CreateFrame(index)
 	if index==nil then return end
@@ -209,9 +222,6 @@ function stTable.initializeIndex(index)
     lb.frames[var].groupTarget:SetWidth(optionsTable.frameWidth - 5)
     lb.frames[var].groupTarget:SetLayer(3)
     lb.frames[var].groupTarget:SetVisible(false)
-
-  
-    
 
     lb.frames[var].groupCastBar:SetTexture("LifeBinder", "Textures/bars/cast.png")
     lb.frames[var].groupCastBar:SetPoint("TOPLEFT", lb.frames[var].groupBF, "TOPLEFT", 0, 0 )
@@ -285,6 +295,8 @@ function stTable.initialize()
 		lbValues.font = 16
 	end
 end
+
+
 function stTable.hideFrame(index)
 	if lb.UnitsTableStatus[index][12] then 
 		lb.frames[index].groupBF:SetVisible(false)
@@ -302,6 +314,17 @@ function stTable.showAllFrames()
 		lb.frames[var].groupBF:SetVisible(true)
 	end
 end
+
+function stTable.showMasks(index)
+	if lb.frames[index].groupMask~=nil then lb.frames[index].groupMask:SetVisible(true) end
+	if lb.frames[index].groupMenu~=nil and optionsTable.menuBar.show then lb.frames[index].groupMenu:SetVisible(true) end
+end
+
+function stTable.hideMasks(index)
+	if lb.frames[index].groupMask~=nil then lb.frames[index].groupMask:SetVisible(false) end
+	if lb.frames[index].groupMenu~=nil and optionsTable.menuBar.show  then lb.frames[index].groupMenu:SetVisible(false) end
+end
+
 function stTable.getHealthFrameTexture()
 	return "Textures/bars/health.png"
 end
@@ -311,6 +334,23 @@ end
 function stTable.getFrameHeight()
 	return optionsTable.frameHeight
 end
+
+function stTable.onCombatEnter()
+	--print("combatEnter")
+ 	if not optionsTable.menuBar.showInCombat then
+ 		for var= 1,20 do
+			lb.frames[var].groupMenu:SetVisible(false)
+		end
+	end
+end	
+
+function stTable.onCombatExit()
+	--print("combatExit")
+	for var= 1,20 do
+		if lb.UnitsTableStatus[var][12] then lb.frames[var].groupMenu:SetVisible(true) end
+	end
+end
+
 
 function stTable.setNameValue(index,name)
 	if string.len(name) > optionsTable.nameText.numLetters then name = string.sub(name, 1, optionsTable.nameText.numLetters) end --restrict names
@@ -442,6 +482,21 @@ function stTable.setOfflineStatus(index,value)
 		lb.frames[index].groupRF:SetWidth(1)
     end
 end
+
+function stTable.CreateMenu(index)
+	if lb.UnitsTableStatus[index][5]~=nil and lb.UnitsTableStatus[index][5]~=0 then
+		if Command.Unit~=nil then
+			if lb.isFunction (Command.Unit.Menu) then 
+				if not lb.isincombat then Command.Unit.Menu(lb.UnitsTableStatus[index][5]) end 
+			else
+				print("Function not enabled until 1.8")
+			end
+		else
+			print("Function not enabled until 1.8")
+		end
+	end
+end
+
 --------------------------------------------options----------------------------------------------------------------------- 
 function stTable.getOptionsWindow(optionsFrame)
 	frame=optionsFrame
@@ -512,6 +567,10 @@ function stTable.setFlowDirection(flowIndex)
 		stTable.fastInitialize()
 	end
 end
+
+
+
+
 function stTable.slashCommHandler(cmd,params)
 	local cmdv= lb.slashCommands.parseCommandValues(params[1])
 	

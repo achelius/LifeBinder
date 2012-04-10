@@ -116,6 +116,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -136,6 +138,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -156,6 +160,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -176,6 +182,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -195,6 +203,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -214,6 +224,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -233,6 +245,8 @@ function lb.mouseBinds.generateMacro(associations,name)
         		temp=temp.."/target "..modifier.." @"..name..".target\13"
         	elseif val[4]=="focus" then
         		temp=temp.."/focus "..modifier.." @"..name.."\13"
+        	elseif val[4]=="menu" then
+        		temp=temp.."/lb menu.show="..name.."\13"
         	elseif val[4]=="macro" then
         		temp=temp..val[5]
         	end
@@ -249,3 +263,16 @@ function lb.mouseBinds.generateMacro(associations,name)
     return macro
 end
 
+function lb.mouseBinds.showMenu(cmd,params)
+	local cmdv= lb.slashCommands.parseCommandValues(params[1])
+	if cmdv[1]=="show" then
+		local index= lb.stripnum(cmdv[2])
+		if index~=nil then
+			lb.styles[lb.currentStyle].CreateMenu(index)
+		end
+		return true
+	end
+	return false
+end
+--add the /lb menu command handler
+lb.addCustomSlashCommand("menu",lb.mouseBinds.showMenu)

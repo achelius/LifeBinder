@@ -1,6 +1,6 @@
-lb.slotsGui.debuffManager={}
+lb.optionsGui.debuffManager={}
 local frame
-function lb.slotsGui.debuffManager.createTable(parentFrame)
+function lb.optionsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame = UI.CreateLbFrame("Frame", "DebuffManagementTab", parentFrame)
 	 frame=optionsFrame
 	 
@@ -19,7 +19,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.DebuffsTable:AddTab("Debuffs",optionsFrame.DebuffsTable.Tabs[1])
 	 optionsFrame.DebuffsList=UI.CreateLbFrame("AbilitiesList", "DebuffsList",optionsFrame.DebuffsTable.Tabs[1])
 	 optionsFrame.DebuffsList:CreateDragFrame(optionsFrame.DebuffsList,optionsFrame.DebuffsTable.Tabs[1],parentFrame)
-	 optionsFrame.DebuffsList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onDebuffItemDrag
+	 optionsFrame.DebuffsList.Event.DraggedOutItem= lb.optionsGui.debuffManager.onDebuffItemDrag
 	 optionsFrame.DebuffsListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.DebuffsTable.Tabs[1])
 	 optionsFrame.DebuffsListView:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[1], "TOPLEFT",10, 30)
      optionsFrame.DebuffsListView:SetWidth(200)
@@ -40,7 +40,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.DebuffsTable:AddTab("Custom Names",optionsFrame.DebuffsTable.Tabs[2])
 	 optionsFrame.CustomNamesList=UI.CreateLbFrame("AbilitiesList", "CustomNamesList",optionsFrame.DebuffsTable.Tabs[2])
 	 optionsFrame.CustomNamesList:CreateDragFrame(optionsFrame.CustomNamesList,optionsFrame.DebuffsTable.Tabs[2],parentFrame)
-	 optionsFrame.CustomNamesList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onDebuffItemDrag
+	 optionsFrame.CustomNamesList.Event.DraggedOutItem= lb.optionsGui.debuffManager.onDebuffItemDrag
 	 optionsFrame.CustomNamesListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.DebuffsTable.Tabs[2])
 	 optionsFrame.CustomNamesListView:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[2], "TOPLEFT",10, 20)
      optionsFrame.CustomNamesListView:SetWidth(200)
@@ -58,20 +58,20 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.DebuffsTable.Tabs[2].addCustomNameButton:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[2],"TOPLEFT",120,360)
 	 optionsFrame.DebuffsTable.Tabs[2].addCustomNameButton:SetText("Add")
 	 optionsFrame.DebuffsTable.Tabs[2].addCustomNameButton:SetWidth(100)
-	 optionsFrame.DebuffsTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.slotsGui.debuffManager.addCustomName
+	 optionsFrame.DebuffsTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.optionsGui.debuffManager.addCustomName
 	    --initialize add Button
 	 optionsFrame.DebuffsTable.Tabs[2].removeCustomNameButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame.DebuffsTable.Tabs[2])
 	 optionsFrame.DebuffsTable.Tabs[2].removeCustomNameButton:SetPoint("TOPLEFT", optionsFrame.DebuffsTable.Tabs[2],"TOPLEFT",10,320)
 	 optionsFrame.DebuffsTable.Tabs[2].removeCustomNameButton:SetText("Remove")
 	 optionsFrame.DebuffsTable.Tabs[2].removeCustomNameButton:SetWidth(200)
-	 optionsFrame.DebuffsTable.Tabs[2].removeCustomNameButton.Event.LeftClick=lb.slotsGui.debuffManager.removeCustomName
+	 optionsFrame.DebuffsTable.Tabs[2].removeCustomNameButton.Event.LeftClick=lb.optionsGui.debuffManager.removeCustomName
 	 
 	 --- initializing  whitelist
 	 --adds the whitelist
 	 writeText("Whitelisted Debuffs","text",optionsFrame,40,50)
 	 optionsFrame.WhiteList=UI.CreateLbFrame("AbilitiesList", "WhiteList",optionsFrame)
 	 optionsFrame.WhiteList:CreateDragFrame(optionsFrame.WhiteList,optionsFrame,parentFrame)
-	 optionsFrame.WhiteList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onWhiteListItemDrag
+	 optionsFrame.WhiteList.Event.DraggedOutItem= lb.optionsGui.debuffManager.onWhiteListItemDrag
 	 optionsFrame.WhiteListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame)
 	 
 	 optionsFrame.WhiteListView:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",40, 70)
@@ -88,13 +88,13 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.whiteListCopyFromRole=lb.commonUtils.createComboBox(optionsFrame,"WhiteListCopyFromRole",10,10,rolesList,nil,"Import from role:")
 	 optionsFrame.whiteListCopyFromRole.comboBox:SetWidth(50)
 	 optionsFrame.whiteListCopyFromRoleButton=lb.commonUtils.createButton(optionsFrame,"WhiteListCopyFromRoleButton",200,5,120,40,"Import") 
-	 optionsFrame.whiteListCopyFromRoleButton.Event.LeftClick=lb.slotsGui.debuffManager.copyWhitelistFromAnotherRole
+	 optionsFrame.whiteListCopyFromRoleButton.Event.LeftClick=lb.optionsGui.debuffManager.copyWhitelistFromAnotherRole
 	 
 	  --adds the BlackList
 	 writeText("Blacklisted Debuffs","text",optionsFrame,620,50)
 	 optionsFrame.BlackList=UI.CreateLbFrame("AbilitiesList", "BlackList",optionsFrame)
 	 optionsFrame.BlackList:CreateDragFrame(optionsFrame.BlackList,optionsFrame,parentFrame)
-	 optionsFrame.BlackList.Event.DraggedOutItem= lb.slotsGui.debuffManager.onBlackListItemDrag
+	 optionsFrame.BlackList.Event.DraggedOutItem= lb.optionsGui.debuffManager.onBlackListItemDrag
 	 optionsFrame.BlackListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame)
 	 optionsFrame.BlackListView:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",620, 70)
      optionsFrame.BlackListView:SetWidth(250)
@@ -106,7 +106,7 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.blackListCopyFromRole=lb.commonUtils.createComboBox(optionsFrame,"BlackListCopyFromRole",620,10,rolesList,nil,"Import from role:")
 	 optionsFrame.blackListCopyFromRole.comboBox:SetWidth(50)
 	 optionsFrame.blackListCopyFromRoleButton=lb.commonUtils.createButton(optionsFrame,"BlackListCopyFromRoleButton",820,5,120,40,"Import") 
-	 optionsFrame.blackListCopyFromRoleButton.Event.LeftClick=lb.slotsGui.debuffManager.copyBlacklistFromAnotherRole
+	 optionsFrame.blackListCopyFromRoleButton.Event.LeftClick=lb.optionsGui.debuffManager.copyBlacklistFromAnotherRole
 	
      
      
@@ -115,35 +115,35 @@ function lb.slotsGui.debuffManager.createTable(parentFrame)
      optionsFrame.ShowCurableOnlyCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",620, 400)
      optionsFrame.ShowCurableOnlyCheckBox:SetText("Show only curable debuffs")
      optionsFrame.ShowCurableOnlyCheckBox:SetChecked(lbDebuffOptions[lbValues.set].showCurableOnly)
-     optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions 
+     optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions 
      
      optionsFrame.ShowPoisonCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowPoisonCheckBox",optionsFrame)
      optionsFrame.ShowPoisonCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 420)
      optionsFrame.ShowPoisonCheckBox:SetText("Show poisons")
      optionsFrame.ShowPoisonCheckBox:SetChecked(lbDebuffOptions[lbValues.set].poison)
-     optionsFrame.ShowPoisonCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions
+     optionsFrame.ShowPoisonCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions
      
      optionsFrame.ShowCurseCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowCurseCheckBox",optionsFrame)
      optionsFrame.ShowCurseCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 440)
      optionsFrame.ShowCurseCheckBox:SetText("Show curses")
      optionsFrame.ShowCurseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].curse)
-     optionsFrame.ShowCurseCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions
+     optionsFrame.ShowCurseCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions
      
      optionsFrame.ShowDiseaseCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowDiseaseCheckBox",optionsFrame)
      optionsFrame.ShowDiseaseCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 460)
      optionsFrame.ShowDiseaseCheckBox:SetText("Show diseases")
      optionsFrame.ShowDiseaseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].disease)
-     optionsFrame.ShowDiseaseCheckBox.Event.CheckboxChange = lb.slotsGui.debuffManager.updateDebuffFilterOptions
+     optionsFrame.ShowDiseaseCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions
      --optionsFrame.ShowCurableOnlyCheckBox:SetChecked(lbValues.CacheDebuffs)
      --optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = function () lbValues.CacheDebuffs=optionsFrame.DebuffsRecordingCheckbox:GetChecked() end 
      
      
-     lb.slotsGui.debuffManager.populateList()
+     lb.optionsGui.debuffManager.populateList()
      
 	 return optionsFrame
 end
 
-function lb.slotsGui.debuffManager.updateDebuffFilterOptions()
+function lb.optionsGui.debuffManager.updateDebuffFilterOptions()
 	lbDebuffOptions[lbValues.set].showCurableOnly=optionsFrame.ShowCurableOnlyCheckBox:GetChecked()
 	lbDebuffOptions[lbValues.set].poison=optionsFrame.ShowPoisonCheckBox:GetChecked()
 	lbDebuffOptions[lbValues.set].curse=optionsFrame.ShowCurseCheckBox:GetChecked()
@@ -153,7 +153,7 @@ function lb.slotsGui.debuffManager.updateDebuffFilterOptions()
 	frame.ShowDiseaseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
 end
 
-function lb.slotsGui.debuffManager.populateList()
+function lb.optionsGui.debuffManager.populateList()
 	
 	frame.ShowCurableOnlyCheckBox:SetChecked(lbDebuffOptions[lbValues.set].showCurableOnly)
 	frame.ShowPoisonCheckBox:SetChecked(lbDebuffOptions[lbValues.set].poison)
@@ -239,46 +239,46 @@ function lb.slotsGui.debuffManager.populateList()
 end
 
 
-function lb.slotsGui.debuffManager.onDebuffItemDrag(item,x,y)
-	if lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].WhiteListView,x,y) then
+function lb.optionsGui.debuffManager.onDebuffItemDrag(item,x,y)
+	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].WhiteListView,x,y) then
 		if lbDebuffWhitelist[lbValues.set][item[1]]==nil then
 			lbDebuffWhitelist[lbValues.set][item[1]]={castByMe=false}
 		end
 	end
-	if lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].BlackListView,x,y) then
+	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].BlackListView,x,y) then
 		if lbDebuffBlackList[lbValues.set][item[1]]==nil then
 			lbDebuffBlackList[lbValues.set][item[1]]={castByMe=false}
 		end
 	end
-	lb.slotsGui.debuffManager.populateList()-- populate lists
+	lb.optionsGui.debuffManager.populateList()-- populate lists
 end
 
-function lb.slotsGui.debuffManager.onWhiteListItemDrag(item,x,y)
+function lb.optionsGui.debuffManager.onWhiteListItemDrag(item,x,y)
 
-	if lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].DebuffsListView,x,y) or lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].BlackListView,x,y) then
+	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].DebuffsListView,x,y) or lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].BlackListView,x,y) then
 		lbDebuffWhitelist[lbValues.set][item[1]]=nil
-		if lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].BlackListView,x,y) then
+		if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].BlackListView,x,y) then
 			if lbDebuffBlackList[lbValues.set][item[1]]==nil then
 				lbDebuffBlackList[lbValues.set][item[1]]={castByMe=false}
 			end
 		end
 	end
-	lb.slotsGui.debuffManager.populateList() -- populate lists
+	lb.optionsGui.debuffManager.populateList() -- populate lists
 end
 
-function lb.slotsGui.debuffManager.onBlackListItemDrag(item,x,y)
-	if lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].DebuffsListView,x,y) or lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].WhiteListView,x,y) then
+function lb.optionsGui.debuffManager.onBlackListItemDrag(item,x,y)
+	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].DebuffsListView,x,y) or lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].WhiteListView,x,y) then
 		lbDebuffBlackList[lbValues.set][item[1]]=nil
-		if lb.slotsGui.isPointInFrame(lb.slotsGui.Tabs[4].WhiteListView,x,y) then
+		if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].WhiteListView,x,y) then
 			if lbDebuffWhitelist[lbValues.set][item[1]]==nil then
 				lbDebuffWhitelist[lbValues.set][item[1]]={castByMe=false}
 			end
 		end
 	end
-	lb.slotsGui.debuffManager.populateList() -- populate lists
+	lb.optionsGui.debuffManager.populateList() -- populate lists
 end
 
-function lb.slotsGui.debuffManager.copyWhitelistFromAnotherRole()
+function lb.optionsGui.debuffManager.copyWhitelistFromAnotherRole()
 	--reads current selected item
 	local index=optionsFrame.whiteListCopyFromRole.comboBox:GetSelectedIndex()
 	
@@ -296,10 +296,10 @@ function lb.slotsGui.debuffManager.copyWhitelistFromAnotherRole()
 		end
 		print ("Imported debuff priority list from role "..tostring(index).. " count:"..tostring(counter))
 	end
-	lb.slotsGui.debuffManager.populateList() -- populate lists
+	lb.optionsGui.debuffManager.populateList() -- populate lists
 end
 
-function lb.slotsGui.debuffManager.copyBlacklistFromAnotherRole()
+function lb.optionsGui.debuffManager.copyBlacklistFromAnotherRole()
 	--reads current selected item
 	local index=optionsFrame.blackListCopyFromRole.comboBox:GetSelectedIndex()
 	
@@ -317,31 +317,31 @@ function lb.slotsGui.debuffManager.copyBlacklistFromAnotherRole()
 		end
 		print ("Imported debuff priority list from role "..tostring(index).. " count:"..tostring(counter))
 	end
-	lb.slotsGui.debuffManager.populateList() -- populate lists
+	lb.optionsGui.debuffManager.populateList() -- populate lists
 end
 
-function lb.slotsGui.debuffManager.updateData()
+function lb.optionsGui.debuffManager.updateData()
 	frame.DebuffsRecordingCheckbox:SetChecked(lbValues.CacheDebuffs)
-	lb.slotsGui.debuffManager.populateList()
+	lb.optionsGui.debuffManager.populateList()
 end
 
-function lb.slotsGui.debuffManager.addCustomName()
+function lb.optionsGui.debuffManager.addCustomName()
 	local text= frame.DebuffsTable.Tabs[2].txtNewCustomName:GetText()
 	if text~=nil and text~="" then
 		 lb.customNames.addCustomName(text)
 		 ClearKeyFocus()
 		 
-		 lb.slotsGui.debuffManager.populateList() -- populate lists
+		 lb.optionsGui.debuffManager.populateList() -- populate lists
 	end
 end
 
-function lb.slotsGui.debuffManager.removeCustomName()
+function lb.optionsGui.debuffManager.removeCustomName()
 	local item= frame.CustomNamesList:GetSelectedItem()
 	if item~=nil then
 	print(item[1])
 		 lb.customNames.removeCustomName(item[1])
 		
-		 lb.slotsGui.debuffManager.populateList() -- populate lists
+		 lb.optionsGui.debuffManager.populateList() -- populate lists
 	end
 end
 

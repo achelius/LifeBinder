@@ -44,7 +44,7 @@ function lb.slashCommands.parse(cmdLine)
 				commandDone=true
 			elseif (par=="config") then
 				--print ("debug: config")
-				if not lb.isincombat then lb.slotsGui.show() end
+				if not lb.isincombat then lb.optionsGui.show() end
 				commandDone=true
 			elseif(par == "lock") then
 				lbValues.lockedState = true

@@ -208,15 +208,15 @@ function lb.onRoleChanged(role)
     lb.buffMonitor.updateSpellTextures() --update textures cache and populate the lb.NoIconsBuffList table
     
     lb.mouseBinds.setMouseActions()
-    if lb.slotsGui.initialized then
-    	lb.slotsGui.updateOptions()
+    if lb.optionsGui.initialized then
+    	lb.optionsGui.updateOptions()
     end
     --lbUpdateRequiredSpellsList()
 
     --createTableBuffs()--gui
     --createTableDebuffs() --gui
     --UpdateMouseAssociationsTextFieldsValues() --gui
-    --lb.slotsGui.initialize()
+    --lb.optionsGui.initialize()
    -- hideAll()
 end
 
@@ -233,9 +233,11 @@ end
 function lb.onSecureEnter()
     lb.isincombat=true
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot2.png")
+    lb.styles[lb.currentStyle].onCombatEnter()
     --lb.WindowFrameTop:SetTexture("LifeBinder", "none.jpg")
    -- lb.specButtons.hideAll()
 end
+
 function lb.onSecureExit()
     lb.isincombat=false
     lb.CombatStatus:SetTexture("LifeBinder", "Textures/buffhot.png")
@@ -244,9 +246,9 @@ function lb.onSecureExit()
     if lb.ReloadWhileInCombat then
     	lb.UnitUpdate()
     end
-   
-    
+    lb.styles[lb.currentStyle].onCombatExit()
 end
+
 function lb.onBuffChange(unit,buffs)
 --	print ("------------------------")
 --	dump(unit)

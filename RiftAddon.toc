@@ -41,7 +41,7 @@ RunOnStartup = {
 	"internals/debuffPositionStyles.lua",
 	"internals/commonUtils.lua",
 	"internals/readyCheck.lua",
-	"options/slotsGui.lua",
+	"options/optionsGui.lua",
 	"options/tabs/addonInfo.lua",
 	"options/tabs/bossDebuffs.lua",
 	"options/tabs/buffAssociations.lua",

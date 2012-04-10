@@ -1,10 +1,10 @@
-lb.slotsGui.buffAssociations={}
+lb.optionsGui.buffAssociations={}
 local frame=nil
 local lastIndex=-1
  local scalex=1-- lb.styles[lb.currentStyle].getFrameWidth()*0.009009009
  local scaley=1--lb.styles[lb.currentStyle].getFrameHeight()*0.023255814
  local checkedinit=false --used to suppress checkedchange event when not needed
-function lb.slotsGui.buffAssociations.createTable(parentFrame)
+function lb.optionsGui.buffAssociations.createTable(parentFrame)
 
 	 local optionsFrame
 	 optionsFrame = UI.CreateLbFrame("Frame", "BuffAssociationsTab", parentFrame)
@@ -13,8 +13,8 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.UnitFrame = UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame  )
 	 optionsFrame.UnitFrame:SetPoint("TOPLEFT",optionsFrame , "TOPLEFT", 20, 50)
 	 writeText("Select the slot and drag the buff from the list into the slot square","text",optionsFrame,10,10)
-	 optionsFrame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.slotsGui.PreviewScale[1])
-	 optionsFrame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.slotsGui.PreviewScale[2])
+	 optionsFrame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.optionsGui.PreviewScale[1])
+	 optionsFrame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.optionsGui.PreviewScale[2])
 	 optionsFrame.UnitFrame:SetVisible(true)
 	 optionsFrame.UnitFrame:SetTexture("LifeBinder", lb.styles[lb.currentStyle].getHealthFrameTexture())
 	 optionsFrame.UnitFrame:SetLayer(1)
@@ -25,24 +25,24 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
 	 	optionsFrame.buffSlots[i]={}
 	 	optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
-	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
+	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
 	        local iconl=iconwidth
 	        if iconheight<iconwidth then
 	        	iconl=iconheight
 	        end
-	 	optionsFrame.buffSlots[i].Frame:SetWidth(iconl*lb.slotsGui.PreviewScale[1])
-	 	optionsFrame.buffSlots[i].Frame:SetHeight(iconl*lb.slotsGui.PreviewScale[2])
+	 	optionsFrame.buffSlots[i].Frame:SetWidth(iconl*lb.optionsGui.PreviewScale[1])
+	 	optionsFrame.buffSlots[i].Frame:SetHeight(iconl*lb.optionsGui.PreviewScale[2])
 	 	optionsFrame.buffSlots[i].Frame:SetBackgroundColor(0,1,0.2,1)
 	 	optionsFrame.buffSlots[i].Frame:SetLayer(3)
-		optionsFrame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.buffAssociations.onSlotLeftUp(i) end
+		optionsFrame.buffSlots[i].Frame.Event.LeftUp=function () lb.optionsGui.buffAssociations.onSlotLeftUp(i) end
 	 	optionsFrame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", optionsFrame.buffSlots[i].Frame )
 	 	optionsFrame.buffSlots[i].Text:SetPoint("CENTER", optionsFrame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	optionsFrame.buffSlots[i].Text:SetText(tostring(i))
 	 	
-	 	optionsFrame.buffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]
-	 	optionsFrame.buffSlots[i].Y=slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2]
+	 	optionsFrame.buffSlots[i].X=slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1]
+	 	optionsFrame.buffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
 	 end
 	 
 	 --initializing sidetable
@@ -58,7 +58,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SideTable:AddTab("Abilities",optionsFrame.SideTable.Tabs[1])
 	 optionsFrame.AbilitiesList=UI.CreateLbFrame("AbilitiesList", "BuffsList", optionsFrame.SideTable.Tabs[1])
 	 optionsFrame.AbilitiesList:CreateDragFrame(optionsFrame.AbilitiesList,optionsFrame.SideTable.Tabs[1],parentFrame)
-	 optionsFrame.AbilitiesList.Event.DraggedOutItem= lb.slotsGui.buffAssociations.onAbilitiesItemDrag
+	 optionsFrame.AbilitiesList.Event.DraggedOutItem= lb.optionsGui.buffAssociations.onAbilitiesItemDrag
 	 optionsFrame.AbilitiesListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[1])
 	 optionsFrame.AbilitiesListView:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[1], "TOPLEFT",10, 20)
      optionsFrame.AbilitiesListView:SetWidth(300)
@@ -74,7 +74,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SideTable:AddTab("Custom Names",optionsFrame.SideTable.Tabs[2])
 	 	 optionsFrame.CustomNamesList=UI.CreateLbFrame("AbilitiesList", "CustomNamesList",optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.CustomNamesList:CreateDragFrame(optionsFrame.CustomNamesList,optionsFrame.SideTable.Tabs[2],parentFrame)
-	 optionsFrame.CustomNamesList.Event.DraggedOutItem=lb.slotsGui.buffAssociations.onAbilitiesItemDrag
+	 optionsFrame.CustomNamesList.Event.DraggedOutItem=lb.optionsGui.buffAssociations.onAbilitiesItemDrag
 	 optionsFrame.CustomNamesListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.CustomNamesListView:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2], "TOPLEFT",10, 20)
      optionsFrame.CustomNamesListView:SetWidth(200)
@@ -92,13 +92,13 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",120,360)
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetText("Add")
 	 optionsFrame.SideTable.Tabs[2].addCustomNameButton:SetWidth(100)
-	 optionsFrame.SideTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.slotsGui.buffAssociations.addCustomName
+	 optionsFrame.SideTable.Tabs[2].addCustomNameButton.Event.LeftClick=lb.optionsGui.buffAssociations.addCustomName
 	    --initialize remove Button
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton=UI.CreateLbFrame("RiftButton", "ApplyButton", optionsFrame.SideTable.Tabs[2])
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetPoint("TOPLEFT", optionsFrame.SideTable.Tabs[2],"TOPLEFT",10,320)
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetText("Remove")
 	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton:SetWidth(200)
-	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton.Event.LeftClick=lb.slotsGui.buffAssociations.removeCustomName
+	 optionsFrame.SideTable.Tabs[2].removeCustomNameButton.Event.LeftClick=lb.optionsGui.buffAssociations.removeCustomName
      
      
      
@@ -107,7 +107,7 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
 	 ----initializing slot details list
 	 optionsFrame.SlotDetailsList=UI.CreateLbFrame("AbilitiesList", "BuffsList", optionsFrame)
 	 optionsFrame.SlotDetailsList:CreateDragFrame(optionsFrame.SlotDetailsList,optionsFrame,parentFrame)
-	 optionsFrame.SlotDetailsList.Event.DraggedOutItem= lb.slotsGui.buffAssociations.onSlotDetailItemDrag
+	 optionsFrame.SlotDetailsList.Event.DraggedOutItem= lb.optionsGui.buffAssociations.onSlotDetailItemDrag
 	 optionsFrame.SlotDetailsListView=UI.CreateLbFrame("SimpleScrollView", "List", optionsFrame)
 	 optionsFrame.SlotDetailsListView:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",10, 270)
      optionsFrame.SlotDetailsListView:SetWidth(250)
@@ -117,28 +117,28 @@ function lb.slotsGui.buffAssociations.createTable(parentFrame)
      optionsFrame.SlotDetailsListView:SetContent( optionsFrame.SlotDetailsList)
 	 optionsFrame.SlotDetailsListView:SetVisible(false)
 	 ----initializing  slot details options
-	 optionsFrame.SlotDetailsList.Event.ItemSelect=lb.slotsGui.buffAssociations.onSlotAssociationSelected
+	 optionsFrame.SlotDetailsList.Event.ItemSelect=lb.optionsGui.buffAssociations.onSlotAssociationSelected
 	 optionsFrame.SlotDetailsOptions={}
 	 --cast by me only
 	 optionsFrame.SlotDetailsOptions.CastByMeOnly=UI.CreateLbFrame("SimpleCheckbox", "SlotDetailsOptions.CastByMeOnlyCastByme", optionsFrame)
 	 optionsFrame.SlotDetailsOptions.CastByMeOnly:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",270, 270)
 	 optionsFrame.SlotDetailsOptions.CastByMeOnly:SetText("Cast By Me only")
 	 optionsFrame.SlotDetailsOptions.CastByMeOnly:SetVisible(false)
-	 optionsFrame.SlotDetailsOptions.CastByMeOnly.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKCastByMeChanged
+	 optionsFrame.SlotDetailsOptions.CastByMeOnly.Event.CheckboxChange=lb.optionsGui.buffAssociations.onCHKCastByMeChanged
 	 --priority buff
 	 optionsFrame.SlotDetailsOptions.PriorityBuff=UI.CreateLbFrame("SimpleCheckbox", "SlotDetailsOptions.PriorityBuffPriority", optionsFrame)
 	 optionsFrame.SlotDetailsOptions.PriorityBuff:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",270, 300)
 	 optionsFrame.SlotDetailsOptions.PriorityBuff:SetText("Has priority")
 	 optionsFrame.SlotDetailsOptions.PriorityBuff:SetVisible(false)
-	 optionsFrame.SlotDetailsOptions.PriorityBuff.Event.CheckboxChange=lb.slotsGui.buffAssociations.onCHKPriorityChanged
+	 optionsFrame.SlotDetailsOptions.PriorityBuff.Event.CheckboxChange=lb.optionsGui.buffAssociations.onCHKPriorityChanged
 	 
-	 lb.slotsGui.buffAssociations.populateList()
+	 lb.optionsGui.buffAssociations.populateList()
 	 
 	 return optionsFrame
 end
 
 
-function lb.slotsGui.buffAssociations.populateList()
+function lb.optionsGui.buffAssociations.populateList()
 	local list={}
 	 local abs=Inspect.Ability.Detail(Inspect.Ability.List())
 	 local counter=1
@@ -173,7 +173,7 @@ function lb.slotsGui.buffAssociations.populateList()
 	 frame.CustomNamesList:SetItems(CNList)
 end
 
-function lb.slotsGui.buffAssociations.onSlotLeftUp(slotindex)
+function lb.optionsGui.buffAssociations.onSlotLeftUp(slotindex)
 --print("leftup")
 	if lastIndex~=-1 then
 		frame.buffSlots[lastIndex].Frame:SetBackgroundColor(0,1,0.2,1)
@@ -182,11 +182,11 @@ function lb.slotsGui.buffAssociations.onSlotLeftUp(slotindex)
 	
 	if lastIndex~=slotindex then
 		 lastIndex=slotindex
-		 lb.slotsGui.buffAssociations.ReadSlotData(slotindex)	
+		 lb.optionsGui.buffAssociations.ReadSlotData(slotindex)	
 	end
 end
 
-function lb.slotsGui.buffAssociations.ReadSlotData(slotindex)
+function lb.optionsGui.buffAssociations.ReadSlotData(slotindex)
 	lb.buffMonitor.updateSpellTextures()
 	local buffs =lbSelectedBuffsList[lbValues.set][slotindex][1]
 	local list={}
@@ -205,9 +205,9 @@ function lb.slotsGui.buffAssociations.ReadSlotData(slotindex)
 	frame.SlotDetailsOptions.PriorityBuff:SetVisible(false)
 end
 
-function lb.slotsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
+function lb.optionsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
 	for i = 1 , #(lbBuffSlotOptions[lbValues.set]) do
-		if lb.slotsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
+		if lb.optionsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
 			--print ("into slot" ..tostring(i))
 			local slotindex=i
 			local buffs =lbSelectedBuffsList[lbValues.set][slotindex][1]
@@ -215,29 +215,29 @@ function lb.slotsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
 				buffs[item[1]]={castByMeOnly=true,showCount=true,showDuration=true}
 			end
 			
-		    lb.slotsGui.buffAssociations.ReadSlotData(i)
+		    lb.optionsGui.buffAssociations.ReadSlotData(i)
 			
 			return
 			
 		end
 	end
 	if lastIndex~=nil then
-		if lb.slotsGui.isPointInFrame(frame.SlotDetailsListView,x,y) then
+		if lb.optionsGui.isPointInFrame(frame.SlotDetailsListView,x,y) then
 			local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
 			if buffs[item[1]]==nil then
 				buffs[item[1]]={castByMeOnly=true,showCount=true,showDuration=true}
 			end
-			lb.slotsGui.buffAssociations.ReadSlotData(lastIndex)
+			lb.optionsGui.buffAssociations.ReadSlotData(lastIndex)
 		end
 	end
 	
 end
 
-function lb.slotsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
+function lb.optionsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
 	--print("leftout")
 	if lastIndex==-1 then return end
 	for i = 1 , #(lbBuffSlotOptions[lbValues.set]) do
-		if lb.slotsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
+		if lb.optionsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
 			local lastindex=lastIndex
 			if lastIndex~=-1 then
 				local lastbuffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
@@ -248,52 +248,52 @@ function lb.slotsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
 			if buffs[item[1]]==nil then
 				buffs[item[1]]={castByMeOnly=true,showCount=true,showDuration=true}
 			end
-		    lb.slotsGui.buffAssociations.ReadSlotData(i)
+		    lb.optionsGui.buffAssociations.ReadSlotData(i)
 			return
 			
 		end
 	end
-	if lb.slotsGui.isPointInFrame(frame.SideTable,x,y) then
+	if lb.optionsGui.isPointInFrame(frame.SideTable,x,y) then
 		local lastindex=lastIndex
 			if lastIndex~=-1 then
 				local lastbuffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
 				lastbuffs[item[1]]=nil
-				lb.slotsGui.buffAssociations.ReadSlotData(lastIndex)
+				lb.optionsGui.buffAssociations.ReadSlotData(lastIndex)
 			end
 	end
 	
 end
 
-function lb.slotsGui.buffAssociations.updateData()
+function lb.optionsGui.buffAssociations.updateData()
 	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
 	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
-	 	frame.buffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1], slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2])
+	 	frame.buffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
 	        local iconl=iconwidth
 	        if iconheight<iconwidth then
 	        	iconl=iconheight
 	        end
-	 	frame.buffSlots[i].Frame:SetWidth(iconl*lb.slotsGui.PreviewScale[1])
-	 	frame.buffSlots[i].Frame:SetHeight(iconl*lb.slotsGui.PreviewScale[2])
+	 	frame.buffSlots[i].Frame:SetWidth(iconl*lb.optionsGui.PreviewScale[1])
+	 	frame.buffSlots[i].Frame:SetHeight(iconl*lb.optionsGui.PreviewScale[2])
 	 	frame.buffSlots[i].Frame:SetBackgroundColor(0,1,0.2,1)
 	 	frame.buffSlots[i].Frame:SetLayer(3)
-		frame.buffSlots[i].Frame.Event.LeftUp=function () lb.slotsGui.buffAssociations.onSlotLeftUp(i) end
+		frame.buffSlots[i].Frame.Event.LeftUp=function () lb.optionsGui.buffAssociations.onSlotLeftUp(i) end
 	 	frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame )
 	 	frame.buffSlots[i].Text:SetPoint("CENTER", frame.buffSlots[i].Frame ,"CENTER",0,0)
 	 	frame.buffSlots[i].Text:SetText(tostring(i))
-	 	frame.buffSlots[i].X=slotinfo[3]*scalex*lb.slotsGui.PreviewScale[1]
-	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.slotsGui.PreviewScale[2]
+	 	frame.buffSlots[i].X=slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1]
+	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
 	 end
 	 lastIndex=-1
 	 frame.SlotDetailsOptions.CastByMeOnly:SetVisible(false)
 	 frame.SlotDetailsOptions.PriorityBuff:SetVisible(false)
 	  frame.SlotDetailsListView:SetVisible(false)
-	lb.slotsGui.buffAssociations.populateList()
+	lb.optionsGui.buffAssociations.populateList()
 end
 
 
-function lb.slotsGui.buffAssociations.onSlotAssociationSelected(item,value,index)
+function lb.optionsGui.buffAssociations.onSlotAssociationSelected(item,value,index)
 	local buffname=value[1]
 	local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
 	
@@ -311,7 +311,7 @@ function lb.slotsGui.buffAssociations.onSlotAssociationSelected(item,value,index
 	end
 end
 
-function lb.slotsGui.buffAssociations.onCHKCastByMeChanged()
+function lb.optionsGui.buffAssociations.onCHKCastByMeChanged()
 	if checkedinit then return end
 	
 	local buffname=frame.SlotDetailsList:GetSelectedItem()[1]
@@ -326,7 +326,7 @@ function lb.slotsGui.buffAssociations.onCHKCastByMeChanged()
 	end
 end
 
-function lb.slotsGui.buffAssociations.onCHKPriorityChanged()
+function lb.optionsGui.buffAssociations.onCHKPriorityChanged()
 	if checkedinit then return end
 	
 	local buffname=frame.SlotDetailsList:GetSelectedItem()[1]
@@ -341,21 +341,21 @@ function lb.slotsGui.buffAssociations.onCHKPriorityChanged()
 	end
 end
 
-function lb.slotsGui.buffAssociations.addCustomName()
+function lb.optionsGui.buffAssociations.addCustomName()
 	local text= frame.SideTable.Tabs[2].txtNewCustomName:GetText()
 	if text~=nil and text~="" then
 		 lb.customNames.addCustomName(text)
 		 ClearKeyFocus()
 		 
-		 lb.slotsGui.buffAssociations.populateList() -- populate lists
+		 lb.optionsGui.buffAssociations.populateList() -- populate lists
 	end
 end
 
-function lb.slotsGui.buffAssociations.removeCustomName()
+function lb.optionsGui.buffAssociations.removeCustomName()
 	local item= frame.CustomNamesList:GetSelectedItem()
 	if item~=nil then
 		 lb.customNames.removeCustomName(item[1])
 		
-		 lb.slotsGui.buffAssociations.populateList() -- populate lists
+		 lb.optionsGui.buffAssociations.populateList() -- populate lists
 	end
 end

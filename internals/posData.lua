@@ -40,7 +40,6 @@ lb.posData.player={}
 lb.posData.targetOORStatus=nil
 lb.posData.CurrentTarget=nil
 lb.posData.player.OutOfRange, Event.Unit.Detail.OutOfRange = Utility.Event.Create("Rift", "Unit.Detail.OutOfRange")
---lb.LastTarget
 
 
 function lb.posData.initialize()
@@ -281,6 +280,42 @@ function lb.posData.updateUnitPos(index,x,y,z)
 	end
 end
 
+--return unitids that are into a certain range of the index
+function lb.posData.getCluster(index,range)
+	local retTable={}
+	for i= 1,20 do
+		
+		if lb.posData.units[i].X~=0 then
+			local dx=lb.posData.units[i].X-lb.posData.units[index].X
+			local dy=lb.posData.units[i].Y-lb.posData.units[index].Y
+			local dz=lb.posData.units[i].Z-lb.posData.units[index].Z
+   		    local distance=lb.posData.getFastDistance(dx,dy,dz)	
+		   	if distance <= range then
+		   	 table.insert(recTable,{index=i,distance=distance})
+		   	end
+		end
+	end
+	return retTable
+end
+
+--return unitids that are into a certain range of the player
+function lb.posData.getNearPlayerUnits(range)
+	local retTable={}
+	for i= 1,20 do
+		
+		if lb.posData.units[i].X~=0 then
+			local dx=lb.posData.units[i].X-lb.playerPosition.X
+			local dy=lb.posData.units[i].Y-lb.playerPosition.Y
+			local dz=lb.posData.units[i].Z-lb.playerPosition.Z
+   		    local distance=lb.posData.getFastDistance(dx,dy,dz)	
+		   	if distance <= range then
+		   	 table.insert(recTable,{index=i,distance=distance})
+		   	end
+		end
+	end
+	return retTable
+end
+
 function lb.posData.getFastDistance(dx,dy,dz)
 	local approx=0
 	if  dx < 0 then dx = -dx end 
@@ -314,3 +349,28 @@ function lb.posData.getFastDistance(dx,dy,dz)
 	end
     return (bit.rshift(( approx + 512 ), 10) )
 end
+
+function lb.posData.slashCommandHandler(cmd,params)
+	local cmdv= lb.slashCommands.parseCommandValues(params[1])
+	if cmdv[1]=="inrange" then
+		if cmdv[2]~=nil then
+			local range= tonumber(cmdv[2])
+			local tab= lb.posData.getNearPlayerUnits(range)
+			dump (tab)
+		else
+			print("You have to select a range (es: /lb posdata.inrange=5)")			
+		end	
+		return true
+	elseif cmdv[1]=="show" then
+		local index= lb.stripnum(cmdv[2])
+		if index~=nil then
+			if lb.UnitsTableStatus[index][5]~=0 and lb.UnitsTableStatus[index][5]~=nil then
+				if not lb.isincombat and Command.Unit~=nil then Command.Unit.Menu(lb.UnitsTableStatus[index][5]) end
+			end
+		end
+		return true
+	end
+	return false
+end
+--add the /lb menu command handler
+lb.addCustomSlashCommand("posdata",lb.posData.slashCommandHandler)
