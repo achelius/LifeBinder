@@ -114,3 +114,11 @@ function lb.commonUtils.createText(parentFrame,left,top,text)
     tp:SetText(text)
     return tp
 end
+
+function lb.isFunction(aObject)
+    if  'function' == type(aObject) then
+        return true
+    else
+        return false
+    end
+end

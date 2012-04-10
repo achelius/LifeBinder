@@ -12,7 +12,7 @@ function lb.slotsGui.styleOptions.createTable(parentFrame)
 	 local counter=1
 	 local currentsel=-1
 	 for key,stl in pairs(lb.styles) do
-	 	if not isFunction(stl) then
+	 	if not lb.isFunction(stl) then
 		 	if stl.fastInitialize~=nil then
 		 		  list[counter]=key 
 		 		  if key==lb.styles.getCurrentStyleName() then currentsel=counter end
@@ -73,7 +73,7 @@ function lb.slotsGui.styleOptions.populateList()
 	 local counter=1
 	 local currentsel=-1
 	 for key,stl in pairs(lb.styles) do
-	 	if not isFunction(stl) then
+	 	if not lb.isFunction(stl) then
 		 	if stl.fastInitialize~=nil then
 		 		  list[counter]=key 
 		 		  if key==lb.styles.getCurrentStyleName() then currentsel=counter end
@@ -89,10 +89,3 @@ function lb.slotsGui.styleOptions.updateData()
 	 lb.slotsGui.styleOptions.populateList()
 end
 
-function isFunction(aObject)
-    if  'function' == type(aObject) then
-        return true
-    else
-        return false
-    end
-end

@@ -545,11 +545,7 @@ function lb.autosetDebuffOptions(role)
 			end
 		end
 		lbDebuffOptions[role]={showCurableOnly=false,poison=poison,curse=curse,disease=disease}
---		lbDebuffOptions[role].showCurable=poison or curse or disease
---		lbDebuffOptions[role].poison=poison
---		lbDebuffOptions[role].curse=curse
---		lbDebuffOptions[role].disease=disease
-			
+		
 	end
 	
 end
