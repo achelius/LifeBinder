@@ -24,9 +24,11 @@ function stTable.InitializeOptionsTable()
 	if optionsTable.nameText==nil then optionsTable.nameText={left=30,top=7,fontSize=12,numLetters=5} end
 	if optionsTable.hpText==nil then optionsTable.hpText={left=-10,top=-10,fontSize=12,style=0} end
 	if optionsTable.manaBar==nil then optionsTable.manaBar={height=5} end
+	if optionsTable.manaBar.direction==nil then optionsTable.manaBar.direction=0 end
 	if optionsTable.flowDirection==nil then optionsTable.flowDirection={firstUnit="BOTTOMLEFT",unitGrowth="RIGHT",groupGrowth="UP"} end
 	if optionsTable.currentFlowDirection==nil then optionsTable.currentFlowDirection=1 end
 	if optionsTable.menuBar==nil then optionsTable.menuBar={create=true,show=true,showInCombat=false} end
+	if optionsTable.hpBar==nil then optionsTable.hpBar={left=0,top=0,width=1,height=1,direction=0,texture="Textures/bars/health.png"} end
 end
 
 function stTable.fastInitialize()
@@ -326,7 +328,7 @@ function stTable.hideMasks(index)
 end
 
 function stTable.getHealthFrameTexture()
-	return "Textures/bars/health.png"
+	return optionsTable.hpBar.texture
 end
 function stTable.getFrameWidth()
 	return optionsTable.frameWidth
@@ -430,13 +432,15 @@ end
 
 function stTable.setRoleIcon(index,calling,role)
 	if index==nil then return end
-	if optionsTable.roleIconPackage ==0 then
-		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
-	elseif optionsTable.roleIconPackage ==1 then
+	
+	if optionsTable.roleIconPackage ==1 then
 		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons2/"..tostring(role)..".png")
+	else
+		lb.frames[index].groupRole:SetTexture("LifeBinder","Textures/role_icons/"..tostring(calling).."-"..tostring(role)..".png")
 	end
 	lb.frames[index].groupRole:SetVisible(true)
 end
+
 function stTable.setReadyCheck(index,value)
 	if index==nil then return end
 	if value then
@@ -535,7 +539,7 @@ function stTable.setOptionsValues()
 	optionsTable.nameText.top=frame.playerNameMover.top
 	optionsTable.manaBar.height=tonumber(frame.manaBarHeight.textArea:GetText())
 	optionsTable.nameText.numLetters=tonumber(frame.nameNumLetters.textArea:GetText())
-	print(frame.FlowDirection.comboBox:GetSelectedIndex())
+	--print(frame.FlowDirection.comboBox:GetSelectedIndex())
 	stTable.setFlowDirection(frame.FlowDirection.comboBox:GetSelectedIndex())
 	stTable.fastInitialize()
 	stTable.initialize()
@@ -568,6 +572,15 @@ function stTable.setFlowDirection(flowIndex)
 	end
 end
 
+function stTable.setRoleIconPackage(packageIndex)
+	local pkg= tonumber(packageIndex)
+	optionsTable.roleIconPackage=pkg
+	for i = 1,20 do
+		if lb.UnitsTableStatus[i][12] then
+			stTable.setRoleIcon(i,lb.UnitsTableStatus[i][9],lb.UnitsTableStatus[i][4])
+		end	
+	end
+end
 
 
 
@@ -576,6 +589,9 @@ function stTable.slashCommHandler(cmd,params)
 	
 	if cmdv[1]=="setfd" then
 		stTable.setFlowDirection(cmdv[2])
+		return true
+	elseif cmdv[1]=="rolep" then
+		stTable.setRoleIconPackage(cmdv[2])
 		return true
 	end
 	return false

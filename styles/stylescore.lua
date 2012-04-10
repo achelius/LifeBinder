@@ -4,10 +4,15 @@ lb.currentStyle=nil -- name of the current style, different from the lbValues.Cu
 
 function lb.styles.initializeStylesCore()
     -- styles table
-    
+    if lbValues.CurrentStyle=="oldstyle" then
+		lbValues.CurrentStyle="standard"
+	end
 end
 
 function lb.styles.applySelectedStyle()
+	if lbValues.CurrentStyle=="oldstyle" then
+		lbValues.CurrentStyle="standard"
+	end
 	if lb.styles.hasStyle(lbValues.CurrentStyle) then
 		lb.currentStyle=lbValues.CurrentStyle
 	else
