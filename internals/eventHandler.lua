@@ -1,5 +1,5 @@
 table.insert(Event.Addon.SavedVariables.Load.End, {loadVariables, "LifeBinder", "lbLoadVariables"})
-lb.waitPlayerEventID={waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
+lb.waitPlayerEventID={lb.waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
 function lb.EnableStarterCycle()
 	if not lbValues.AddonDisabled then
 		table.insert(Event.System.Update.Begin, lb.waitPlayerEventID)
@@ -24,7 +24,7 @@ function lb.EnableHandlers()
 			table.insert(Event.TEMPORARY.Role, {lb.onRoleChanged, "LifeBinder", "lb.onRoleChanged"})
 			table.insert(Event.Unit.Detail.Role, {lb.onUnitRoleChanged, "LifeBinder", "onUnitRoleChanged"})
 			
-			table.insert(Event.Addon.Load.End, {lbUnitUpdate, "LifeBinder", "UpdateGroupDetails"})
+			table.insert(Event.Addon.Load.End, {lb.UnitUpdate, "LifeBinder", "UpdateGroupDetails"})
 			
 			table.insert(Event.System.Update.Begin, {castbarUpdate, "LifeBinder", "CastbarUpdate"})
 			table.insert(Event.System.Update.Begin, {lb.UpdatePlayerFrame, "LifeBinder", "UpdatePlayerFrame"})

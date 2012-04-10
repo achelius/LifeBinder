@@ -17,7 +17,7 @@ function lb.manaBars.updateResourceBar(units)
     end
 	local details = unitdetail(units)
 	for unitident, unitTable in pairs(details) do
-		local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
+		local identif = lb.GetIndexFromID(unitTable.id)   --calculate key from unit identifier
 		if identif~=nil then
 			local j=identif
 			if j~=nil then

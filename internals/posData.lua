@@ -120,7 +120,7 @@ function lb.posData.onPlayerMovement(x,y,z)
 				lb.posData.updateTargetPosition(lb.posData.Target.X,lb.posData.Target.Y,lb.posData.Target.Z)
 			end
 		end
-		lb.posData.updateUnitPos(GetIndexFromID(id),x[id],y[id],z[id])
+		lb.posData.updateUnitPos(lb.GetIndexFromID(id),x[id],y[id],z[id])
 		
 		if id==lb.posData.CurrentTarget then
 			lb.posData.Target.X=x[id]
@@ -262,7 +262,7 @@ function lb.posData.updateUnitPos(index,x,y,z)
 	
 	
     lb.posData.units[index].distance=lb.posData.getFastDistance(dx,dy,dz)
- 	local ident = getIdentifierFromIndex(index)
+ 	local ident = lb.getIdentifierFromIndex(index)
  	
     if ident~=nil then
     	if lb.UnitsTableStatus[index]~=nil then

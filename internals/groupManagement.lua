@@ -1,18 +1,18 @@
 function lb.onGroupJoin(unitID, specifier)
 	--print("join->"..tostring(unitID)..tostring(specifier))
-	local index=stripnum(specifier)
+	local index=lb.stripnum(specifier)
 	lb.UnitsTableStatus[index][11]=true
 end
 function lb.onGroupLeave(unitID, specifier)
 	--print("leave->"..tostring(unitID)..tostring(specifier))
-	local index=stripnum(specifier)
+	local index=lb.stripnum(specifier)
 	lb.UnitsTableStatus[index][5]=0
 	lb.UnitsTableStatus[index][11]=true
 end
 function lb.onGroupChange(unitID, oldspecifier,newspecifier)
 	--print("change->"..tostring(unitID)..tostring(oldspecifier)..tostring(newspecifier))
-	local oldindex=stripnum(oldspecifier)
-	local newindex=stripnum(newspecifier)
+	local oldindex=lb.stripnum(oldspecifier)
+	local newindex=lb.stripnum(newspecifier)
 	
 	lb.UnitsTableStatus[oldindex][11]=true
 	lb.UnitsTableStatus[newindex][11]=true
@@ -27,7 +27,7 @@ function lb.onPlayerJoin(units)
 --    dump(units)
 --    print("pj-")
     lb.UnitsTableStatus[1][11]=true
-	lbUnitUpdate()
+	lb.UnitUpdate()
 end
 
 function lb.onPlayerLeave()
@@ -36,5 +36,5 @@ function lb.onPlayerLeave()
 	  lastmode=0
 --	  lb.UnitsTable =lb.UnitTable
 	  lb.UnitsTableStatus[1][11]=true
-	  lbUnitUpdate()
+	  lb.UnitUpdate()
 end

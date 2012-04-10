@@ -18,7 +18,7 @@ lb.LastTarget=nil --current group target (if it's in the group)
 lb.currentTarget=nil --current target (the actual target)
 lb.MouseOverUnit=nil  -- current mouseover unit ID
 lb.MouseOverUnitLastCast=nil -- unit id of the moment one spell une spell has been casted
-lb.ReloadWhileInCombat=false --true if lbUnitUpdate is called during combat
+lb.ReloadWhileInCombat=false --true if lb.UnitUpdate is called during combat
  --had to set these here because of dependencies problems
 lb.styles={}
 lb.WindowDrag = {}
@@ -192,7 +192,7 @@ end -- function round
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-function waitPlayerAvailable()
+function lb.waitPlayerAvailable()
 	local timer= lb.getLastWaitPlayerThrottle()
 	if not timer then return end
 	if lb.playerFound==true then return end
@@ -214,7 +214,7 @@ function waitPlayerAvailable()
 		
 		lb.posData.initialize()--positional module initialized here to be sure to have player info
 		
-		lbUnitUpdate()
+		lb.UnitUpdate()
 		lb.autosetDebuffOptions(Inspect.TEMPORARY.Role())
 		lb.buffMonitor.updateSpellTextures()
 		lb.debuffMonitor.updateSpellTextures()
@@ -264,7 +264,7 @@ function lb.UpdatePlayerFrame()
 				end
 				if detail.calling~=nil or detail.offline~=nil then
 					unitupd=true
-					if not lb.ReloadWhileInCombat then lbUnitUpdateIndex(i) end
+					if not lb.ReloadWhileInCombat then lb.UnitUpdateIndex(i) end
 					if not lb.ReloadWhileInCombat then ut[11]=false end
 					
 				end
@@ -279,7 +279,7 @@ function lb.UpdatePlayerFrame()
 	
 	if unitupd and lastMode==1 then
 		--it calls a full refresh while in group mode
-		--lbUnitUpdate()
+		--lb.UnitUpdate()
 	end
 end
 function lb.createNewFrame(index)
@@ -349,7 +349,7 @@ function lb.UpdateFramesVisibility()
         lb.QueryTable = lb.RaidTable
     end
 end
-function lbUnitUpdateIndex(index)
+function lb.UnitUpdateIndex(index)
 	if index==nil then return end
 	if not lb.playerFound then return end
 	if lbValues.playerName==nil then  lbValues.playerName=unitdetail("player").name end
@@ -493,7 +493,7 @@ function lbUnitUpdateIndex(index)
     
     
 end
-function lbUnitUpdate()
+function lb.UnitUpdate()
 
 	if not lb.playerFound then return end
 --	
@@ -507,7 +507,7 @@ function lbUnitUpdate()
     	count=5
     end
     for i = 1,count do
-    	lbUnitUpdateIndex(i)
+    	lb.UnitUpdateIndex(i)
     end
     
 end
@@ -551,7 +551,7 @@ function lb.autosetDebuffOptions(role)
 end
 
 
-function GetIndexFromID(ID)
+function lb.GetIndexFromID(ID)
     for v,g in pairs(lb.UnitsTableStatus) do
         if g[5]==ID then
             return (g[7])
@@ -560,14 +560,14 @@ function GetIndexFromID(ID)
     return nil
 end
 
-function stripnum(name)
+function lb.stripnum(name)
     local j
     if name == "player" or name == "player.pet" then j = 1
     else j = tonumber(string.sub(name, string.find(name, "%d%d"))) end
     return j
 end
 
-function getIdentifierFromIndex(index)
+function lb.getIdentifierFromIndex(index)
 	
 	local counter=1
 	for id,ph in pairs(lb.QueryTable) do

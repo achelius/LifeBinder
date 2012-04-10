@@ -20,19 +20,19 @@ function onCastbarChanged(units)
         --print(unitid)
         if unitid==lb.PlayerID then
             --print("cbchanged")
-            local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+            local unitIndex =lb.GetIndexFromID( lb.MouseOverUnitLastCast)
             if unitIndex~=nil then  end
             local details= castbardetail(lb.PlayerID)
             --if details==nil then return end
             if details==nil then
 
-                local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+                local unitIndex =lb.GetIndexFromID( lb.MouseOverUnitLastCast)
                 if unitIndex~=nil then  lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false) end
                 lb.MouseOverUnitLastCast=nil
 
                 return
             else
-                local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+                local unitIndex =lb.GetIndexFromID( lb.MouseOverUnitLastCast)
                 if unitIndex~=nil then  lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false) end
                 --print(details.abilityName)
             end
@@ -64,13 +64,13 @@ function castbarUpdate()
     --print (tostring(details))
     if details==nil then
         -- print ("endvis")
-        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+        local unitIndex =lb.GetIndexFromID( lb.MouseOverUnitLastCast)
         if unitIndex~=nil then  lb.styles[lb.currentStyle].setCastbarVisible(unitIndex,false) end
         lb.MouseOverUnitLastCast=nil
 
         return
     else
-        local unitIndex =GetIndexFromID( lb.MouseOverUnitLastCast)
+        local unitIndex =lb.GetIndexFromID( lb.MouseOverUnitLastCast)
         --print ("show" ..tostring(unitIndex ))
 
         if unitIndex~=nil then

@@ -74,7 +74,7 @@ function lb.slashCommands.parse(cmdLine)
 						print ("Current Style reinitialization..")
 						lb.styles[lb.currentStyle].fastInitialize()
 						lb.styles[lb.currentStyle].initialize()
-						lbUnitUpdate()
+						lb.UnitUpdate()
 						print ("Current Style reinitialization completed")
 						commandDone=true
 					elseif subc=="viewall" then

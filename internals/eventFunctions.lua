@@ -10,7 +10,7 @@ local bufflist=   _G.Inspect.Buff.List
 --Called by the event   Event.Unit.Detail.OutOfRange   (oor flag)
 function lb.onOutOfRange(unit,status)
 	if unit==nil then return end
-	local index= GetIndexFromID(unit)
+	local index= lb.GetIndexFromID(unit)
 	--print (tostring(unit) ..tostring(status))
 	if index~=nil then
 		--print(index)
@@ -24,7 +24,7 @@ function  lb.onAggroUpdate(units)
     local details = unitdetail(units)
 	
     for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
+        local identif = lb.GetIndexFromID(unitTable.id)   --calculate key from unit identifier
         if identif~=nil then
             local j=identif
             if j~=nil then
@@ -47,7 +47,7 @@ function  lb.onBlockedUpdate(units)
     local details = unitdetail(units)
 
     for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
+        local identif = lb.GetIndexFromID(unitTable.id)   --calculate key from unit identifier
         if identif~=nil then
             local j=identif
             if j~=nil then
@@ -69,7 +69,7 @@ function lb.onOfflineUpdate(units)
 	local details = unitdetail(units)
 
     for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
+        local identif = lb.GetIndexFromID(unitTable.id)   --calculate key from unit identifier
         if identif~=nil then
             local j=identif
             if j~=nil then
@@ -87,7 +87,7 @@ function lb.onUnitRoleChanged(units)
 	local details = unitdetail(units)
 
     for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
+        local identif = lb.GetIndexFromID(unitTable.id)   --calculate key from unit identifier
         if identif~=nil then
             local j=identif
             if j~=nil then
@@ -109,7 +109,7 @@ function  lb.onHpUpdate(units)
 
     local details = unitdetail(units)
     for unitident, unitTable in pairs(details) do
-        local identif = GetIndexFromID(unitTable.id)   --calculate key from unit identifier
+        local identif = lb.GetIndexFromID(unitTable.id)   --calculate key from unit identifier
         if identif~=nil then
             local j=identif
             if j~=nil then
@@ -182,8 +182,8 @@ function lb.onPlayerTargetChanged(unit)
 end
 function lb.onMouseOverTargetChanged(unit)
 
-     local newindex =GetIndexFromID(unit)
-     local lastindex= GetIndexFromID(lb.MouseOverUnit)
+     local newindex =lb.GetIndexFromID(unit)
+     local lastindex= lb.GetIndexFromID(lb.MouseOverUnit)
      --if lastindex~=nil then lb.frames[lastindex].groupAggro:SetVisible(false) end
      if newindex~=nil then
 
@@ -242,7 +242,7 @@ function lb.onSecureExit()
     --lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
     --lb.specButtons.showAll()
     if lb.ReloadWhileInCombat then
-    	lbUnitUpdate()
+    	lb.UnitUpdate()
     end
    
     
@@ -252,7 +252,7 @@ function lb.onBuffChange(unit,buffs)
 --	dump(unit)
 --	dump(buffs)
 --	print("--------------------------")
-	 local frameindex=GetIndexFromID(unit)
+	 local frameindex=lb.GetIndexFromID(unit)
 	 if frameindex==nil then return end
 	 local updatebuffs=false
 	 if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
@@ -263,7 +263,7 @@ function lb.onBuffChange(unit,buffs)
 	
 end
 function lb.onBuffAdd(unit,buffs)
-	 local frameindex=GetIndexFromID(unit)
+	 local frameindex=lb.GetIndexFromID(unit)
      if frameindex==nil then return end
      local updatebuffs=false
      if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
@@ -279,7 +279,7 @@ function lb.onBuffAdd(unit,buffs)
 end
 
 function lb.onBuffRemove(unit,buffs)
-	 local frameindex=GetIndexFromID(unit)
+	 local frameindex=lb.GetIndexFromID(unit)
      if frameindex==nil then return end
      local updatebuffs=false
      if lb.PlayerID==nil then lb.PlayerID=unitdetail("player").ID end
