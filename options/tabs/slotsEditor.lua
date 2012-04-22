@@ -6,7 +6,8 @@ function lb.optionsGui.slotsEditor.createTable(parentFrame)
 
 	 local optionsFrame
 	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
-	
+	 frame=optionsFrame
+	lb.optionsGui.slotsEditor.updateScale()
      writeText("Move the slots where you want them on the unit frame","text",optionsFrame,20,10)
      
 	 optionsFrame.UnitFrame = UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame  )
@@ -20,8 +21,8 @@ function lb.optionsGui.slotsEditor.createTable(parentFrame)
 	 ------initialize Slots
 	 optionsFrame.buffSlots={}
 	 
-	 for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
-	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
+	 for i =1 ,lb.buffMonitor.slotscount do
+	 	local slotinfo=lb.buffMonitor.getBuffSlotTable(i)
 	 	optionsFrame.buffSlots[i]={}
 	 	if optionsFrame.buffSlots[i].Frame==nil then  optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame ) end
 	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
@@ -51,8 +52,8 @@ function lb.optionsGui.slotsEditor.createTable(parentFrame)
 	 
 	  optionsFrame.debuffSlots={}
 	 
-	 for i =1 ,#(lbDebuffSlotOptions[lbValues.set]) do
-	 	local slotinfo=lbDebuffSlotOptions[lbValues.set][i]
+	 for i =1 ,lb.debuffMonitor.slotscount do
+	 	local slotinfo=lb.debuffMonitor.getDebuffSlotTable(i)
 	 	optionsFrame.debuffSlots[i]={}
 	 	optionsFrame.debuffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
 	 	optionsFrame.debuffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
@@ -132,7 +133,7 @@ function lb.optionsGui.slotsEditor.createTable(parentFrame)
 	 optionsFrame.SizeDown:SetText("Smaller")
 	 optionsFrame.SizeDown.Event.LeftClick=function() lb.optionsGui.slotsEditor.ChangeSlotSize(-1,-1) end
 	 
-	 frame=optionsFrame
+
 	 return optionsFrame
 	 
 	 
@@ -142,13 +143,13 @@ function lb.optionsGui.slotsEditor.ChangeSlotSize(dsx,dsy)
 	if  lb.optionsGui.selectedType==nil then return end
     local slots=nil
     local options=nil 
-    if lb.optionsGui.selectedType==0 then slots=lb.optionsGui.Tabs[2].buffSlots options=lbBuffSlotOptions end
-    if lb.optionsGui.selectedType==1 then slots=lb.optionsGui.Tabs[2].debuffSlots options=lbDebuffSlotOptions end 
+    if lb.optionsGui.selectedType==0 then slots=frame.buffSlots options=lb.buffMonitor.getBuffSlotTable(lb.optionsGui.selectedIndex) end
+    if lb.optionsGui.selectedType==1 then slots=frame.debuffSlots options=lb.debuffMonitor.getDebuffSlotTable(lb.optionsGui.selectedIndex) end 
     slots[lb.optionsGui.selectedIndex].sWidth=slots[lb.optionsGui.selectedIndex].sWidth+ dsx
     slots[lb.optionsGui.selectedIndex].sHeight=slots[lb.optionsGui.selectedIndex].sHeight+ dsy
     ---Experimental
- 	options[lbValues.set][lb.optionsGui.selectedIndex][5]=slots[lb.optionsGui.selectedIndex].sWidth/scalex/lb.optionsGui.PreviewScale[1]
- 	options[lbValues.set][lb.optionsGui.selectedIndex][6]=slots[lb.optionsGui.selectedIndex].sHeight/scaley/lb.optionsGui.PreviewScale[2]
+ 	options[5]=slots[lb.optionsGui.selectedIndex].sWidth/scalex/lb.optionsGui.PreviewScale[1]
+ 	options[6]=slots[lb.optionsGui.selectedIndex].sHeight/scaley/lb.optionsGui.PreviewScale[2]
  	
  	slots[lb.optionsGui.selectedIndex].Frame:SetWidth(slots[lb.optionsGui.selectedIndex].sWidth)
  	slots[lb.optionsGui.selectedIndex].Frame:SetHeight(slots[lb.optionsGui.selectedIndex].sHeight)
@@ -161,15 +162,15 @@ function lb.optionsGui.slotsEditor.MoveSlot(dx,dy)
 	if  lb.optionsGui.selectedType==nil then return end
     local slots=nil
     local options=nil 
-    if lb.optionsGui.selectedType==0 then slots=lb.optionsGui.Tabs[2].buffSlots options=lbBuffSlotOptions end
-    if lb.optionsGui.selectedType==1 then slots=lb.optionsGui.Tabs[2].debuffSlots options=lbDebuffSlotOptions end 
+    if lb.optionsGui.selectedType==0 then slots=frame.buffSlots options=lb.buffMonitor.getBuffSlotTable(lb.optionsGui.selectedIndex) end
+    if lb.optionsGui.selectedType==1 then slots=frame.debuffSlots options=lb.debuffMonitor.getDebuffSlotTable(lb.optionsGui.selectedIndex) end 
     slots[lb.optionsGui.selectedIndex].X=slots[lb.optionsGui.selectedIndex].X+ dx
     slots[lb.optionsGui.selectedIndex].Y=slots[lb.optionsGui.selectedIndex].Y+ dy
     ---Experimental
- 	options[lbValues.set][lb.optionsGui.selectedIndex][3]=slots[lb.optionsGui.selectedIndex].X/scalex/lb.optionsGui.PreviewScale[1]
- 	options[lbValues.set][lb.optionsGui.selectedIndex][4]=slots[lb.optionsGui.selectedIndex].Y/scaley/lb.optionsGui.PreviewScale[2]
+ 	options[3]=slots[lb.optionsGui.selectedIndex].X/scalex/lb.optionsGui.PreviewScale[1]
+ 	options[4]=slots[lb.optionsGui.selectedIndex].Y/scaley/lb.optionsGui.PreviewScale[2]
  	
- 	slots[lb.optionsGui.selectedIndex].Frame:SetPoint("TOPLEFT", lb.optionsGui.Tabs[2].UnitFrame, "TOPLEFT", slots[lb.optionsGui.selectedIndex].X,  slots[lb.optionsGui.selectedIndex].Y)
+ 	slots[lb.optionsGui.selectedIndex].Frame:SetPoint("TOPLEFT", frame.UnitFrame, "TOPLEFT", slots[lb.optionsGui.selectedIndex].X,  slots[lb.optionsGui.selectedIndex].Y)
  	if lb.optionsGui.selectedType==0 then lb.buffMonitor.relocateSingleBuffMonitorSlot(lb.optionsGui.selectedIndex) end
 	if lb.optionsGui.selectedType==1 then lb.debuffMonitor.relocateSingleDebuffMonitorSlot(lb.optionsGui.selectedIndex) end
 end
@@ -182,14 +183,14 @@ function lb.optionsGui.slotsEditor.onSlotLeftDown(type,index)
         local mouseStatus = Inspect.Mouse()
         
         local slots=nil
-        if type==0 then slots= lb.optionsGui.Tabs[2].buffSlots end
-        if type==1 then slots= lb.optionsGui.Tabs[2].debuffSlots end
+        if type==0 then slots= frame.buffSlots end
+        if type==1 then slots= frame.debuffSlots end
         slots[index].Frame:SetBackgroundColor(0,0,1,1) 
         if  (lb.optionsGui.selectedIndex~=-1 and lb.optionsGui.selectedIndex~=index) or (lb.optionsGui.selectedType~=-1 and lb.optionsGui.selectedType~=index) then
         	if lb.optionsGui.selectedType==0 then
-         		lb.optionsGui.Tabs[2].buffSlots[lb.optionsGui.selectedIndex].Frame:SetBackgroundColor(0,1,0,1)
+         		frame.buffSlots[lb.optionsGui.selectedIndex].Frame:SetBackgroundColor(0,1,0,1)
          	elseif lb.optionsGui.selectedType==1 then
-         		lb.optionsGui.Tabs[2].debuffSlots[lb.optionsGui.selectedIndex].Frame:SetBackgroundColor(1,0,0,1)
+         		frame.debuffSlots[lb.optionsGui.selectedIndex].Frame:SetBackgroundColor(1,0,0,1)
          	end
         end 
         lb.optionsGui.selectedIndex=index
@@ -204,14 +205,14 @@ function lb.optionsGui.slotsEditor.onSlotLeftUp(type,index)
 if  lb.optionsGui.selectedIndex~=index then return end
 if  lb.optionsGui.selectedType~=type then return end
     slotdrag = false
-    --lb.optionsGui.Tabs[2].buffSlots[index].Frame:SetBackgroundColor(0,0,0,1)
+    --frame.buffSlots[index].Frame:SetBackgroundColor(0,0,0,1)
 end
 
 function lb.optionsGui.slotsEditor.onSlotUpoutside(type,index)
 if  lb.optionsGui.selectedIndex~=index then return end
 if  lb.optionsGui.selectedType~=type then return end
     slotdrag = false
-    --lb.optionsGui.Tabs[2].buffSlots[index].Frame:SetBackgroundColor(0,0,0,1) 
+    --frame.buffSlots[index].Frame:SetBackgroundColor(0,0,0,1) 
 end
 
 function lb.optionsGui.OnSlotMouseMove(type,index,x,y)
@@ -229,35 +230,38 @@ if  lb.optionsGui.selectedType~=type then return end
     	local newy=y-(lb.optionsGui.clickOffset["y"])
     	local slots=nil
     	local options=nil 
-        if type==0 then slots=lb.optionsGui.Tabs[2].buffSlots options=lbBuffSlotOptions end
-        if type==1 then slots=lb.optionsGui.Tabs[2].debuffSlots options=lbDebuffSlotOptions end 
+        if type==0 then slots=frame.buffSlots options=lb.buffMonitor.getBuffSlotTable(index) end
+        if type==1 then slots=frame.debuffSlots options=lb.debuffMonitor.getDebuffSlotTable(index) end 
         
    		slots[index].X=newx
 	 	slots[index].Y=newy
-	 
+
+ 		options[3]=newx/scalex/lb.optionsGui.PreviewScale[1]
+    	options[4]=newy/scaley/lb.optionsGui.PreviewScale[2] 
+
+       
 	 	
-	 	---Experimental
-	 	options[lbValues.set][index][3]=newx/scalex/lb.optionsGui.PreviewScale[1]
-	 	options[lbValues.set][index][4]=newy/scaley/lb.optionsGui.PreviewScale[2]
 	 	
 	 	----
 	 	if type==0 then lb.buffMonitor.relocateSingleBuffMonitorSlot(index) end
 	 	if type==1 then lb.debuffMonitor.relocateSingleDebuffMonitorSlot(index) end
-		slots[index].Frame:SetPoint("TOPLEFT", lb.optionsGui.Tabs[2].UnitFrame, "TOPLEFT", newx, newy)
+		slots[index].Frame:SetPoint("TOPLEFT", frame.UnitFrame, "TOPLEFT", newx, newy)
 		
     end
 end
 
 --called when changing spec
 function lb.optionsGui.slotsEditor.updateData()
-  lb.optionsGui.selectedIndex=-1
- lb.optionsGui.selectedType=-1
+	if frame==nil then return end
+    lb.optionsGui.selectedIndex=-1
+    lb.optionsGui.selectedType=-1
+  	 lb.optionsGui.slotsEditor.updateScale()
  	lb.buffMonitor.hideDummyBuffMonitorSlots()
     lb.debuffMonitor.hideDummyDebuffMonitorSlots()
 	frame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.optionsGui.PreviewScale[1])
 	 frame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.optionsGui.PreviewScale[2])
-	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
-	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
+	 for i =1 ,lb.buffMonitor.slotscount do
+	 	local slotinfo=lb.buffMonitor.getBuffSlotTable(i)
 	 	if frame.buffSlots[i]==nil then frame.buffSlots[i]={} end
 	 	if frame.buffSlots[i].Frame==nil then  frame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  frame.UnitFrame ) end
 	 	if frame.buffSlots[i].Text ==nil then  frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame ) end
@@ -284,8 +288,8 @@ function lb.optionsGui.slotsEditor.updateData()
 	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
 	 	
 	 end
-	 if #(lbBuffSlotOptions[lbValues.set])<#(frame.buffSlots) then
-	 	for i = #(lbBuffSlotOptions[lbValues.set])+1,#(frame.buffSlots) do
+	if #(lb.buffMonitor.getBuffsSlotsCompleteTable())<#(frame.buffSlots) then
+	 	for i = #(lb.buffMonitor.getBuffsSlotsCompleteTable())+1,#(frame.buffSlots) do
 	 		if frame.buffSlots[i]~=nil then
 	 			if frame.buffSlots[i].Frame~=nil then
 		 			frame.buffSlots[i].Frame:SetVisible(false)
@@ -295,8 +299,9 @@ function lb.optionsGui.slotsEditor.updateData()
 	 end
 	
 	 
-	 for i =1 ,#(lbDebuffSlotOptions[lbValues.set]) do
-	 	local slotinfo=lbDebuffSlotOptions[lbValues.set][i]
+	 
+	 for i =1 ,lb.debuffMonitor.slotscount do
+	 	local slotinfo=lb.debuffMonitor.getDebuffSlotTable(i)
 	 	frame.debuffSlots[i].Frame:SetPoint(slotinfo[1],frame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
 	 	local iconwidth=slotinfo[5]*scalex
 	        local iconheight=slotinfo[6]*scaley
@@ -320,4 +325,19 @@ function lb.optionsGui.slotsEditor.updateData()
 	 end
 --	 lb.buffMonitor.showDummyBuffMonitorSlots()
 --	 lb.debuffMonitor.showDummyDebuffMonitorSlots() 
+end
+
+function lb.optionsGui.slotsEditor.updateScale()
+	 local sc1=1
+	 local sc2=1
+	 local minsc
+	 sc1=550/lb.styles[lb.currentStyle].getFrameWidth()
+	 sc2=210/lb.styles[lb.currentStyle].getFrameHeight()
+	 if sc1>sc2 then
+	 	minsc=sc2
+	 else
+	 	minsc=sc1
+	 end
+	 lb.optionsGui.PreviewScale[1]=minsc
+	 lb.optionsGui.PreviewScale[2]=minsc
 end

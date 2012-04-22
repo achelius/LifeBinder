@@ -31,8 +31,13 @@ RunOnStartup = {
 
 	"internals/slashCmds.lua",
 	"internals/eventFunctions.lua",
-	"styles/oldstyle.lua",
 	"styles/standard.lua",
+	"styles/standard/buffManager.lua",
+	"styles/standard/debuffManager.lua",
+	"styles/standard/mouseBinds.lua",
+	"styles/standard/layoutChanger.lua",
+	"styles/standard/profileChanger.lua",
+	"styles/standard/oldSettingsImporter.lua",
 	"styles/stylescore.lua",
 	"internals/posData.lua",
 	"internals/groupManagement.lua",
@@ -47,12 +52,13 @@ RunOnStartup = {
 	"options/tabs/buffAssociations.lua",
 	"options/tabs/debuffManager.lua",
 	"options/tabs/mouseBinds.lua",
+	"styles/standard/profilesEditor.lua",
 	"options/tabs/slotsEditor.lua",
 	"options/tabs/styleOptions.lua",
 	
 	"internals/debuffCache.lua",
 	"internals/customNames.lua",
-	
+	"internals/groupSimulator.lua",
 	
 	"modules/buffMonitor.lua",
 	"modules/debuffMonitor.lua",

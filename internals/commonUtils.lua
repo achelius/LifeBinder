@@ -37,7 +37,7 @@ function lb.commonUtils.createButton(parentFrame,name,left,top,width,height,text
 	
 	return cmd
 end
-function lb.commonUtils.createComboBox(parentFrame,ctrlname,left,top,elements,defaultValue,text)
+function lb.commonUtils.createComboBox(parentFrame,ctrlname,left,top,elements,defaultIndex,text,defaultValue)
 	local nud={}
 	nud.textFrame=UI.CreateLbFrame("Text",ctrlname.."Text",parentFrame)
 	nud.textFrame:SetPoint("TOPLEFT",parentFrame,"TOPLEFT",left,top)
@@ -49,7 +49,8 @@ function lb.commonUtils.createComboBox(parentFrame,ctrlname,left,top,elements,de
 	 nud.comboBox:SetHeight(30)
 	 nud.comboBox:SetLayer(40)
 	 nud.comboBox:SetItems(elements)
-	if defaultValue~=nil then nud.comboBox:SetSelectedIndex(defaultValue,true)end
+	if defaultIndex~=nil then nud.comboBox:SetSelectedIndex(defaultIndex,true)end
+	if defaultValue~=nil then nud.comboBox:SetSelectedItem(defaultValue,true)end
 	return nud
 end
 
@@ -121,4 +122,16 @@ function lb.isFunction(aObject)
     else
         return false
     end
+end
+
+function lb.copyTable(origin,destination)
+	for key,value in pairs(origin) do
+		--print (type(value))
+		if 'table' == type(value) then
+			destination[key]={}
+			lb.copyTable(value,destination[key])
+		else
+			destination[key]=value
+		end
+	end
 end

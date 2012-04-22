@@ -7,10 +7,6 @@ function loadVariables(addonidentifier)
 	        addonState = true, 
 	        windowstate = true, 
 	        lockedState = false, 
-	        locmainx = 0, 
-	        locmainy = 0, 
-	        mainheight = 300, 
-	        mainwidth = 500, 
 	        font = 16, 
 	        pet = false, 
 	        texture = "bars/health.png", 
@@ -119,7 +115,6 @@ function loadVariables(addonidentifier)
     			end
     		end
     	end
-    	
     end
     
      if lbDebuffSlotOptions==nil then

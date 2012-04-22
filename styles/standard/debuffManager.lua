@@ -8,42 +8,70 @@ local abilitydetail = _G.Inspect.Ability.Detail
 local Debuffdetail=   _G.Inspect.Buff.Detail
 local Debufflist=   _G.Inspect.Buff.List
 local timeFrame=_G.Inspect.Time.Real
-lb.debuffMonitor={}
-lb.FullDebuffsList={}     -- used by Debuffmonitor
-lb.NoIconsDebuffList={}
-lb.debuffMonitor.slotscount=0
+
+
+local stTable=lb.styles["standard"]
+local optionsTable=nil
+local frame=nil
+
+stTable.debuffManager={}
+stTable.debuffMonitor={}     -- used by Debuffmonitor
+stTable.NoIconsDebuffList={}
+stTable.debuffManager.slotscount=0
 local lastdurationcheck=0
 
+function stTable.debuffManager.initializeDebuffMonitorOptionsTable()
+	
+	if optionsTable==nil then optionsTable=stTable.options end
+		--print(stTable.getLayoutTable().buffs)
+	if stTable.getLayoutTable().debuffs ==nil then
+		stTable.getLayoutTable().debuffs={}
+		stTable.getLayoutTable().debuffs.slots={}
+		lb.copyTable(lbPredefinedDebuffSlotPos[1],stTable.getLayoutTable().debuffs.slots)
+		
+		
+	end
+	if stTable.getProfileTable().common.debuffs==nil then
+		stTable.getProfileTable().common.debuffs={}
+		stTable.getProfileTable().common.debuffs.priority={}
+		stTable.getProfileTable().common.debuffs.blocked={}
+		stTable.getProfileTable().common.debuffs.options={}
+	end
+	
+	lb.debuffMonitor=stTable.debuffManager --overrides the default buff monitor
+	lb.autosetDebuffOptions()
+end
 
-
-function lb.debuffMonitor.initializeDebuffMonitor()
---print ( lb.debuffMonitor.slotscount )
-	lb.debuffMonitor.slotscount = #(lbDebuffSlotOptions[lbValues.set])
+function stTable.debuffManager.initializeDebuffMonitor()
+--print ( stTable.debuffManager.slotscount )
+	stTable.debuffManager.slotscount = #(stTable.getLayoutTable().debuffs.slots)
  	for var=1,20 do
- 		lb.debuffMonitor.initializeDebuffMonitorFrameIndex(var)
+ 		stTable.debuffManager.initializeDebuffMonitorFrameIndex(var)
     end
 end
 
-function lb.debuffMonitor.initializeDebuffMonitorFrameIndex(var)
---print ( lb.debuffMonitor.slotscount )
-	lb.debuffMonitor.slotscount = #(lbDebuffSlotOptions[lbValues.set])
+function stTable.debuffManager.initializeDebuffMonitorFrameIndex(var)
+--print ( stTable.debuffManager.slotscount )
+	if optionsTable==nil then optionsTable=stTable.options end
+	stTable.debuffManager.initializeDebuffMonitorOptionsTable()
+	stTable.debuffManager.slotscount = #(stTable.getLayoutTable().debuffs.slots)
 	
  		if lb.UnitsTableStatus[var][12]then
-		    for g= 1,  lb.debuffMonitor.slotscount do
-		       
+		    for g= 1,  stTable.debuffManager.slotscount do
+		      
 		       local scalex=1--lbValues.mainwidth*0.009009009
 		       local scaley=1--lbValues.mainheight*0.023255814
-		       local lt=lbDebuffSlotOptions[lbValues.set][g][3]*scalex
-		       local tp=lbDebuffSlotOptions[lbValues.set][g][4]*scaley
-		       local Point1=lbDebuffSlotOptions[lbValues.set][g][1]
-		       local Point2=lbDebuffSlotOptions[lbValues.set][g][2]
-		       local acceptdeDebuffs=lbDebuffSlotOptions[lbValues.set][g][7]
-		       local iconWidth=lbDebuffSlotOptions[lbValues.set][g][5]
-		       local iconHeight=lbDebuffSlotOptions[lbValues.set][g][6]
+		       local lt=stTable.getLayoutTable().debuffs.slots[g][3]*scalex
+		       local tp=stTable.getLayoutTable().debuffs.slots[g][4]*scaley
+		       local Point1=stTable.getLayoutTable().debuffs.slots[g][1]
+		       local Point2=stTable.getLayoutTable().debuffs.slots[g][2]
+		       local acceptdeDebuffs=stTable.getLayoutTable().debuffs.slots[g][7]
+		       local iconWidth=stTable.getLayoutTable().debuffs.slots[g][5]
+		       local iconHeight=stTable.getLayoutTable().debuffs.slots[g][6]
 		       if lb.frames[var].Debuffs==nil then lb.frames[var].Debuffs={} end
 			   if lb.frames[var].Debuffs.groupSpots==nil then lb.frames[var].Debuffs.groupSpots= {} end
 			   if lb.frames[var].Debuffs.groupSpotsIcons==nil then lb.frames[var].Debuffs.groupSpotsIcons= {} end
-		        lb.frames[var].Debuffs.groupSpots[g] = {}
+		        if lb.frames[var].Debuffs.groupSpots[g]==nil then lb.frames[var].Debuffs.groupSpots[g] = {} end
 		        lb.frames[var].Debuffs.groupSpots[g][0]=true --icon
 		        if lb.frames[var].Debuffs.groupSpots[g][1]==nil then lb.frames[var].Debuffs.groupSpots[g][1]=UI.CreateLbFrame("Texture", "HoT" .. tostring(g), lb.frames[var].groupBF) end
 		        if lb.frames[var].Debuffs.groupSpots[g][2]==nil then lb.frames[var].Debuffs.groupSpots[g][2]=UI.CreateLbFrame("Text", "HoTText" .. tostring(g), lb.frames[var].groupBF) end
@@ -125,18 +153,18 @@ end
 
 
 
-function lb.debuffMonitor.relocateDebuffMonitorSlots()
---print ( lb.debuffMonitor.slotscount )
+function stTable.debuffManager.relocateDebuffMonitorSlots()
+--print ( stTable.debuffManager.slotscount )
    local scalex=1--lbValues.mainwidth*0.009009009
 	local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-		    for g= 1,  lb.debuffMonitor.slotscount do
+		    for g= 1,  stTable.debuffManager.slotscount do
 		    
-		       local lt=lbDebuffSlotOptions[lbValues.set][g][3]*scalex
-		       local tp=lbDebuffSlotOptions[lbValues.set][g][4]*scaley
-		       local Point1=lbDebuffSlotOptions[lbValues.set][g][1]
-		       local Point2=lbDebuffSlotOptions[lbValues.set][g][2]
+		       local lt=stTable.getLayoutTable().debuffs.slots[g][3]*scalex
+		       local tp=stTable.getLayoutTable().debuffs.slots[g][4]*scaley
+		       local Point1=stTable.getLayoutTable().debuffs.slots[g][1]
+		       local Point2=stTable.getLayoutTable().debuffs.slots[g][2]
 		       
 		        
 		        local iconwidth=16*scalex
@@ -156,17 +184,17 @@ function lb.debuffMonitor.relocateDebuffMonitorSlots()
     end
 end
 
-function lb.debuffMonitor.relocateSingleDebuffMonitorSlot(index)
---print ( lb.debuffMonitor.slotscount )
+function stTable.debuffManager.relocateSingleDebuffMonitorSlot(index)
+--print ( stTable.debuffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
 	   
 	   if lb.UnitsTableStatus[var][12]then 
-	       local lt=lbDebuffSlotOptions[lbValues.set][index][3]*scalex
-	       local tp=lbDebuffSlotOptions[lbValues.set][index][4]*scaley
-	       local Point1=lbDebuffSlotOptions[lbValues.set][index][1]
-	       local Point2=lbDebuffSlotOptions[lbValues.set][index][2]
+	       local lt=stTable.getLayoutTable().debuffs.slots[index][3]*scalex
+	       local tp=stTable.getLayoutTable().debuffs.slots[index][4]*scaley
+	       local Point1=stTable.getLayoutTable().debuffs.slots[index][1]
+	       local Point2=stTable.getLayoutTable().debuffs.slots[index][2]
 	       
 	        
 	        local iconwidth=16*scalex
@@ -183,55 +211,56 @@ function lb.debuffMonitor.relocateSingleDebuffMonitorSlot(index)
 	   	end
     end
 end
-function lb.debuffMonitor.setDebuffOptionsTable(table)
-	lbDebuffOptions[lbValues.set]=table
+
+function stTable.debuffManager.setDebuffOptionsTable(table)
+	stTable.getProfileTable().common.debuffs.options=table
+end
+function stTable.debuffManager.getDebuffOptionsTable()
+	return stTable.getProfileTable().common.debuffs.options
+end
+function stTable.debuffManager.getDebuffSlotTable(slotindex)
+	return stTable.getLayoutTable().debuffs.slots[slotindex]
+end
+function stTable.debuffManager.getDebuffSlotPriorityTable()
+	return stTable.getProfileTable().common.debuffs.priority
+end
+function stTable.debuffManager.getDebuffSlotBlockedTable()
+	return stTable.getProfileTable().common.debuffs.blocked
+end
+function stTable.debuffManager.getDebuffsSlotsCompleteTable()
+	return stTable.getLayoutTable().debuffs.slots
 end
 
-function lb.debuffMonitor.getDebuffOptionsTable()
-	return lbDebuffOptions[lbValues.set]
-end
-function lb.debuffMonitor.getDebuffSlotTable(slotindex)
-	return lbDebuffSlotOptions[lbValues.set][slotindex]
-end
-function lb.debuffMonitor.getDebuffSlotPriorityTable()
-	return lbDebuffWhitelist[lbValues.set]
-end
-function lb.debuffMonitor.getDebuffSlotBlockedTable()
-	return lbDebuffBlackList[lbValues.set]
-end
-function lb.debuffMonitor.getDebuffsSlotsCompleteTable()
-	return lbDebuffSlotOptions[lbValues.set]
-end
 
 
-function lb.debuffMonitor.showDummyDebuffMonitorSlots()
---print ( lb.debuffMonitor.slotscount )
+function stTable.debuffManager.showDummyDebuffMonitorSlots()
+--print ( stTable.debuffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-	 		for g= 1,  lb.debuffMonitor.slotscount do
+	 		for g= 1,  stTable.debuffManager.slotscount do
 		        lb.frames[var].Debuffs.groupSpots[g][1]:SetBackgroundColor(0,0,0,1)
 		        lb.frames[var].Debuffs.groupSpots[g][1]:SetVisible(true)
 		    end  	   
 	    end
     end
 end
-function lb.debuffMonitor.hideDummyDebuffMonitorSlots()
---print ( lb.debuffMonitor.slotscount )
+function stTable.debuffManager.hideDummyDebuffMonitorSlots()
+--print ( stTable.debuffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-	 		for g= 1,  lb.debuffMonitor.slotscount do
+	 		for g= 1,  stTable.debuffManager.slotscount do
 		        lb.frames[var].Debuffs.groupSpots[g][1]:SetBackgroundColor(0,0,0,0)
 		        lb.frames[var].Debuffs.groupSpots[g][1]:SetVisible(lb.frames[var].Debuffs.groupSpotsIcons[g][0])
 		    end  	   
 	    end
     end
 end
-function lb.debuffMonitor.showSingleDummDebuffMonitorSlot(index)
---print ( lb.debuffMonitor.slotscount )
+function stTable.debuffManager.showSingleDummDebuffMonitorSlot(index)
+--print ( stTable.debuffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
@@ -241,8 +270,8 @@ function lb.debuffMonitor.showSingleDummDebuffMonitorSlot(index)
 		end	        	   
     end
 end
-function lb.debuffMonitor.hideSingleDummyDebuffMonitorSlot(index)
---print ( lb.debuffMonitor.slotscount )
+function stTable.debuffManager.hideSingleDummyDebuffMonitorSlot(index)
+--print ( stTable.debuffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
@@ -253,17 +282,17 @@ function lb.debuffMonitor.hideSingleDummyDebuffMonitorSlot(index)
     end
 end
 
-function lb.debuffMonitor.updatedebuffMonitorTextures()
+function stTable.debuffManager.updatedebuffMonitorTextures()
     for var=1,20 do
     	if lb.UnitsTableStatus[var][12]then
-	        for g= 1,  lb.debuffMonitor.slotscount do
-				lb.debuffMonitor.updatedebuffMonitorTexturesIndex(var,g)
+	        for g= 1,  stTable.debuffManager.slotscount do
+				stTable.debuffManager.updatedebuffMonitorTexturesIndex(var,g)
 	            
 	        end
 	    end
     end
 end
-function lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
+function stTable.debuffManager.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
 
 		if lb.UnitsTableStatus[frameindex][12]then
             if lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4] then
@@ -301,16 +330,16 @@ function lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
        end
 
 end
-function lb.debuffMonitor.resetdebuffMonitorTextures()
+function stTable.debuffManager.resetdebuffMonitorTextures()
     for var=1,20 do
     	
-    	lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(var)
+    	stTable.debuffManager.resetDebuffMonitorTexturesForIndex(var)
     end
 end
-function lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(var)
+function stTable.debuffManager.resetDebuffMonitorTexturesForIndex(var)
 	if lb.UnitsTableStatus[var][12]then
 		
-        for g= 1,  lb.debuffMonitor.slotscount do
+        for g= 1,  stTable.debuffManager.slotscount do
 	
 				
 	            if lb.frames[var].Debuffs.groupSpotsIcons[g][0] then
@@ -344,26 +373,26 @@ function lb.debuffMonitor.resetDebuffMonitorTexturesForIndex(var)
         end
 	end
 end
-function lb.debuffMonitor.updateDurations()
+function stTable.debuffManager.updateDurations()
 	local elapsed = now - lastdurationcheck
     if (elapsed < (.5)) then --half a second
         return 
     else
     	lastdurationcheck = now
     end
-	local timer=lb.debuffMonitor.getDurationThrottle()
+	local timer=stTable.debuffManager.getDurationThrottle()
 	if not timer then return end
 	local now =timeFrame()
 	 for var=1,20 do
-	 	lb.debuffMonitor.updateDurationsOfIndex(i)
+	 	stTable.debuffManager.updateDurationsOfIndex(i)
     end
 end
 
-function lb.debuffMonitor.updateDurationsOfIndex(index)
+function stTable.debuffManager.updateDurationsOfIndex(index)
 	
 	
 	local frames= lb.frames[index]
-	local Debuffcount=lb.debuffMonitor.slotscount
+	local Debuffcount=stTable.debuffManager.slotscount
  	if lb.UnitsTableStatus[index][5]~=nil and lb.UnitsTableStatus[index][5]~=0 and  lb.UnitsTableStatus[index][12]  then
         for g= 1,  Debuffcount do
         	
@@ -399,7 +428,7 @@ function lb.debuffMonitor.updateDurationsOfIndex(index)
 			                frames.Debuffs.groupSpotsIcons[g][9]=false
 			                frames.Debuffs.groupSpotsIcons[g][10]=1
 			                frames.Debuffs.groupSpotsIcons[g][11]=0
-		        			lb.debuffMonitor.updatedebuffMonitorTexturesIndex(index,g)
+		        			stTable.debuffManager.updatedebuffMonitorTexturesIndex(index,g)
 		        		else
 		        			frames.Debuffs.groupSpotsIcons[g][12]=timeval
 		        		end
@@ -420,7 +449,7 @@ function lb.debuffMonitor.updateDurationsOfIndex(index)
     
 end
 
-function lb.debuffMonitor.updateSpellTextures()
+function stTable.debuffManager.updateSpellTextures()
     local abilities
     abtextures={}
    
@@ -429,10 +458,10 @@ function lb.debuffMonitor.updateSpellTextures()
 --    end
     abilities =abilitylist()
     local abilitydets=abilitydetail(abilities)
-    for dbName,c in pairs(lbDebuffWhitelist[lbValues.set]) do
+    for dbName,c in pairs(stTable.getProfileTable().common.debuffs.priority) do
         --print("txt"..tostring(s))
         found=false
-        lb.FullDebuffsList[dbName ]=true
+        stTable.debuffMonitor[dbName ]=true
         for v, k in pairs(abilitydets) do
             if dbName==k.name and dbName~=nil then
                 if k.icon ~=nil then
@@ -442,7 +471,7 @@ function lb.debuffMonitor.updateSpellTextures()
             end
         end
         if not found then
-            lb.NoIconsDebuffList[dbName]=true
+            stTable.NoIconsDebuffList[dbName]=true
             --print (a)
         end
 	
@@ -452,7 +481,7 @@ end
 
 
 
-function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
+function stTable.debuffManager.onBuffAdd(unit, DebuffTable,frameindex)
 
         local name=DebuffTable.name
        -- print (name)
@@ -464,11 +493,11 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
                 addDebuffToCache(DebuffTable)
             end
 			--is a deDebuff so now we check if it's in a whitelist
-			local debWCount = #(lbDebuffWhitelist[lbValues.set])
-			local debBCount = #(lbDebuffBlackList[lbValues.set])
+			local debWCount = #(stTable.getProfileTable().common.debuffs.priority)
+			local debBCount = #(stTable.getProfileTable().common.debuffs.blocked)
 			--print (name)
-			--dump(lbDebuffWhitelist[lbValues.set])
-            if lbDebuffWhitelist[lbValues.set][name]~=nil then
+			--dump(stTable.getLayoutTable().debuffs.priority)
+            if stTable.getProfileTable().common.debuffs.priority[name]~=nil then
 				-- it's into the whitelist
                     local texture=nil
                     if lb.iconsCache.hasTextureInCache(name) then
@@ -514,7 +543,7 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
 	                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=0
 	                            end
 	                            --print (lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
-	                            lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,i)
+	                            stTable.debuffManager.updatedebuffMonitorTexturesIndex(frameindex,i)
 	                            updateDebuffs=true
 	                            break
 							else
@@ -539,7 +568,7 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
 		                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=0
 		                            end
 		                            --print (lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
-		                            lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,i)
+		                            stTable.debuffManager.updatedebuffMonitorTexturesIndex(frameindex,i)
 		                            updateDebuffs=true
 		                            break
 								end
@@ -550,18 +579,18 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
                   
 			else
 				--it's not in the whitelist so i check if it's on the blacklist
-				if lbDebuffBlackList[lbValues.set][name]~=nil then
+				if stTable.getProfileTable().common.debuffs.blocked[name]~=nil then
 					--I don't do anything because it's on the blacklist
 				else
 					local enable=false
-					if lbDebuffOptions[lbValues.set].showCurableOnly then
-						if DebuffTable.poison and lbDebuffOptions[lbValues.set].poison then
+					if stTable.getProfileTable().common.debuffs.options.showCurableOnly then
+						if DebuffTable.poison and stTable.getProfileTable().common.debuffs.options.poison then
 							enable=true
 						end
-						if DebuffTable.curse and lbDebuffOptions[lbValues.set].curse then
+						if DebuffTable.curse and stTable.getProfileTable().common.debuffs.options.curse then
 							enable=true
 						end
-						if DebuffTable.disease and lbDebuffOptions[lbValues.set].disease then
+						if DebuffTable.disease and stTable.getProfileTable().common.debuffs.options.disease then
 							enable=true
 						end 
 					else
@@ -605,7 +634,7 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
 	                                lb.frames[frameindex].Debuffs.groupSpotsIcons[i][11]=0
 	                            end
 	                            --print (lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
-	                            lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,i)
+	                            stTable.debuffManager.updatedebuffMonitorTexturesIndex(frameindex,i)
 	                            updateDebuffs=true
 	                            break
 	
@@ -619,17 +648,17 @@ function lb.debuffMonitor.onBuffAdd(unit, DebuffTable,frameindex)
             end
             if updateDebuffs then
                 --print(true)
-                --lb.debuffMonitor.updatedebuffMonitorTextures()
+                --stTable.debuffManager.updatedebuffMonitorTextures()
             end
         end
     
 
 end
-function lb.debuffMonitor.onDebuffRemove(unit, debuffID,frameindex)
+function stTable.debuffManager.onDebuffRemove(unit, debuffID,frameindex)
     --Debuffs=Debuffdetail(unit,Debuffs)
     --print ("remove")
 
-    local Debuffcount=lb.debuffMonitor.slotscount
+    local Debuffcount=stTable.debuffManager.slotscount
 
        -- for slotindex,c in pairs(lbSelectedDebuffsList[lbValues.set]) do
        
@@ -645,7 +674,7 @@ function lb.debuffMonitor.onDebuffRemove(unit, debuffID,frameindex)
 	                lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][10]=1
 	                lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][11]=0
 					--print ("removedDebuff"..tostring(frameindex).."--"..tostring(slotindex))
-	                lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
+	                stTable.debuffManager.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
 	                --print ("rem"..lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
 	                updateDebuffs=true
 	            end
@@ -655,18 +684,18 @@ function lb.debuffMonitor.onDebuffRemove(unit, debuffID,frameindex)
       
         if updateDebuffs then
             --print(true)
-            --lb.debuffMonitor.updatedebuffMonitorTextures()
+            --stTable.debuffManager.updatedebuffMonitorTextures()
         end
         return updateDebuffs
 
 end
 
 
-function lb.debuffMonitor.onDebuffChange(unit, debuffID,frameindex)
+function stTable.debuffManager.onDebuffChange(unit, debuffID,frameindex)
     --Debuffs=Debuffdetail(unit,Debuffs)
     --print ("remove")
 
-    local Debuffcount=lb.debuffMonitor.slotscount
+    local Debuffcount=stTable.debuffManager.slotscount
 
        -- for slotindex,c in pairs(lbSelectedDebuffsList[lbValues.set]) do
        
@@ -680,7 +709,7 @@ function lb.debuffMonitor.onDebuffChange(unit, debuffID,frameindex)
 	                	lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4]=true --flags that the debuff needs an update
 	             	end
 					--print ("removedDebuff"..tostring(frameindex).."--"..tostring(slotindex))
-	                lb.debuffMonitor.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
+	                stTable.debuffManager.updatedebuffMonitorTexturesIndex(frameindex,slotindex)
 	                --print ("rem"..lb.frames[frameindex].Debuffs.groupSpotsIcons[slotindex][4])
 	                updateDebuffs=true
 	            end
@@ -690,13 +719,13 @@ function lb.debuffMonitor.onDebuffChange(unit, debuffID,frameindex)
       
         if updateDebuffs then
             --print(true)
-            --lb.debuffMonitor.updatedebuffMonitorTextures()
+            --stTable.debuffManager.updatedebuffMonitorTextures()
         end
         return updateDebuffs
 
 end
 
-function lb.debuffMonitor.copySettingsFromRole(Role)
+function stTable.debuffManager.copySettingsFromRole(Role)
 	--copies the settings from the selected role into the current role
 	--must copy lbDebuffWhitelist[role] ,lbDebuffBlackList[role] , lbDebuffSlotOptions[role] , lbDebuffOptions[role]
 end

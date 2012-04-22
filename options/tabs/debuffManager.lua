@@ -109,30 +109,30 @@ function lb.optionsGui.debuffManager.createTable(parentFrame)
 	 optionsFrame.blackListCopyFromRoleButton.Event.LeftClick=lb.optionsGui.debuffManager.copyBlacklistFromAnotherRole
 	
      
-     
+     local opttable=lb.debuffMonitor.getDebuffOptionsTable()
      writeText("If it's not whitelisted and it's not blacklisted:","text",optionsFrame,620,380)
      optionsFrame.ShowCurableOnlyCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowCurableOnlyCheckBox",optionsFrame)
      optionsFrame.ShowCurableOnlyCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",620, 400)
      optionsFrame.ShowCurableOnlyCheckBox:SetText("Show only curable debuffs")
-     optionsFrame.ShowCurableOnlyCheckBox:SetChecked(lbDebuffOptions[lbValues.set].showCurableOnly)
+     optionsFrame.ShowCurableOnlyCheckBox:SetChecked(opttable.showCurableOnly)
      optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions 
      
      optionsFrame.ShowPoisonCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowPoisonCheckBox",optionsFrame)
      optionsFrame.ShowPoisonCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 420)
      optionsFrame.ShowPoisonCheckBox:SetText("Show poisons")
-     optionsFrame.ShowPoisonCheckBox:SetChecked(lbDebuffOptions[lbValues.set].poison)
+     optionsFrame.ShowPoisonCheckBox:SetChecked(opttable.poison)
      optionsFrame.ShowPoisonCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions
      
      optionsFrame.ShowCurseCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowCurseCheckBox",optionsFrame)
      optionsFrame.ShowCurseCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 440)
      optionsFrame.ShowCurseCheckBox:SetText("Show curses")
-     optionsFrame.ShowCurseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].curse)
+     optionsFrame.ShowCurseCheckBox:SetChecked(opttable.curse)
      optionsFrame.ShowCurseCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions
      
      optionsFrame.ShowDiseaseCheckBox=UI.CreateLbFrame("SimpleCheckbox", "ShowDiseaseCheckBox",optionsFrame)
      optionsFrame.ShowDiseaseCheckBox:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT",630, 460)
      optionsFrame.ShowDiseaseCheckBox:SetText("Show diseases")
-     optionsFrame.ShowDiseaseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].disease)
+     optionsFrame.ShowDiseaseCheckBox:SetChecked(opttable.disease)
      optionsFrame.ShowDiseaseCheckBox.Event.CheckboxChange = lb.optionsGui.debuffManager.updateDebuffFilterOptions
      --optionsFrame.ShowCurableOnlyCheckBox:SetChecked(lbValues.CacheDebuffs)
      --optionsFrame.ShowCurableOnlyCheckBox.Event.CheckboxChange = function () lbValues.CacheDebuffs=optionsFrame.DebuffsRecordingCheckbox:GetChecked() end 
@@ -144,24 +144,25 @@ function lb.optionsGui.debuffManager.createTable(parentFrame)
 end
 
 function lb.optionsGui.debuffManager.updateDebuffFilterOptions()
-	lbDebuffOptions[lbValues.set].showCurableOnly=optionsFrame.ShowCurableOnlyCheckBox:GetChecked()
-	lbDebuffOptions[lbValues.set].poison=optionsFrame.ShowPoisonCheckBox:GetChecked()
-	lbDebuffOptions[lbValues.set].curse=optionsFrame.ShowCurseCheckBox:GetChecked()
-	lbDebuffOptions[lbValues.set].disease=optionsFrame.ShowDiseaseCheckBox:GetChecked()
-	frame.ShowPoisonCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
-	frame.ShowCurseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
-	frame.ShowDiseaseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	local opttable=lb.debuffMonitor.getDebuffOptionsTable()
+	opttable.showCurableOnly=optionsFrame.ShowCurableOnlyCheckBox:GetChecked()
+	opttable.poison=optionsFrame.ShowPoisonCheckBox:GetChecked()
+	opttable.curse=optionsFrame.ShowCurseCheckBox:GetChecked()
+	opttable.disease=optionsFrame.ShowDiseaseCheckBox:GetChecked()
+	frame.ShowPoisonCheckBox:SetVisible(opttable.showCurableOnly)
+	frame.ShowCurseCheckBox:SetVisible(opttable.showCurableOnly)
+	frame.ShowDiseaseCheckBox:SetVisible(opttable.showCurableOnly)
 end
 
 function lb.optionsGui.debuffManager.populateList()
-	
-	frame.ShowCurableOnlyCheckBox:SetChecked(lbDebuffOptions[lbValues.set].showCurableOnly)
-	frame.ShowPoisonCheckBox:SetChecked(lbDebuffOptions[lbValues.set].poison)
-	frame.ShowCurseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].curse)
-	frame.ShowDiseaseCheckBox:SetChecked(lbDebuffOptions[lbValues.set].disease)
-	frame.ShowPoisonCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
-	frame.ShowCurseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
-	frame.ShowDiseaseCheckBox:SetVisible(lbDebuffOptions[lbValues.set].showCurableOnly)
+	local opttable=lb.debuffMonitor.getDebuffOptionsTable()
+	frame.ShowCurableOnlyCheckBox:SetChecked(opttable.showCurableOnly)
+	frame.ShowPoisonCheckBox:SetChecked(opttable.poison)
+	frame.ShowCurseCheckBox:SetChecked(opttable.curse)
+	frame.ShowDiseaseCheckBox:SetChecked(opttable.disease)
+	frame.ShowPoisonCheckBox:SetVisible(opttable.showCurableOnly)
+	frame.ShowCurseCheckBox:SetVisible(opttable.showCurableOnly)
+	frame.ShowDiseaseCheckBox:SetVisible(opttable.showCurableOnly)
 	
 	
 	
@@ -182,7 +183,7 @@ function lb.optionsGui.debuffManager.populateList()
 	 local WList={}
 	 
 	 local Wcounter=1
-	 for k,ab in pairs(lbDebuffWhitelist[lbValues.set]) do
+	 for k,ab in pairs(lb.debuffMonitor.getDebuffSlotPriorityTable()) do
 		local name=k
 		local texture=lb.iconsCache.getTextureFromCache(name)
 		if texture[1]=="LifeBinder" then
@@ -201,7 +202,7 @@ function lb.optionsGui.debuffManager.populateList()
 	 local BList={}
 	 
 	 local Bcounter=1
-	 for k,ab in pairs(lbDebuffBlackList[lbValues.set]) do
+	 for k,ab in pairs(lb.debuffMonitor.getDebuffSlotBlockedTable()) do
 		local name=k
 		local texture=lb.iconsCache.getTextureFromCache(name)
 		if texture[1]=="LifeBinder" then
@@ -240,14 +241,14 @@ end
 
 
 function lb.optionsGui.debuffManager.onDebuffItemDrag(item,x,y)
-	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].WhiteListView,x,y) then
-		if lbDebuffWhitelist[lbValues.set][item[1]]==nil then
-			lbDebuffWhitelist[lbValues.set][item[1]]={castByMe=false}
+	if lb.optionsGui.isPointInFrame(frame.WhiteListView,x,y) then
+		if lb.debuffMonitor.getDebuffSlotPriorityTable()[item[1]]==nil then
+			lb.debuffMonitor.getDebuffSlotPriorityTable()[item[1]]={castByMe=false}
 		end
 	end
-	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].BlackListView,x,y) then
-		if lbDebuffBlackList[lbValues.set][item[1]]==nil then
-			lbDebuffBlackList[lbValues.set][item[1]]={castByMe=false}
+	if lb.optionsGui.isPointInFrame(frame.BlackListView,x,y) then
+		if lb.debuffMonitor.getDebuffSlotBlockedTable()[item[1]]==nil then
+			lb.debuffMonitor.getDebuffSlotBlockedTable()[item[1]]={castByMe=false}
 		end
 	end
 	lb.optionsGui.debuffManager.populateList()-- populate lists
@@ -255,11 +256,11 @@ end
 
 function lb.optionsGui.debuffManager.onWhiteListItemDrag(item,x,y)
 
-	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].DebuffsListView,x,y) or lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].BlackListView,x,y) then
-		lbDebuffWhitelist[lbValues.set][item[1]]=nil
-		if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].BlackListView,x,y) then
-			if lbDebuffBlackList[lbValues.set][item[1]]==nil then
-				lbDebuffBlackList[lbValues.set][item[1]]={castByMe=false}
+	if lb.optionsGui.isPointInFrame(frame.DebuffsListView,x,y) or lb.optionsGui.isPointInFrame(frame.BlackListView,x,y) then
+		lb.debuffMonitor.getDebuffSlotPriorityTable()[item[1]]=nil
+		if lb.optionsGui.isPointInFrame(frame.BlackListView,x,y) then
+			if lb.debuffMonitor.getDebuffSlotBlockedTable()[item[1]]==nil then
+				lb.debuffMonitor.getDebuffSlotBlockedTable()[item[1]]={castByMe=false}
 			end
 		end
 	end
@@ -267,11 +268,11 @@ function lb.optionsGui.debuffManager.onWhiteListItemDrag(item,x,y)
 end
 
 function lb.optionsGui.debuffManager.onBlackListItemDrag(item,x,y)
-	if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].DebuffsListView,x,y) or lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].WhiteListView,x,y) then
-		lbDebuffBlackList[lbValues.set][item[1]]=nil
-		if lb.optionsGui.isPointInFrame(lb.optionsGui.Tabs[4].WhiteListView,x,y) then
-			if lbDebuffWhitelist[lbValues.set][item[1]]==nil then
-				lbDebuffWhitelist[lbValues.set][item[1]]={castByMe=false}
+	if lb.optionsGui.isPointInFrame(frame.DebuffsListView,x,y) or lb.optionsGui.isPointInFrame(frame.WhiteListView,x,y) then
+		lb.debuffMonitor.getDebuffSlotBlockedTable()[item[1]]=nil
+		if lb.optionsGui.isPointInFrame(frame.WhiteListView,x,y) then
+			if lb.debuffMonitor.getDebuffSlotPriorityTable()[item[1]]==nil then
+				lb.debuffMonitor.getDebuffSlotPriorityTable()[item[1]]={castByMe=false}
 			end
 		end
 	end
@@ -286,11 +287,11 @@ function lb.optionsGui.debuffManager.copyWhitelistFromAnotherRole()
 	if index~=lbValues.set then
 		local counter=0
 		for debName,debOpts in pairs(lbDebuffWhitelist[index]) do
-			if lbDebuffWhitelist[lbValues.set][debName]==nil then
+			if lb.debuffMonitor.getDebuffSlotPriorityTable()[debName]==nil then
 				counter=counter+1
-				lbDebuffWhitelist[lbValues.set][debName]={}
+				lb.debuffMonitor.getDebuffSlotPriorityTable()[debName]={}
 				for propName,propValue in pairs(debOpts) do
-					lbDebuffWhitelist[lbValues.set][debName][propName]=	propValue 
+					lb.debuffMonitor.getDebuffSlotPriorityTable()[debName][propName]=	propValue 
 				end
 			end
 		end
@@ -307,11 +308,11 @@ function lb.optionsGui.debuffManager.copyBlacklistFromAnotherRole()
 	if index~=lbValues.set then
 		local counter=0
 		for debName,debOpts in pairs(lbDebuffBlackList[index]) do
-			if lbDebuffBlackList[lbValues.set][debName]==nil then
+			if lb.debuffMonitor.getDebuffSlotBlockedTable()[debName]==nil then
 				counter=counter+1
-				lbDebuffBlackList[lbValues.set][debName]={}
+				lb.debuffMonitor.getDebuffSlotBlockedTable()[debName]={}
 				for propName,propValue in pairs(debOpts) do
-					lbDebuffBlackList[lbValues.set][debName][propName]=	propValue 
+					lb.debuffMonitor.getDebuffSlotBlockedTable()[debName][propName]=	propValue 
 				end
 			end
 		end

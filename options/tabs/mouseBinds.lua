@@ -3,7 +3,7 @@ local frame=nil
 function lb.optionsGui.mouseBinds.createTable(parentFrame)
  	 local optionsFrame
 	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
-	 
+	 frame=optionsFrame
 	 optionsFrame.CommandsList=UI.CreateLbFrame("AbilitiesList", "CommandsList",optionsFrame)
 	 optionsFrame.CommandsList:CreateDragFrame(optionsFrame.CommandsList,optionsFrame,parentFrame)
 	 optionsFrame.CommandsList.Event.DraggedOutItem= lb.optionsGui.mouseBinds.onCommandsListItemDrag
@@ -45,7 +45,7 @@ function lb.optionsGui.mouseBinds.createTable(parentFrame)
      optionsFrame.ButtonsTable:SetLayer(30)
      optionsFrame.ButtonsTable.Tabs={}
      
-     optionsFrame.tempBindsLists=lbMouseBinds[lbValues.set]
+     optionsFrame.tempBindsLists=lb.mouseBinds.getMouseBindsTable()
      
 	 local mouseBindButtonNames = { "Left", "Right", "Middle", "M4", "M5" }
 	 
@@ -78,7 +78,7 @@ function lb.optionsGui.mouseBinds.createTable(parentFrame)
 	 optionsFrame.ApplyButton:SetPoint("BOTTOMRIGHT", optionsFrame,"BOTTOMRIGHT",-5,-5)
 	 optionsFrame.ApplyButton:SetText("Apply")
 	 optionsFrame.ApplyButton.Event.LeftClick=function() if not lb.isincombat then lb.mouseBinds.setMouseActions() else print("you must be out of combat to change mouse binds!") end end
-	 frame=optionsFrame
+	 
 	 return optionsFrame
 end
 
@@ -114,7 +114,7 @@ function lb.optionsGui.mouseBinds.BindsListItemDrag(buttonindex,modindex,item,x,
 	end
 end
 function lb.optionsGui.mouseBinds.updateData()
-	frame.tempBindsLists=lbMouseBinds[lbValues.set]
+	frame.tempBindsLists=lb.mouseBinds.getMouseBindsTable()
 	local tabindex=frame.ButtonsTable:GetActiveTab()
 	local list={}
 	 local abs=Inspect.Ability.Detail(Inspect.Ability.List())

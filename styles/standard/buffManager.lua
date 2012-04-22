@@ -1,6 +1,4 @@
---
---Buff Monitor
---
+
 local _G = getfenv(0)
 local unitdetail = _G.Inspect.Unit.Detail
 local abilitylist = _G.Inspect.Ability.List
@@ -8,38 +6,60 @@ local abilitydetail = _G.Inspect.Ability.Detail
 local buffdetail=   _G.Inspect.Buff.Detail
 local bufflist=   _G.Inspect.Buff.List
 local timeFrame=_G.Inspect.Time.Real
-lb.buffMonitor={}
-lb.FullBuffsList={}     -- used by buffmonitor
-lb.FullDeBuffsList={}    -- used by buffmonitor
-lb.buffMonitor.slotscount=0
+
+local stTable=lb.styles["standard"]
+local optionsTable=nil
+local frame=nil
+
+local timeFrame=_G.Inspect.Time.Real
+stTable.buffManager={}
+stTable.FullBuffsList={}     -- used by buffmonitor
+stTable.buffManager.slotscount=0
 local lastdurationcheck=0
 
+function stTable.buffManager.initializeBuffMonitorOptionsTable()
+	if optionsTable==nil then optionsTable=stTable.options end
+		--print(stTable.getLayoutTable().buffs)
+	if stTable.getLayoutTable().buffs ==nil then
+		stTable.getLayoutTable().buffs={}
+		stTable.getLayoutTable().buffs.options={}
+		lb.copyTable(lbPredefinedBuffSlotPos[1],stTable.getLayoutTable().buffs.options)
+		for i = 1,4 do
+			stTable.getLayoutTable().buffs.options[i].names={}
+		end
+       
+	end
+	lb.buffMonitor=stTable.buffManager --overrides the default buff monitor
+end
 
-
-function lb.buffMonitor.initializeBuffMonitor()
---print ( lb.buffMonitor.slotscount )
-	lb.buffMonitor.slotscount = #(lbBuffSlotOptions[lbValues.set])
+function stTable.buffManager.initializeBuffMonitor()
+--print ( stTable.buffManager.slotscount )
+	if optionsTable==nil then optionsTable=stTable.options end
+	stTable.buffManager.initializeBuffMonitorOptionsTable()
+	stTable.buffManager.slotscount = #(stTable.getLayoutTable().buffs.options)
  	for var=1,20 do
- 		lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
+ 		stTable.buffManager.initializeBuffMonitorFrameIndex(var)
     end
 end
 
-function lb.buffMonitor.initializeBuffMonitorFrameIndex(var)
-print ( "default")
-	lb.buffMonitor.slotscount = #(lbBuffSlotOptions[lbValues.set])
+function stTable.buffManager.initializeBuffMonitorFrameIndex(var)
+--print ( stTable.buffManager.slotscount )
+	if optionsTable==nil then optionsTable=stTable.options end
+	stTable.buffManager.initializeBuffMonitorOptionsTable()
+	stTable.buffManager.slotscount = #(stTable.getLayoutTable().buffs.options)
 	
  		if lb.UnitsTableStatus[var][12]then
-		    for g= 1,  lb.buffMonitor.slotscount do
+		    for g= 1,  stTable.buffManager.slotscount do
 		       
 		       local scalex=1--lbValues.mainwidth*0.009009009
 		       local scaley=1--lbValues.mainheight*0.023255814
-		       local lt=lbBuffSlotOptions[lbValues.set][g][3]*scalex
-		       local tp=lbBuffSlotOptions[lbValues.set][g][4]*scaley
-		       local Point1=lbBuffSlotOptions[lbValues.set][g][1]
-		       local Point2=lbBuffSlotOptions[lbValues.set][g][2]
-		       local acceptdebuffs=lbBuffSlotOptions[lbValues.set][g][7]
-		       local iconWidth=lbBuffSlotOptions[lbValues.set][g][5]
-		       local iconHeight=lbBuffSlotOptions[lbValues.set][g][6]
+		       local lt=stTable.getLayoutTable().buffs.options[g][3]*scalex
+		       local tp=stTable.getLayoutTable().buffs.options[g][4]*scaley
+		       local Point1=stTable.getLayoutTable().buffs.options[g][1]
+		       local Point2=stTable.getLayoutTable().buffs.options[g][2]
+		       local acceptdebuffs=stTable.getLayoutTable().buffs.options[g][7]
+		       local iconWidth=stTable.getLayoutTable().buffs.options[g][5]
+		       local iconHeight=stTable.getLayoutTable().buffs.options[g][6]
 		       if lb.frames[var].buffs==nil then lb.frames[var].buffs={} end
 			   if lb.frames[var].buffs.groupSpots==nil then lb.frames[var].buffs.groupSpots= {} end
 			   if lb.frames[var].buffs.groupSpotsIcons==nil then lb.frames[var].buffs.groupSpotsIcons= {} end
@@ -113,8 +133,8 @@ print ( "default")
 		        
 		        lb.frames[var].buffs.groupSpots[g][4]:SetVisible(lb.frames[var].buffs.groupSpotsIcons[g][9])
 			end
-			if #(lbBuffSlotOptions[lbValues.set])<#(lb.frames[var].buffs.groupSpots) then
-			 	for i = #(lbBuffSlotOptions[lbValues.set])+1,#(lb.frames[var].buffs.groupSpots) do
+			if #(stTable.getLayoutTable().buffs.options)<#(lb.frames[var].buffs.groupSpots) then
+			 	for i = #(stTable.getLayoutTable().buffs.options)+1,#(lb.frames[var].buffs.groupSpots) do
 		 			if lb.frames[var].buffs.groupSpots[i]~=nil then
 			 			lb.frames[var].buffs.groupSpots[i][1]:SetVisible(false)
 			 		end
@@ -127,23 +147,22 @@ end
 
 
 
-
-function lb.buffMonitor.relocateBuffMonitorSlots()
---print ( lb.buffMonitor.slotscount )
+function stTable.buffManager.relocateBuffMonitorSlots()
+--print ( stTable.buffManager.slotscount )
    local scalex=1--lbValues.mainwidth*0.009009009
 	local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-		    for g= 1,  lb.buffMonitor.slotscount do
+		    for g= 1,  stTable.buffManager.slotscount do
 		    
-		       local lt=lbBuffSlotOptions[lbValues.set][g][3]*scalex
-		       local tp=lbBuffSlotOptions[lbValues.set][g][4]*scaley
-		       local Point1=lbBuffSlotOptions[lbValues.set][g][1]
-		       local Point2=lbBuffSlotOptions[lbValues.set][g][2]
+		       local lt=stTable.getLayoutTable().buffs.options[g][3]*scalex
+		       local tp=stTable.getLayoutTable().buffs.options[g][4]*scaley
+		       local Point1=stTable.getLayoutTable().buffs.options[g][1]
+		       local Point2=stTable.getLayoutTable().buffs.options[g][2]
 		       
 		        
-		        local iconwidth=lbBuffSlotOptions[lbValues.set][g][5]*scalex
-	            local iconheight=lbBuffSlotOptions[lbValues.set][g][6]*scaley
+		        local iconwidth=stTable.getLayoutTable().buffs.options[g][5]*scalex
+	            local iconheight=stTable.getLayoutTable().buffs.options[g][6]*scaley
 		        local iconl=iconwidth
 		        if iconheight<iconwidth then
 		        	iconl=iconheight
@@ -159,33 +178,22 @@ function lb.buffMonitor.relocateBuffMonitorSlots()
     end
 end
 
-function lb.buffMonitor.getBuffSlotTable(slotindex)
-	return lbBuffSlotOptions[lbValues.set][slotindex]
-end
-function lb.buffMonitor.getBuffSlotNamesTable(slotindex)
-	return lbSelectedBuffsList[lbValues.set][slotindex][1]
-end
-
-function lb.buffMonitor.getBuffsSlotsCompleteTable()
-	return lbBuffSlotOptions[lbValues.set]
-end
-
-
-function lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
---print ( lb.buffMonitor.slotscount )
+function stTable.buffManager.relocateSingleBuffMonitorSlot(index)
+--print ( stTable.buffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
+ 	--print("style")
  	for var=1,20 do
-	   print("nostyle")
+ 		
 	   if lb.UnitsTableStatus[var][12]then 
-	       local lt=lbBuffSlotOptions[lbValues.set][index][3]*scalex
-	       local tp=lbBuffSlotOptions[lbValues.set][index][4]*scaley
-	       local Point1=lbBuffSlotOptions[lbValues.set][index][1]
-	       local Point2=lbBuffSlotOptions[lbValues.set][index][2]
+	       local lt=stTable.getLayoutTable().buffs.options[index][3]*scalex
+	       local tp=stTable.getLayoutTable().buffs.options[index][4]*scaley
+	       local Point1=stTable.getLayoutTable().buffs.options[index][1]
+	       local Point2=stTable.getLayoutTable().buffs.options[index][2]
 	       
 	        
-	        local iconwidth=lbBuffSlotOptions[lbValues.set][index][5]*scalex
-	        local iconheight=lbBuffSlotOptions[lbValues.set][index][6]*scaley
+	        local iconwidth=stTable.getLayoutTable().buffs.options[index][5]*scalex
+	        local iconheight=stTable.getLayoutTable().buffs.options[index][6]*scaley
 	        local iconl=iconwidth
 	        if iconheight<iconwidth then
 	        	iconl=iconheight
@@ -199,21 +207,33 @@ function lb.buffMonitor.relocateSingleBuffMonitorSlot(index)
     end
 end
 
-function lb.buffMonitor.showDummyBuffMonitorSlots()
---print ( lb.buffMonitor.slotscount )
+function stTable.buffManager.getBuffSlotTable(slotindex)
+	return stTable.getLayoutTable().buffs.options[slotindex]
+end
+function stTable.buffManager.getBuffSlotNamesTable(slotindex)
+	return stTable.getLayoutTable().buffs.options[slotindex].names
+end
+
+function stTable.buffManager.getBuffsSlotsCompleteTable()
+	return stTable.getLayoutTable().buffs.options
+end
+
+
+function stTable.buffManager.showDummyBuffMonitorSlots()
+--print ( stTable.buffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
  		if lb.UnitsTableStatus[var][12]then
-	 		for g= 1, lb.buffMonitor.slotscount  do
+	 		for g= 1, stTable.buffManager.slotscount  do
 		        lb.frames[var].buffs.groupSpots[g][1]:SetBackgroundColor(0,0,0,1)
 		        lb.frames[var].buffs.groupSpots[g][1]:SetVisible(true)
 		    end  	   
 	    end
     end
 end
-function lb.buffMonitor.hideDummyBuffMonitorSlots()
---print ( lb.buffMonitor.slotscount )
+function stTable.buffManager.hideDummyBuffMonitorSlots()
+--print ( stTable.buffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
@@ -226,8 +246,8 @@ function lb.buffMonitor.hideDummyBuffMonitorSlots()
 	    end
     end
 end
-function lb.buffMonitor.showSingleDummyBuffMonitorSlot(index)
---print ( lb.buffMonitor.slotscount )
+function stTable.buffManager.showSingleDummyBuffMonitorSlot(index)
+--print ( stTable.buffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
@@ -237,8 +257,8 @@ function lb.buffMonitor.showSingleDummyBuffMonitorSlot(index)
 		end	        	   
     end
 end
-function lb.buffMonitor.hideSingleDummyBuffMonitorSlot(index)
---print ( lb.buffMonitor.slotscount )
+function stTable.buffManager.hideSingleDummyBuffMonitorSlot(index)
+--print ( stTable.buffManager.slotscount )
  local scalex=1--lbValues.mainwidth*0.009009009
  local scaley=1--lbValues.mainheight*0.023255814
  	for var=1,20 do
@@ -249,17 +269,17 @@ function lb.buffMonitor.hideSingleDummyBuffMonitorSlot(index)
     end
 end
 
-function lb.buffMonitor.updateBuffMonitorTextures()
+function stTable.buffManager.updateBuffMonitorTextures()
     for var=1,20 do
     	if lb.UnitsTableStatus[var][12]then
-	        for g= 1,  lb.buffMonitor.slotscount do
-				lb.buffMonitor.updateBuffMonitorTexturesIndex(var,g)
+	        for g= 1,  stTable.buffManager.slotscount do
+				stTable.buffManager.updateBuffMonitorTexturesIndex(var,g)
 	            
 	        end
 	    end
     end
 end
-function lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
+function stTable.buffManager.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 
 		if lb.UnitsTableStatus[frameindex][12]then
             if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4] then
@@ -296,16 +316,16 @@ function lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
        end
 
 end
-function lb.buffMonitor.resetBuffMonitorTextures()
+function stTable.buffManager.resetBuffMonitorTextures()
     for var=1,20 do
     	
-    	lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
+    	stTable.buffManager.resetBuffMonitorTexturesForIndex(var)
     end
 end
-function lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
+function stTable.buffManager.resetBuffMonitorTexturesForIndex(var)
 	if lb.UnitsTableStatus[var][12]then
 		
-        for g= 1,  lb.buffMonitor.slotscount do
+        for g= 1,  stTable.buffManager.slotscount do
 	
 				
 	            if lb.frames[var].buffs.groupSpotsIcons[g][0] then
@@ -339,20 +359,20 @@ function lb.buffMonitor.resetBuffMonitorTexturesForIndex(var)
         end
 	end
 end
-function lb.buffMonitor.updateDurations()
+function stTable.buffManager.updateDurations()
 	local elapsed = now - lastdurationcheck
     if (elapsed < (.5)) then --half a second
         return 
     else
     	lastdurationcheck = now
     end
-	local timer=lb.buffMonitor.getDurationThrottle()
+	local timer=stTable.buffManager.getDurationThrottle()
 	if not timer then return end
 	local now =timeFrame()
 	 for var=1,20 do
 	 	if lb.UnitsTableStatus[var][12]then
 		 	if lb.UnitsTableStatus[var][5]~=nil and lb.UnitsTableStatus[var][5]~=0 then
-		        for g= 1,  lb.buffMonitor.slotscount do
+		        for g= 1,  stTable.buffManager.slotscount do
 		        	
 		        	
 		        	if lb.frames[var].buffs.groupSpotsIcons[g][0] then
@@ -388,11 +408,11 @@ function lb.buffMonitor.updateDurations()
     end
 end
 
-function lb.buffMonitor.updateDurationsOfIndex(index)
+function stTable.buffManager.updateDurationsOfIndex(index)
 	
 	
 	local frames= lb.frames[index]
-	local buffcount=lb.buffMonitor.slotscount
+	local buffcount=stTable.buffManager.slotscount
  	if lb.UnitsTableStatus[index][5]~=nil and lb.UnitsTableStatus[index][5]~=0 and  lb.UnitsTableStatus[index][12]  then
         for g= 1,  buffcount do
         	
@@ -435,54 +455,42 @@ function lb.buffMonitor.updateDurationsOfIndex(index)
     end
     
 end
-function lb.buffMonitor.updateSpellTextures()
+
+function stTable.buffManager.updateSpellTextures()
     local abilities
     abtextures={}
-   
---    for v, k in pairs(lbSelectedBuffsList) do
---        table.insert(abtextures,"Textures/buffhot.png")
---    end
+    --stTable.getLayoutTable().buffs.options[i].names
     abilities =abilitylist()
     abilitydets=abilitydetail(abilities)
-    for d,c in pairs(lbSelectedBuffsList[lbValues.set]) do
-        --c={"Soothing Stream", "Healing Current","Healing Flood" }
-       
-        for j,m in pairs(c) do
-       
-	        for s,a in pairs(m) do
-	      
-	            --a="Soothing Stream" ....
-	            --print("txt"..tostring(s))
-	            found=false
-	            lb.FullBuffsList[s]=true
-	            for v, k in pairs(abilitydets) do
-	                if s==k.name and s~=nil then
-	                    if k.icon ~=nil then
-	                        found=true
-	                        lb.iconsCache.addTextureToCache(s,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
-	                    end
-	                end
-	            end
-	            if not found then
-	                lb.NoIconsBuffList[s]=true
-	                --print (a)
-	            end
-	
-	        end
+    for d,c in pairs(stTable.getLayoutTable().buffs.options) do
+        for s,a in pairs(c.names) do
+            found=false
+            stTable.FullBuffsList[s]=true
+            for v, k in pairs(abilitydets) do
+                if s==k.name and s~=nil then
+                    if k.icon ~=nil then
+                        found=true
+                        lb.iconsCache.addTextureToCache(s,"Rift",k.icon) -- the function controls automatically if the icon is present in the cache
+                    end
+                end
+            end
+            if not found then
+                lb.NoIconsBuffList[s]=true
+                --print (a)
+            end
+
         end
     end
 
 end
 
 
-
-
-function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
+function stTable.buffManager.onBuffAddTest(unit, buffTable,frameindex)
      
         
         local name=buffTable.name
         if buffTable.debuff==nil then
-            if lb.FullBuffsList[name]~=nil then
+            if stTable.FullBuffsList[name]~=nil then
                 
                     local texture=nil
                     if lb.iconsCache.hasTextureInCache(name) then
@@ -494,10 +502,10 @@ function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
                         --print("added"..lb.iconsCache.getTextureFromCache(name)[2])
                     end
 
-                    for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
+                    for slotindex,c in pairs(stTable.getLayoutTable().buffs.options) do
                        if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex]~=nil then
-                         for j,m in pairs(c) do
-	                        for s,a in pairs(m) do
+
+	                        for s,a in pairs(c.names) do
 	                        	--s=ability name
 	                            --a=options
 	                            if s==name and s~=nil then
@@ -552,13 +560,13 @@ function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
 			                                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][11]=0
 		                                end
 		                                --print (lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
-		                                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
+		                                stTable.buffManager.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 		                                updatebuffs=true
 	                                end
 	                            end
 	
 	
-	                        end
+	                        
                         end
                       end
                     end
@@ -566,7 +574,7 @@ function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
             end
             if updatebuffs then
                 --print(true)
-                --lb.buffMonitor.updateBuffMonitorTextures()
+                --stTable.buffManager.updateBuffMonitorTextures()
             end
         else
         	
@@ -576,14 +584,13 @@ function lb.buffMonitor.onBuffAddTest(unit, buffTable,frameindex)
 end
 
 
-function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
+function stTable.buffManager.onBuffRemoveTest(unit, buffID,frameindex)
     --buffs=buffdetail(unit,buffs)
     --print ("remove")
     local updatebuffs=false
        -- for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
-	local buffcount=lb.buffMonitor.slotscount
+	local buffcount=stTable.buffManager.slotscount
 	        for slotindex= 1, buffcount do
-	           
 	            if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][5]== buffID then
 	                --print (frameindex)
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][0]=false
@@ -595,134 +602,51 @@ function lb.buffMonitor.onBuffRemoveTest(unit, buffID,frameindex)
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][10]=1
 	                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][11]=0
 	                local buffs= bufflist(unit)
-	
 	                local newbuffsdetails=buffdetail(unit,buffs)
-	
-	                
                     --was a buff
                     for idb,BuffDet in pairs(newbuffsdetails) do
                         if BuffDet.debuff==nil then
-                            local slotbuffs=  lbSelectedBuffsList[lbValues.set][slotindex][1]
-
+                            local slotbuffs= stTable.getLayoutTable().buffs.options[slotindex].names
                             if slotbuffs~=nil then
                                 local nextBuff=nil
-
                                 for buffname,buffopt in pairs(slotbuffs) do
-									
                                     if buffname==BuffDet.name then
-                                    	
-						
                                         nextBuff=BuffDet
-                                        
                                     end
                                 end
                                 if nextBuff~=nil then
 
-                                    lb.buffMonitor.onBuffAddTest(unit,nextBuff,frameindex)
+                                    stTable.buffManager.onBuffAddTest(unit,nextBuff,frameindex)
                                 end
 
                             end
 
                         end
                     end
-                
-	
-	                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
-	                --print ("rem"..lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
+	                stTable.buffManager.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 	                updatebuffs=true
 	            end
 	        end
-		
-       -- end
-       
---        for i,debuffname in pairs(lbDebuffWhitelist[lbValues.set]) do
---            --c={"Soothing Stream", "Healing Current","Healing Flood" }
---            --print (tostring(slotindex)..tostring(buffID))
---            if lb.frames[frameindex].buffs.groupSpotsIcons[5][5]== buffID then
---                --print (frameindex)
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][0]=false
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][3]=nil
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][4]=true
---                lb.frames[frameindex].buffs.groupSpotsIcons[5][5]=nil
-----                lb.frames[frameindex].buffs.groupSpotsIcons[5][9]=false
-----                lb.frames[frameindex].buffs.groupSpotsIcons[5][10]=1
-----                lb.frames[frameindex].buffs.groupSpotsIcons[5][11]=0
---                --print ("rem"..lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4])
---                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,5)
---
---                updatebuffs=true
---            end
---
---        end
---        if updatebuffs then
---            --print(true)
---            --lb.buffMonitor.updateBuffMonitorTextures()
---        end
 	return updatebuffs
 
 end
 
-function lb.buffMonitor.onBuffChangeTest(unit, buffID,frameindex)
-    --buffs=buffdetail(unit,buffs)
-    --print ("remove")
+function stTable.buffManager.onBuffChangeTest(unit, buffID,frameindex)
     local updatebuffs=false
-       -- for slotindex,c in pairs(lbSelectedBuffsList[lbValues.set]) do
-	local buffcount=lb.buffMonitor.slotscount
+	local buffcount=stTable.buffManager.slotscount
 	        for slotindex= 1, buffcount do
 	           
 	            if lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][5]== buffID then
 	            	local newbuffsdetails=buffdetail(unit,buffID)
-	            	
 	            	if newbuffsdetails~=nil then
-	            		--dump(newbuffsdetails)
 		                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][3]=newbuffsdetails.stack
 		                lb.frames[frameindex].buffs.groupSpotsIcons[slotindex][4]=true --flags that the buff needs an update
-		                lb.buffMonitor.updateBuffMonitorTexturesIndex(frameindex,slotindex)
+		                stTable.buffManager.updateBuffMonitorTexturesIndex(frameindex,slotindex)
 		                
 	                end
 	                updatebuffs=true
 	            end
 	        end
-		
-      
 	return updatebuffs
-
-end
-
-function lb.buffMonitor.addBuffSlot(addForAll)
-	local newcount=lb.buffMonitor.slotscount+1
-	if addForAll then
-		for i = 1, 6 do
-			lbBuffSlotOptions[i][newcount]={}
-			for h=1,#(lbPredefinedBuffSlotPos[1][1]) do 
-				lbBuffSlotOptions[i][newcount][h]=lbPredefinedBuffSlotPos[1][1][h] --set the slot to the x style definition for that slot
-			end
-		end
-	else
-		lbBuffSlotOptions[lbValues.set][newcount]={}
-		for h=1,#(lbPredefinedBuffSlotPos[1][1]) do 
-			lbBuffSlotOptions[lbValues.set][newcount][h]=lbPredefinedBuffSlotPos[1][1][h] --set the slot to the x style definition for that slot
-		end
-	end
-	
-	lb.buffMonitor.initializeBuffMonitorFrameIndex(newcount)
-	--update the buffs count
-	lb.buffMonitor.slotscount=lb.buffMonitor.slotscount+1
-	
-end
-
-function lb.buffMonitor.removeBuffSlot(index)
-	lbBuffSlotOptions[lbValues.set][index]=nil
-	
-	--update the buffs count
-	lb.buffMonitor.slotscount=lb.buffMonitor.slotscount-1
-	
-end
-
-
-
-function lb.buffMonitor.copySettingsFromRole(Role)
-	--copies the settings from the selected role into the current role
-	--must copy lbDebuffWhitelist[role] ,lbDebuffBlackList[role] , lbDebuffSlotOptions[role] , lbDebuffOptions[role]
 end
 

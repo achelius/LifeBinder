@@ -9,6 +9,7 @@ function lb.optionsGui.buffAssociations.createTable(parentFrame)
 	 local optionsFrame
 	 optionsFrame = UI.CreateLbFrame("Frame", "BuffAssociationsTab", parentFrame)
 	 frame=optionsFrame
+	 lb.optionsGui.buffAssociations.updateScale()
 	 --initializing unitframe
 	 optionsFrame.UnitFrame = UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame  )
 	 optionsFrame.UnitFrame:SetPoint("TOPLEFT",optionsFrame , "TOPLEFT", 20, 50)
@@ -21,8 +22,8 @@ function lb.optionsGui.buffAssociations.createTable(parentFrame)
 	 --initializing buff slots
 	  optionsFrame.buffSlots={}
 	 
-	 for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
-	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
+	 for i =1 ,lb.buffMonitor.slotscount do
+	 	local slotinfo=lb.buffMonitor.getBuffSlotTable(i)
 	 	optionsFrame.buffSlots[i]={}
 	 	optionsFrame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  optionsFrame.UnitFrame )
 	 	optionsFrame.buffSlots[i].Frame:SetPoint(slotinfo[1],optionsFrame.UnitFrame, slotinfo[2], slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1], slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2])
@@ -188,7 +189,7 @@ end
 
 function lb.optionsGui.buffAssociations.ReadSlotData(slotindex)
 	lb.buffMonitor.updateSpellTextures()
-	local buffs =lbSelectedBuffsList[lbValues.set][slotindex][1]
+	local buffs =lb.buffMonitor.getBuffSlotNamesTable(slotindex)
 	local list={}
 	local counter=1
 
@@ -206,11 +207,11 @@ function lb.optionsGui.buffAssociations.ReadSlotData(slotindex)
 end
 
 function lb.optionsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
-	for i = 1 , #(lbBuffSlotOptions[lbValues.set]) do
+	for i = 1 , lb.buffMonitor.slotscount do
 		if lb.optionsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
 			--print ("into slot" ..tostring(i))
 			local slotindex=i
-			local buffs =lbSelectedBuffsList[lbValues.set][slotindex][1]
+			local buffs =lb.buffMonitor.getBuffSlotNamesTable(slotindex)
 			if buffs[item[1]]==nil then
 				buffs[item[1]]={castByMeOnly=true,showCount=true,showDuration=true}
 			end
@@ -223,7 +224,7 @@ function lb.optionsGui.buffAssociations.onAbilitiesItemDrag(item,x,y)
 	end
 	if lastIndex~=nil then
 		if lb.optionsGui.isPointInFrame(frame.SlotDetailsListView,x,y) then
-			local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+			local buffs =lb.buffMonitor.getBuffSlotNamesTable(lastIndex)
 			if buffs[item[1]]==nil then
 				buffs[item[1]]={castByMeOnly=true,showCount=true,showDuration=true}
 			end
@@ -236,15 +237,15 @@ end
 function lb.optionsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
 	--print("leftout")
 	if lastIndex==-1 then return end
-	for i = 1 , #(lbBuffSlotOptions[lbValues.set]) do
+	for i = 1 ,lb.buffMonitor.slotscount do
 		if lb.optionsGui.isPointInFrame(frame.buffSlots[i].Frame,x,y) then
 			local lastindex=lastIndex
 			if lastIndex~=-1 then
-				local lastbuffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+				local lastbuffs =lb.buffMonitor.getBuffSlotNamesTable(lastIndex)
 				lastbuffs[item[1]]=nil
 			end
 			local slotindex=i
-			local buffs =lbSelectedBuffsList[lbValues.set][slotindex][1]
+			local buffs =lb.buffMonitor.getBuffSlotNamesTable(slotindex)
 			if buffs[item[1]]==nil then
 				buffs[item[1]]={castByMeOnly=true,showCount=true,showDuration=true}
 			end
@@ -256,7 +257,7 @@ function lb.optionsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
 	if lb.optionsGui.isPointInFrame(frame.SideTable,x,y) then
 		local lastindex=lastIndex
 			if lastIndex~=-1 then
-				local lastbuffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+				local lastbuffs =lb.buffMonitor.getBuffSlotNamesTable(lastIndex)
 				lastbuffs[item[1]]=nil
 				lb.optionsGui.buffAssociations.ReadSlotData(lastIndex)
 			end
@@ -265,8 +266,11 @@ function lb.optionsGui.buffAssociations.onSlotDetailItemDrag(item,x,y)
 end
 
 function lb.optionsGui.buffAssociations.updateData()
-	for i =1 ,#(lbBuffSlotOptions[lbValues.set]) do
-	 	local slotinfo=lbBuffSlotOptions[lbValues.set][i]
+	lb.optionsGui.buffAssociations.updateScale()
+	frame.UnitFrame:SetWidth(lb.styles[lb.currentStyle].getFrameWidth()*lb.optionsGui.PreviewScale[1])
+	 frame.UnitFrame:SetHeight(lb.styles[lb.currentStyle].getFrameHeight()*lb.optionsGui.PreviewScale[2])
+	 for i =1 ,lb.buffMonitor.slotscount do
+	 	local slotinfo=lb.buffMonitor.getBuffSlotTable(i)
 	 	if frame.buffSlots[i]==nil then frame.buffSlots[i]={} end
 	 	if frame.buffSlots[i].Frame==nil then  frame.buffSlots[i].Frame= UI.CreateLbFrame("Texture", "UnitFrame",  frame.UnitFrame ) end
 	 	if frame.buffSlots[i].Text ==nil then  frame.buffSlots[i].Text= UI.CreateLbFrame("Text", "UnitFrame", frame.buffSlots[i].Frame ) end
@@ -289,8 +293,8 @@ function lb.optionsGui.buffAssociations.updateData()
 	 	frame.buffSlots[i].X=slotinfo[3]*scalex*lb.optionsGui.PreviewScale[1]
 	 	frame.buffSlots[i].Y=slotinfo[4]*scaley*lb.optionsGui.PreviewScale[2]
 	 end
-	 if #(lbBuffSlotOptions[lbValues.set])<#(frame.buffSlots) then
-	 	for i = #(lbBuffSlotOptions[lbValues.set])+1,#(frame.buffSlots) do
+	 if #(lb.buffMonitor.getBuffsSlotsCompleteTable())<#(frame.buffSlots) then
+	 	for i = #(lb.buffMonitor.getBuffsSlotsCompleteTable())+1,#(frame.buffSlots) do
 	 		if frame.buffSlots[i]~=nil then
 	 			if frame.buffSlots[i].Frame~=nil then
 		 			frame.buffSlots[i].Frame:SetVisible(false)
@@ -308,7 +312,7 @@ end
 
 function lb.optionsGui.buffAssociations.onSlotAssociationSelected(item,value,index)
 	local buffname=value[1]
-	local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+	local buffs =lb.buffMonitor.getBuffSlotNamesTable(lastIndex)
 	
 	for key,buffTable in pairs(buffs) do
 		local name=key
@@ -329,7 +333,7 @@ function lb.optionsGui.buffAssociations.onCHKCastByMeChanged()
 	
 	local buffname=frame.SlotDetailsList:GetSelectedItem()[1]
 	
-	local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+	local buffs =lb.buffMonitor.getBuffSlotNamesTable(lastIndex)
 	
 	for key,buffTable in pairs(buffs) do
 		local name=key
@@ -344,7 +348,7 @@ function lb.optionsGui.buffAssociations.onCHKPriorityChanged()
 	
 	local buffname=frame.SlotDetailsList:GetSelectedItem()[1]
 	
-	local buffs =lbSelectedBuffsList[lbValues.set][lastIndex][1]
+	local buffs =lb.buffMonitor.getBuffSlotNamesTable(lastIndex)
 	
 	for key,buffTable in pairs(buffs) do
 		local name=key
@@ -371,4 +375,19 @@ function lb.optionsGui.buffAssociations.removeCustomName()
 		
 		 lb.optionsGui.buffAssociations.populateList() -- populate lists
 	end
+end
+
+function lb.optionsGui.buffAssociations.updateScale()
+ 	 local sc1=1
+	 local sc2=1
+	 local minsc
+	 sc1=550/lb.styles[lb.currentStyle].getFrameWidth()
+	 sc2=210/lb.styles[lb.currentStyle].getFrameHeight()
+	 if sc1>sc2 then
+	 	minsc=sc2
+	 else
+	 	minsc=sc1
+	 end
+	 lb.optionsGui.PreviewScale[1]=minsc
+	 lb.optionsGui.PreviewScale[2]=minsc
 end

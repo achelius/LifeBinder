@@ -23,6 +23,33 @@ function lb.styles.applySelectedStyle()
 	lb.styles.applyStyle(lb.currentStyle)
 	
 end
+function lb.styles.styleFirstInitialization()
+	if lbValues.CurrentStyle=="oldstyle" then
+		lbValues.CurrentStyle="standard"
+	end
+	if lb.styles.hasStyle(lbValues.CurrentStyle) then
+		lb.currentStyle=lbValues.CurrentStyle
+	else
+		print("style:"..tostring(lbValues.CurrentStyle).." not found, using standard")
+		lb.currentStyle="standard"		
+	end
+	
+	lb.styles.firstInitialize(lb.currentStyle)
+end
+
+function lb.styles.styleOnPlayerReady()
+	if lbValues.CurrentStyle=="oldstyle" then
+		lbValues.CurrentStyle="standard"
+	end
+	if lb.styles.hasStyle(lbValues.CurrentStyle) then
+		lb.currentStyle=lbValues.CurrentStyle
+	else
+		print("style:"..tostring(lbValues.CurrentStyle).." not found, using standard")
+		lb.currentStyle="standard"		
+	end
+	
+	lb.styles.onPlayerReady(lb.currentStyle)
+end
 
 function lb.styles.hasStyle(styleName)
 	for stid, style in pairs(lb.styles) do
@@ -57,8 +84,12 @@ end
 function lb.styles.applyStyle(styleName)
 	lb.styles[styleName].fastInitialize()
 end
+function lb.styles.firstInitialize(styleName)
+	lb.styles[styleName].firstInitialization()
+end
 
-
-
+function lb.styles.onPlayerReady(styleName)
+	lb.styles[styleName].onPlayerReady()
+end
 
 

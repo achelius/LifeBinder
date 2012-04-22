@@ -3,11 +3,12 @@ local frame=nil
 function lb.optionsGui.styleOptions.createTable(parentFrame)
  	 local optionsFrame
 	 optionsFrame = UI.CreateLbFrame("Frame", "OptionsWindowA", parentFrame)
-	 writeText("Current Selected Style","text",optionsFrame,10,50)
+	-- writeText("Current Selected Style","text",optionsFrame,10,50)
 	 optionsFrame.comboBox=UI.CreateLbFrame("SimpleSelect", "styleSelectCombobox",optionsFrame)
 	 optionsFrame.comboBox:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,70)
 	 optionsFrame.comboBox:SetWidth(200)
 	 optionsFrame.comboBox:SetHeight(30)
+	 optionsFrame.comboBox:SetVisible(false)
 	 local list={}
 	 local counter=1
 	 local currentsel=-1
@@ -30,6 +31,7 @@ function lb.optionsGui.styleOptions.createTable(parentFrame)
 	 optionsFrame.styleApplyButton:SetHeight(30)
 	 
 	 optionsFrame.styleApplyButton:SetText("Apply")
+	 optionsFrame.styleApplyButton:SetVisible(false)
 	 optionsFrame.styleApplyButton.Event.LeftClick=lb.optionsGui.styleOptions.SetCurrentStyle
 	 
 	 optionsFrame.styleStatusText=UI.CreateLbFrame("Text", "styleStatusText",optionsFrame)
@@ -39,9 +41,9 @@ function lb.optionsGui.styleOptions.createTable(parentFrame)
 	 optionsFrame.styleStatusText:SetFontColor(1,0,0,1)
 	 optionsFrame.styleStatusText:SetText("")
 	 --initializing style options frame
-	 writeText("Style detailed options","text",optionsFrame,10,120)
+	 writeText("Style detailed options","text",optionsFrame,10,10)
 	 optionsFrame.styleDetalsOptions = UI.CreateLbFrame("Frame", "OptionsWindowA", optionsFrame)
-	 optionsFrame.styleDetalsOptions:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,150)
+	 optionsFrame.styleDetalsOptions:SetPoint("TOPLEFT",optionsFrame,"TOPLEFT",10,40)
 	-- optionsFrame.styleDetalsOptions:SetBackgroundColor(0,0,0,1)
 	 optionsFrame.styleDetalsOptions:SetWidth(700)
 	 optionsFrame.styleDetalsOptions:SetHeight(300)
@@ -55,7 +57,7 @@ function lb.optionsGui.styleOptions.createTable(parentFrame)
 --	 optionsFrame.styleReloaduiButton:SetText("Reload UI")
 --	 
 --	 optionsFrame.styleReloaduiButton.Event.LeftClick="/reloadui"
-	 writeText("Note: Styles only changes unit frames positions for now, it will be expanded later.","text",optionsFrame,10,10)
+	 --writeText("Note: Styles only changes unit frames positions for now, it will be expanded later.","text",optionsFrame,10,10)
 	 frame=optionsFrame
 	 return optionsFrame
 end
@@ -87,5 +89,13 @@ end
 
 function lb.optionsGui.styleOptions.updateData()
 	 lb.optionsGui.styleOptions.populateList()
+	 frame.styleDetalsOptions:SetVisible(false)
+	  frame.styleDetalsOptions = UI.CreateLbFrame("Frame", "OptionsWindowA", frame)
+	 frame.styleDetalsOptions:SetPoint("TOPLEFT",frame,"TOPLEFT",10,40)
+	-- optionsFrame.styleDetalsOptions:SetBackgroundColor(0,0,0,1)
+	 frame.styleDetalsOptions:SetWidth(700)
+	 frame.styleDetalsOptions:SetHeight(300)
+	 lb.styles[lb.currentStyle].getOptionsWindow(frame.styleDetalsOptions)
+	 
 end
 

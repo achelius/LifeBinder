@@ -2,7 +2,7 @@ lb.mouseBinds={}
 function lb.mouseBinds.setMouseActions()
     if lbValues.set==nil then return end
     if lb.isincombat then return end
-    local associations =lbMouseBinds[lbValues.set]
+    local associations =lb.mouseBinds.getMouseBindsTable()
     for i = 1,20 do
         local fname=""
         --print (lastMode)
@@ -50,7 +50,7 @@ function lb.mouseBinds.setMouseActionsForIndex(index)
     if lbValues.set==nil then return end
     if lb.isincombat then return end
     local i=index
-    local associations =lbMouseBinds[lbValues.set]
+    local associations =lb.mouseBinds.getMouseBindsTable()
     
         local fname=""
         --print (lastMode)
@@ -261,6 +261,11 @@ function lb.mouseBinds.generateMacro(associations,name)
 --    print (macro)
 --    print("-----------------")
     return macro
+end
+
+--WARNING: can be overrided by another module
+function lb.mouseBinds.getMouseBindsTable()
+	return lbMouseBinds[lbValues.set]
 end
 
 function lb.mouseBinds.showMenu(cmd,params)

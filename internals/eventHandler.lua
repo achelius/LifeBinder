@@ -1,5 +1,6 @@
 table.insert(Event.Addon.SavedVariables.Load.End, {loadVariables, "LifeBinder", "lbLoadVariables"})
 lb.waitPlayerEventID={lb.waitPlayerAvailable, "LifeBinder", "WaitPlayerAvailable"}
+--lb.OtherEvents={} moved to lifebinderMain
 function lb.EnableStarterCycle()
 	if not lbValues.AddonDisabled then
 		table.insert(Event.System.Update.Begin, lb.waitPlayerEventID)
@@ -53,6 +54,10 @@ function lb.EnableHandlers()
 			table.insert(Event.SafesRaidManager.Group.Change, {lb.onGroupChange , "LifeBinder", "GroupLeave"})
 			table.insert(Event.SafesRaidManager.Player.Join, {lb.onPlayerJoin , "LifeBinder", "PlayerJoin"})
 			table.insert(Event.SafesRaidManager.Player.Leave,{lb.onPlayerLeave, "LifeBinder", "PlayerLeave"})
+			--call other eventhandlers function
+			for k,func in pairs(lb.OtherEvents)do
+				func()
+			end
 			
 	end
 end

@@ -24,6 +24,7 @@ lb.styles={}
 lb.WindowDrag = {}
 lb.controls={}
 lb.version="1.0.1.4" -- lifebinder version
+lb.OtherEvents={} --table containing functions that will register other events
 --
 local lastUpdatePlayerFrameCheck=0
 
@@ -95,6 +96,7 @@ function lb.initialize()
 		lb.UnitsTableStatus[i][11]=false --needs an update
 		lb.UnitsTableStatus[i][12]=false --Frame Created
 		lb.UnitsTableStatus[i][13]=false --Frame Creating (to avoid double initilizations)
+		lb.UnitsTableStatus[i][14]=false --isdummy
 		lb.RaidTable[string.format("group%.2d", i)] = true --populate raid query table
 		
 		
@@ -117,9 +119,9 @@ end
 
 function lb.createWindow()
 	if not lb.initialized then return end
-	lb.Window:SetPoint("TOPLEFT", UIParent, "TOPLEFT", lbValues.locmainx, lbValues.locmainy)
-	lb.Window:SetHeight(lbValues.mainheight)
-	lb.Window:SetWidth(lbValues.mainwidth)
+	lb.Window:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, 0)
+	--lb.Window:SetHeight(lbValues.mainheight)
+	--lb.Window:SetWidth(lbValues.mainwidth)
 	lb.WindowFrameTop:SetTexture("LifeBinder", "Textures/header.png")
 	lb.WindowFrameTop:SetPoint("TOPLEFT", lb.Window, "TOPLEFT", 0, 0)
 	lb.WindowFrameTop:SetPoint("TOPRIGHT", lb.Window, "TOPRIGHT", 0, 0)
@@ -148,15 +150,15 @@ function lb.createWindow()
     --initializeSpecButtons()
 	
 	--toggleLockedWindow(lbValues.islocked)
-	lb.styles.applySelectedStyle()
+	lb.styles.styleFirstInitialization()
 end
 
 function lb.WindowDragEventLeftDown()
     if not lb.isincombat and not lbValues.lockedState then
         windowdragActive = true
         local mouseStatus = Inspect.Mouse()
-        lb.clickOffset["x"] = mouseStatus.x - lbValues.locmainx
-        lb.clickOffset["y"] = mouseStatus.y - lbValues.locmainy
+        lb.clickOffset["x"] = mouseStatus.x - lb.styles[lb.currentStyle].getMainWindowLocation().left
+        lb.clickOffset["y"] = mouseStatus.y - lb.styles[lb.currentStyle].getMainWindowLocation().top
     end
 end
 
@@ -174,9 +176,8 @@ function lb.WindowDragEventMouseMove(buttons,x,y)
     end
     if windowdragActive == true then
 
-        lbValues.locmainx = x - lb.clickOffset["x"]
-        lbValues.locmainy = y- lb.clickOffset["y"]
-        lb.Window:SetPoint("TOPLEFT", lb.Context, "TOPLEFT", lbValues.locmainx, lbValues.locmainy)
+        lb.styles[lb.currentStyle].setMainWindowLocation(x - lb.clickOffset["x"],y- lb.clickOffset["y"])
+        --lb.Window:SetPoint("TOPLEFT", lb.Context, "TOPLEFT", lbValues.locmainx, lbValues.locmainy)
     end
 end
 
@@ -237,6 +238,7 @@ function lb.waitPlayerAvailable()
 		
          
 		lb.EnableHandlers()--add event handlers
+		lb.styles.styleOnPlayerReady() --
 		print("LifeBinder loaded, write /lb help for console commands")
 		--print ("afterinit"..tostring(timeFrame()))
 	end
@@ -296,7 +298,7 @@ function lb.UpdatePlayerFrame()
 		--lb.UnitUpdate()
 	end
 end
-function lb.createNewFrame(index)
+function lb.createNewFrame(index,notupdate)
 	if lb.UnitsTableStatus[index][12] then return end
 	lb.UnitsTableStatus[index][13]=true --Frame Creating
 	lb.styles[lb.currentStyle].CreateFrame(index)
@@ -306,7 +308,7 @@ function lb.createNewFrame(index)
 	lb.buffMonitor.resetBuffMonitorTexturesForIndex(index)
 	lb.mouseBinds.setMouseActionsForIndex(index)
 	lb.UnitsTableStatus[index][13]=false --Frame Created
-	lb.UnitsTableStatus[index][11]=true --set the frame for update
+	if not(notupdate==true) then lb.UnitsTableStatus[index][11]=true end --set the frame for update
 end
 function lb.UpdateFramesVisibility()
    local lbgroupfound = false
@@ -327,12 +329,12 @@ function lb.UpdateFramesVisibility()
             if k < 6 then lbraidfound = false lbgroupfound = true end
             if k > 5 then lbraidfound = true lbgroupfound = false end
             lbsolofound = false
-            lb.frames[k].groupBF:SetVisible(true)
+            if not lb.UnitsTableStatus[k][14] then lb.styles[lb.currentStyle].showFrame(k) end
             if not lb.isincombat and lb.UnitsTableStatus[k][12]  then
              if lb.styles[lb.currentStyle].showMasks~=nil then lb.styles[lb.currentStyle].showMasks(k) else lb.styles["standard"].showMasks(k) end 
             end
         else
-            lb.frames[k].groupBF:SetVisible(false)
+            if not lb.UnitsTableStatus[k][14] then lb.styles[lb.currentStyle].forceHideFrame(k) end--hides the frame not checking for the frame created flag
              if not lb.isincombat and lb.UnitsTableStatus[k][12]  then
              if lb.styles[lb.currentStyle].hideMasks~=nil then lb.styles[lb.currentStyle].hideMasks(k) else lb.styles["standard"].hideMasks(k) end 
             end
@@ -346,7 +348,7 @@ function lb.UpdateFramesVisibility()
             lb.mouseBinds.setMouseActions() -- sets macros for frames
         end
         lb.QueryTable = lb.SoloTable
-        lb.frames[1].groupBF:SetVisible(true)
+        if not lb.UnitsTableStatus[1][14] then lb.frames[1].groupBF:SetVisible(true) end
          if not lb.isincombat and lb.UnitsTableStatus[1][12] then 
 	         if lb.styles[lb.currentStyle].showMasks~=nil then lb.styles[lb.currentStyle].showMasks(1) else lb.styles["standard"].showMasks(1) end 
         end
@@ -544,10 +546,10 @@ lb.CleansingAbilitiesList=
 	}
 	
 --must be called when abilities can be retrieved
-function lb.autosetDebuffOptions(role)
+function lb.autosetDebuffOptions()
 	--dump (lbDebuffOptions)
 	--dump( role)
-	if lbDebuffOptions[role]==nil then
+	if lb.debuffMonitor.getDebuffOptionsTable()==nil or lb.debuffMonitor.getDebuffOptionsTable().showCurableOnly==nil  then
 		print ("AutoSetting cleansing parameters")
 		local abilitiesList =Inspect.Ability.List()
 		local abilitiesDetails =Inspect.Ability.Detail(abilitiesList)
@@ -563,8 +565,17 @@ function lb.autosetDebuffOptions(role)
 				end
 			end
 		end
-		lbDebuffOptions[role]={showCurableOnly=false,poison=poison,curse=curse,disease=disease}
-		
+		local optable=lb.debuffMonitor.getDebuffOptionsTable()
+		dump(optable)
+		if optable==nil then 
+			lbDebuffOptions[lbValues.set]={}
+			optable=lbDebuffOptions[lbValues.set]
+		end
+		optable.showCurableOnly=poison or curse or disease
+		optable.poison=poison
+		optable.curse=curse
+		optable.disease=disease
+		--lb.debuffMonitor.setDebuffOptionsTable(optable)
 	end
 	
 end

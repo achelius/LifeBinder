@@ -2,7 +2,7 @@
 lb.iconsCache={} --icon cache table
 lb.iconsCacheCount=0 --icon cache count
 lb.iconsCache.Icons={}
-lb.NoIconsBuffList={} --list of buffs that doesn't have an icon because are not abilities, created by the function CompileBuffsList() in buffmonitor.lua
+lb.NoIconsBuffList={} --list of buffs that doesn't have an icon because are not abilities, created by the functionCompileBuffsList() in buffmonitor.lua
 function lb.iconsCache.getTextureFromCache(abilityName)
     local texture= lb.iconsCache.Icons[abilityName]
     if texture==nil then
